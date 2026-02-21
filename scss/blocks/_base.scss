@@ -1,0 +1,111 @@
+﻿:root {
+  --color-bg: #f5f8ff;
+  --color-surface: #ffffff;
+  --color-text: #0f172a;
+  --color-muted: #4a5770;
+  --color-border: #cfd8eb;
+  --color-primary: #ff4d6d;
+  --color-primary-dark: #e13f5d;
+  --color-secondary: #00c2ff;
+  --color-navy: #0f172a;
+  --color-header-bg: rgba(245, 248, 255, 0.86);
+  --color-header-border: rgba(207, 216, 235, 0.62);
+  --color-card: rgba(255, 255, 255, 0.9);
+  --color-card-strong: rgba(255, 255, 255, 0.96);
+  --color-input-bg: rgba(255, 255, 255, 0.94);
+  --color-btn-secondary-bg: rgba(232, 241, 255, 0.92);
+  --color-btn-secondary-text: #0f172a;
+  --color-btn-secondary-border: #b7c9e8;
+  --bg-glow-one: rgba(255, 77, 109, 0.16);
+  --bg-glow-two: rgba(0, 194, 255, 0.2);
+  --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.13);
+}
+
+[data-theme="dark"] {
+  --color-bg: #070b14;
+  --color-surface: #111827;
+  --color-text: #e6f0ff;
+  --color-muted: #9fb0cc;
+  --color-border: #2b3a56;
+  --color-navy: #e6f0ff;
+  --color-header-bg: rgba(7, 11, 20, 0.88);
+  --color-header-border: rgba(43, 58, 86, 0.76);
+  --color-card: rgba(17, 24, 39, 0.9);
+  --color-card-strong: rgba(17, 24, 39, 0.96);
+  --color-input-bg: rgba(10, 16, 30, 0.96);
+  --color-primary: #ff5c7a;
+  --color-primary-dark: #e14f6a;
+  --color-secondary: #22d3ee;
+  --color-btn-secondary-bg: rgba(26, 38, 61, 0.96);
+  --color-btn-secondary-text: #e6f0ff;
+  --color-btn-secondary-border: rgba(110, 136, 179, 0.72);
+  --bg-glow-one: rgba(255, 92, 122, 0.14);
+  --bg-glow-two: rgba(34, 211, 238, 0.16);
+  --shadow-soft: 0 16px 30px rgba(2, 8, 18, 0.55);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Noto Sans", "Segoe UI", sans-serif;
+  color: var(--color-text);
+  background:
+    radial-gradient(circle at 5% 5%, var(--bg-glow-one), transparent 30%),
+    radial-gradient(circle at 90% 14%, var(--bg-glow-two), transparent 34%),
+    var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+main {
+  flex-grow: 1;
+  padding-top: 102px;
+
+  @include vp-768 {
+    padding-top: 96px;
+  }
+}
+
+a[href],
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+label[for] {
+  cursor: pointer;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: 60;
+  pointer-events: none;
+  background-color: rgba(15, 23, 42, 0.14);
+  box-shadow: inset 0 -1px 0 rgba(15, 23, 42, 0.16);
+
+  &__bar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: left;
+    transform: scaleX(0);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), #7edcff);
+    box-shadow: 0 0 14px rgba(10, 166, 184, 0.55);
+    transition: transform 0.1s linear;
+  }
+}
+
+[data-theme="dark"] .scroll-progress {
+  height: 3px;
+  background-color: rgba(230, 240, 255, 0.14);
+  box-shadow: inset 0 -1px 0 rgba(230, 240, 255, 0.12);
+}

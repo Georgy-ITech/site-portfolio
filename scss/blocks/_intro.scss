@@ -1,0 +1,208 @@
+﻿.intro {
+  padding: 22px 0 50px;
+
+  @include vp-768 {
+    padding-top: 30px;
+  }
+
+  &__banner {
+    position: relative;
+    display: grid;
+    gap: 22px;
+
+    @include vp-1024 {
+      grid-template-columns: 1.08fr 0.92fr;
+      align-items: stretch;
+    }
+  }
+
+  &__content,
+  &__visual {
+    border: 1px solid rgba(220, 227, 239, 0.75);
+    border-radius: 28px;
+    background-color: var(--color-card);
+    box-shadow: var(--shadow-soft);
+  }
+
+  &__content {
+    padding: 26px;
+
+    @include vp-768 {
+      padding: 34px;
+    }
+  }
+
+  &__label {
+    margin: 0 0 14px;
+    display: inline-flex;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+    background-color: rgba(10, 166, 184, 0.14);
+  }
+
+  &__title {
+    margin: 0;
+    max-width: 16ch;
+    font-size: clamp(1.8rem, 5.7vw, 3.4rem);
+    line-height: 1.05;
+  }
+
+  &__text {
+    margin: 18px 0 0;
+    max-width: 52ch;
+    color: var(--color-muted);
+  }
+
+  &__actions {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  &__metrics {
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  &__metric {
+    padding: 13px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-card);
+  }
+
+  &__metric-value {
+    display: block;
+    font-size: 1.24rem;
+    font-weight: 700;
+  }
+
+  &__metric-label {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+
+  &__visual {
+    position: relative;
+    min-height: 350px;
+    overflow: hidden;
+    padding: 26px;
+    --pointer-x: 50%;
+    --pointer-y: 50%;
+
+    @include vp-768 {
+      padding: 34px;
+      min-height: 380px;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 42%);
+      opacity: 0.35;
+      transition: opacity 0.25s ease;
+    }
+
+    &.is-spotlight::after {
+      opacity: 0.85;
+    }
+  }
+
+  [data-theme="dark"] &__visual::after {
+    background: radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(120, 188, 255, 0.22) 0%, rgba(120, 188, 255, 0) 42%);
+  }
+
+  &__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    animation: float-slow 7s ease-in-out infinite;
+
+    &--orange {
+      width: 200px;
+      height: 200px;
+      top: -44px;
+      right: -24px;
+      background-color: rgba(255, 107, 44, 0.32);
+    }
+
+    &--cyan {
+      width: 168px;
+      height: 168px;
+      left: -42px;
+      bottom: -30px;
+      background-color: rgba(10, 166, 184, 0.28);
+      animation-delay: -1.3s;
+    }
+  }
+
+  &__code-card,
+  &__stack-card {
+    position: relative;
+    z-index: 2;
+    border-radius: 18px;
+    border: 1px solid rgba(220, 227, 239, 0.8);
+    background-color: rgba(16, 24, 39, 0.95);
+    color: #eef2ff;
+  }
+
+  &__code-card {
+    padding: 16px;
+    animation: card-rise 0.85s ease both;
+  }
+
+  &__code-title,
+  &__stack-title {
+    margin: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a2aec7;
+  }
+
+  &__code-snippet {
+    margin: 0;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #d9f4ff;
+    white-space: pre-wrap;
+  }
+
+  &__stack-card {
+    margin-top: 12px;
+    padding: 16px;
+    background: linear-gradient(150deg, #132034, #1a2740);
+    animation: card-rise 0.85s ease both;
+    animation-delay: 0.12s;
+  }
+
+  &__stack-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  &__stack-item {
+    padding: 8px 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.08);
+    font-size: 13px;
+  }
+}

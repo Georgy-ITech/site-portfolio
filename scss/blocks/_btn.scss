@@ -1,0 +1,42 @@
+﻿.btn {
+  --mx: 0px;
+  --my: 0px;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+
+  &--primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-primary), #ff8f3f);
+    box-shadow: 0 12px 24px rgba(255, 107, 44, 0.28);
+
+    &:hover,
+    &:focus-visible {
+      transform: translate(var(--mx), calc(var(--my) - 2px));
+      background: linear-gradient(135deg, #ff7f45, var(--color-primary-dark));
+    }
+  }
+
+  &--secondary {
+    color: var(--color-btn-secondary-text);
+    border-color: var(--color-btn-secondary-border);
+    background-color: var(--color-btn-secondary-bg);
+
+    &:hover,
+    &:focus-visible {
+      transform: translate(var(--mx), calc(var(--my) - 2px));
+      border-color: var(--color-secondary);
+      box-shadow: var(--shadow-soft);
+    }
+  }
+}

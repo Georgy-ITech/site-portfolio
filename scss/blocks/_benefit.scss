@@ -1,0 +1,97 @@
+﻿.benefit {
+  padding: 34px 0;
+
+  @include vp-1024 {
+    padding: 48px 0;
+  }
+
+  &__wrapper {
+    display: grid;
+    gap: 16px;
+
+    @include vp-768 {
+      grid-template-columns: 1.25fr 1fr;
+    }
+  }
+
+  &__content,
+  &__panel {
+    border-radius: 24px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-card);
+    box-shadow: var(--shadow-soft);
+    padding: 24px;
+  }
+
+  &__label {
+    margin: 0 0 14px;
+    display: inline-flex;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+    background-color: rgba(10, 166, 184, 0.14);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: clamp(1.5rem, 4vw, 2.35rem);
+    line-height: 1.14;
+  }
+
+  &__text {
+    margin: 16px 0 0;
+    color: var(--color-muted);
+  }
+
+  &__list {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  &__item {
+    position: relative;
+    padding-left: 24px;
+    color: var(--color-navy);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--color-primary);
+    }
+  }
+
+  &__panel {
+    display: grid;
+    gap: 12px;
+  }
+
+  &__panel-item {
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-card);
+  }
+
+  &__panel-value {
+    display: block;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  &__panel-text {
+    margin: 7px 0 0;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+}

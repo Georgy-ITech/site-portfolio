@@ -1,0 +1,64 @@
+﻿.connect {
+  padding: 34px 0;
+
+  @include vp-1024 {
+    padding: 48px 0;
+  }
+
+  &__label {
+    margin: 0 0 14px;
+    display: inline-flex;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+    background-color: rgba(10, 166, 184, 0.14);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: clamp(1.5rem, 4vw, 2.35rem);
+    line-height: 1.14;
+  }
+
+  &__grid {
+    margin-top: 18px;
+    display: grid;
+    gap: 12px;
+
+    @include vp-768 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include vp-1024 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  &__card {
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-card);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+
+    &:hover,
+    &:focus-within {
+      transform: translateY(-4px);
+      border-color: rgba(10, 166, 184, 0.5);
+    }
+  }
+
+  &__card-title {
+    margin: 0;
+    font-size: 1.12rem;
+  }
+
+  &__card-text {
+    margin: 10px 0 0;
+    color: var(--color-muted);
+  }
+}
