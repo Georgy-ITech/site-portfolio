@@ -72,6 +72,7 @@
   }
 
   &__item {
+    flex-shrink: 0;
     transform: translateY(12px);
     opacity: 0;
     transition: transform 0.32s ease, opacity 0.32s ease;

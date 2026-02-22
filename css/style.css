@@ -283,6 +283,7 @@ label[for] {
   min-height: 32px;
   padding: 6px 8px;
   border-radius: 8px;
+  white-space: nowrap;
   font-size: 13px;
   color: var(--color-muted);
   transition: color 0.25s ease, background-color 0.25s ease;
@@ -559,6 +560,7 @@ label[for] {
   margin-top: 0;
 }
 .header-nav__item {
+  flex-shrink: 0;
   transform: translateY(12px);
   opacity: 0;
   transition: transform 0.32s ease, opacity 0.32s ease;
