@@ -99,9 +99,13 @@
   &__link {
     position: relative;
     display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 6px 8px;
+    border-radius: 8px;
     font-size: 13px;
     color: var(--color-muted);
-    transition: color 0.25s ease;
+    transition: color 0.25s ease, background-color 0.25s ease;
 
     @include vp-768 {
       font-size: 14px;
@@ -123,6 +127,7 @@
     &:hover,
     &:focus-visible {
       color: var(--color-text);
+      background-color: rgba(255, 255, 255, 0.38);
 
       &::after {
         transform: scaleX(1);
