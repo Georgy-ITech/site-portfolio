@@ -1157,17 +1157,20 @@ body.menu-open .header__menu-line:nth-child(3) {
   text-decoration: none;
   color: inherit;
   border-radius: 20px;
-  border: 1px solid var(--color-border);
   border-top: 3px solid var(--card-accent, var(--color-accent));
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
   background-color: var(--color-card-strong);
   box-shadow: var(--shadow-soft);
-  outline: 1px solid transparent;
-  outline-offset: 0px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, outline-color 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+              border-right-color 0.25s ease, border-bottom-color 0.25s ease, border-left-color 0.25s ease;
 }
 .promotion__card:hover {
   transform: translateY(-6px);
-  outline-color: var(--card-accent, var(--color-accent));
+  border-right-color: var(--card-accent, var(--color-accent));
+  border-bottom-color: var(--card-accent, var(--color-accent));
+  border-left-color: var(--card-accent, var(--color-accent));
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3);
 }
 .promotion__preview {
