@@ -1391,14 +1391,56 @@ body.menu-open .header__menu-line:nth-child(3) {
   width: 100%;
 }
 .faq__form-success {
-  padding: 20px;
-  border-radius: 12px;
-  background: rgba(155, 109, 255, 0.1);
-  border: 1px solid rgba(155, 109, 255, 0.3);
-  color: var(--color-text);
-  font-size: 1rem;
-  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 32px;
+  border-radius: 16px;
+  background: rgba(155, 109, 255, 0.07);
+  border: 1px solid rgba(155, 109, 255, 0.25);
+  box-shadow: 0 0 60px rgba(155, 109, 255, 0.12);
   margin-top: 16px;
+  animation: successFadeIn 0.5s ease;
+}
+.faq__form-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(155, 109, 255, 0.12);
+  border: 1px solid rgba(155, 109, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 0 32px rgba(155, 109, 255, 0.25);
+}
+.faq__form-success-icon svg {
+  animation: successPop 0.4s 0.2s ease both;
+}
+.faq__form-success-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+.faq__form-success-sub {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 320px;
+}
+@keyframes successFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes successPop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq__form-success,
+  .faq__form-success-icon svg { animation: none; }
 }
 @media (min-width: 768px) {
   .faq__form-button {

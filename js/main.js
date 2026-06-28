@@ -292,11 +292,13 @@
         headers: { Accept: "application/json" }
       }).then(function (response) {
         if (response.ok) {
+          var formHeight = form.offsetHeight;
           form.reset();
           form.style.display = "none";
-          var success = document.createElement("p");
+          var success = document.createElement("div");
           success.className = "faq__form-success";
-          success.textContent = "Спасибо! Сообщение получено, отвечу в течение 24 часов.";
+          success.style.minHeight = formHeight + "px";
+          success.innerHTML = '<div class="faq__form-success-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="rgba(155,109,255,0.15)"/><path d="M9 16.5L13.5 21L23 11" stroke="#9b6dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="faq__form-success-title">Сообщение отправлено!</p><p class="faq__form-success-sub">Отвечу в течение 24 часов. Пока можете посмотреть мои проекты выше.</p>';
           form.parentNode.appendChild(success);
         } else {
           var btn = form.querySelector("button[type=submit]");
