@@ -278,6 +278,37 @@
     }, { passive: true });
   }
 
+  function setupContactForm() {
+    var form = document.querySelector(".faq__form");
+    if (!form) return;
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var data = new FormData(form);
+
+      fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" }
+      }).then(function (response) {
+        if (response.ok) {
+          form.reset();
+          form.style.display = "none";
+          var success = document.createElement("p");
+          success.className = "faq__form-success";
+          success.textContent = "Спасибо! Сообщение получено, отвечу в течение 24 часов.";
+          form.parentNode.appendChild(success);
+        } else {
+          var btn = form.querySelector("button[type=submit]");
+          btn.textContent = "Ошибка, попробуйте ещё раз";
+        }
+      }).catch(function () {
+        var btn = form.querySelector("button[type=submit]");
+        btn.textContent = "Ошибка, попробуйте ещё раз";
+      });
+    });
+  }
+
   function setupBackToTop() {
     var topLink = document.querySelector(".footer__top-link");
     if (!topLink) {
@@ -341,6 +372,7 @@
       setupRevealAnimations();
       setupMagneticHover();
       setupIntroSpotlight();
+      setupContactForm();
       setupBackToTop();
       setupScrollProgress();
     });
@@ -350,6 +382,7 @@
     setupRevealAnimations();
     setupMagneticHover();
     setupIntroSpotlight();
+    setupContactForm();
     setupBackToTop();
     setupScrollProgress();
   }
