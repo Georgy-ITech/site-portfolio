@@ -1177,12 +1177,41 @@ body.menu-open .header__menu-line:nth-child(3) {
 .promotion__preview--startup {
   background-image: linear-gradient(130deg, #083344, #0891b2, #67e8f9);
 }
+.promotion__preview--film {
+  background-image: linear-gradient(130deg, #0d0a0a, #b8860b, #f5c842);
+}
+.promotion__preview--dofit {
+  background-image: linear-gradient(130deg, #0a1a0a, #4a7c2f, #c8f135);
+}
+.promotion__preview--design {
+  background-image: linear-gradient(130deg, #1a0a05, #cc3a1a, #ff5c35);
+}
+.promotion__preview--expense {
+  background-image: linear-gradient(130deg, #0d0714, #5a2fb8, #9b6dff);
+}
+.promotion__preview--fitness {
+  background-image: linear-gradient(130deg, #051a12, #0a7c60, #2ecc8a);
+}
+.promotion__preview--animation {
+  background-image: linear-gradient(130deg, #050d2a, #1a3bbf, #2955f5);
+}
+.promotion__preview {
+  display: block;
+  text-decoration: none;
+}
 .promotion__card-content {
   padding: 18px;
 }
 .promotion__card-title {
   margin: 0;
   font-size: 1.1rem;
+}
+.promotion__card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+.promotion__card-title a:hover {
+  color: var(--color-accent);
 }
 .promotion__card-text {
   margin: 10px 0 0;
