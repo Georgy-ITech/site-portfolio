@@ -156,6 +156,10 @@
 
         entry.target.classList.add("is-visible");
         obs.unobserve(entry.target);
+        var revealDelay = parseFloat(entry.target.style.getPropertyValue("--reveal-delay")) || 0;
+        setTimeout(function (el) {
+          el.style.setProperty("--reveal-delay", "0ms");
+        }, revealDelay + 750, entry.target);
       });
     }, {
       threshold: 0.15,
