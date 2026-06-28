@@ -1161,11 +1161,12 @@ body.menu-open .header__menu-line:nth-child(3) {
   border-top: 3px solid var(--card-accent, var(--color-accent));
   background-color: var(--color-card-strong);
   box-shadow: var(--shadow-soft);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 .promotion__card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  transform: translateY(-6px);
+  border-color: var(--card-accent, var(--color-accent));
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3);
 }
 .promotion__preview {
   height: 170px;
