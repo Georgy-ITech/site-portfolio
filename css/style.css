@@ -1165,7 +1165,7 @@ body.menu-open .header__menu-line:nth-child(3) {
 }
 .promotion__card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--card-accent, var(--color-accent));
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
 }
 .promotion__preview {
   height: 170px;
