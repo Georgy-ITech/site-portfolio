@@ -126,15 +126,15 @@
     }
 
     var groups = [
-      ".intro__content",
-      ".intro__visual",
-      ".benefit__content",
-      ".benefit__panel",
-      ".connect__card",
-      ".subscriptions__tag",
-      ".promotion__card",
-      ".faq__content",
-      ".faq__form"
+      ".hero__content",
+      ".hero__visual",
+      ".about__content",
+      ".about__panel",
+      ".services__card",
+      ".skills__tag",
+      ".works__card",
+      ".contacts__content",
+      ".contacts__form"
     ];
 
     var revealElements = [];
@@ -232,7 +232,7 @@
       return;
     }
 
-    var visual = document.querySelector(".intro__visual");
+    var visual = document.querySelector(".hero__visual");
     if (!visual) {
       return;
     }
@@ -283,7 +283,7 @@
   }
 
   function setupContactForm() {
-    var form = document.querySelector(".faq__form");
+    var form = document.querySelector(".contacts__form");
     if (!form) return;
 
     form.addEventListener("submit", function (event) {
@@ -300,9 +300,9 @@
           form.reset();
           form.style.display = "none";
           var success = document.createElement("div");
-          success.className = "faq__form-success";
+          success.className = "contacts__form-success";
           success.style.minHeight = formHeight + "px";
-          success.innerHTML = '<div class="faq__form-success-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="rgba(155,109,255,0.15)"/><path d="M9 16.5L13.5 21L23 11" stroke="#9b6dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="faq__form-success-title">Сообщение отправлено!</p><p class="faq__form-success-sub">Отвечу в течение 24 часов. Пока можете посмотреть мои проекты выше.</p>';
+          success.innerHTML = '<div class="contacts__form-success-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="rgba(155,109,255,0.15)"/><path d="M9 16.5L13.5 21L23 11" stroke="#9b6dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="contacts__form-success-title">Сообщение отправлено!</p><p class="contacts__form-success-sub">Отвечу в течение 24 часов. Пока можете посмотреть мои проекты выше.</p>';
           form.parentNode.appendChild(success);
         } else {
           var btn = form.querySelector("button[type=submit]");

@@ -1,4 +1,4 @@
-﻿.faq {
+﻿.contacts {
   padding: 34px 0;
 
   @include vp-1024 {
@@ -89,11 +89,11 @@
         transform: translateX(0);
       }
 
-      .faq__contact-icon {
+      .contacts__contact-icon {
         transform: translateX(3px) rotate(-12deg) scale(1.08);
       }
 
-      .faq__contact-text {
+      .contacts__contact-text {
         transform: translateX(2px);
       }
     }

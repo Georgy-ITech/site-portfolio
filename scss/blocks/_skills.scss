@@ -1,4 +1,4 @@
-﻿.connect {
+﻿.skills {
   padding: 34px 0;
 
   @include vp-1024 {
@@ -23,42 +23,27 @@
     line-height: 1.14;
   }
 
-  &__grid {
+  &__tags {
     margin-top: 18px;
-    display: grid;
-    gap: 12px;
-
-    @include vp-768 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    @include vp-1024 {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
-  &__card {
-    padding: 20px;
-    border-radius: 18px;
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 999px;
     border: 1px solid var(--color-border);
     background-color: var(--color-card);
-    box-shadow: var(--shadow-soft);
+    font-size: 14px;
+    color: var(--color-navy);
     transition: transform 0.25s ease, border-color 0.25s ease;
 
-    &:hover,
-    &:focus-within {
-      transform: translateY(-4px);
-      border-color: rgba(10, 166, 184, 0.5);
+    &:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 107, 44, 0.65);
     }
-  }
-
-  &__card-title {
-    margin: 0;
-    font-size: 1.12rem;
-  }
-
-  &__card-text {
-    margin: 10px 0 0;
-    color: var(--color-muted);
   }
 }

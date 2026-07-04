@@ -1,4 +1,4 @@
-﻿.promotion {
+﻿.works {
   padding: 34px 0;
 
   @include vp-1024 {
@@ -50,7 +50,7 @@
       transform: translateY(-6px) scale(1.025);
       box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3);
 
-      .promotion__preview::after {
+      .works__preview::after {
         opacity: 1;
       }
     }
