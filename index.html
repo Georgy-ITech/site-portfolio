@@ -96,7 +96,7 @@
 
             <ul class="hero__metrics" aria-label="Ключевые показатели">
               <li class="hero__metric">
-                <span class="hero__metric-value">10+</span>
+                <span class="hero__metric-value">14+</span>
                 <span class="hero__metric-label">проектов в портфолио</span>
               </li>
               <li class="hero__metric">
@@ -104,8 +104,8 @@
                 <span class="hero__metric-label">адаптив на всех проектах</span>
               </li>
               <li class="hero__metric">
-                <span class="hero__metric-value">Vanilla JS</span>
-                <span class="hero__metric-label">без фреймворков</span>
+                <span class="hero__metric-value">React · 3D</span>
+                <span class="hero__metric-label">и чистый JS без фреймворков</span>
               </li>
             </ul>
           </div>
@@ -124,10 +124,10 @@
             <article class="hero__stack-card">
               <h2 class="hero__stack-title">Core stack</h2>
               <ul class="hero__stack-list">
-                <li class="hero__stack-item">HTML5 / CSS3</li>
+                <li class="hero__stack-item">HTML5 / CSS3 / SCSS</li>
                 <li class="hero__stack-item">JavaScript ES6+</li>
-                <li class="hero__stack-item">SCSS</li>
-                <li class="hero__stack-item">Git / GitHub</li>
+                <li class="hero__stack-item">React / TypeScript</li>
+                <li class="hero__stack-item">Three.js / WebGL</li>
               </ul>
             </article>
           </div>
@@ -203,6 +203,10 @@
           <span class="skills__tag">CSS3</span>
           <span class="skills__tag">SCSS</span>
           <span class="skills__tag">JavaScript ES6+</span>
+          <span class="skills__tag">React</span>
+          <span class="skills__tag">TypeScript</span>
+          <span class="skills__tag">Vite</span>
+          <span class="skills__tag">Three.js / WebGL</span>
           <span class="skills__tag">BEM</span>
           <span class="skills__tag">Git / GitHub</span>
           <span class="skills__tag">REST API</span>
@@ -218,6 +222,66 @@
         <p class="works__label">My works</p>
         <h2 class="works__title">Проекты, где дизайн и разработка работают вместе</h2>
         <div class="works__grid">
+          <a class="works__card" href="https://georgy-itech.github.io/sable-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #6366f1">
+            <div class="works__preview works__preview--sable">
+              <img class="works__preview-img" src="images/works/sable.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Sable — 3D-конфигуратор парфюма на React Three Fiber">
+            </div>
+            <div class="works__card-content">
+              <h3 class="works__card-title">Sable</h3>
+              <p class="works__card-text">3D-конфигуратор парфюма: флакон построен процедурно в коде, без готовых моделей. Гранёное стекло, отражения, три аромата — у каждого своя форма и атмосфера.</p>
+              <span class="works__stack">React · TypeScript · Three.js / R3F</span>
+            </div>
+          </a>
+          <a class="works__card" href="https://georgy-itech.github.io/nodal-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #00e5c3">
+            <div class="works__preview works__preview--nodal">
+              <img class="works__preview-img" src="images/works/nodal.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Nodal — лендинг edge-сети с WebGL-констелляцией">
+            </div>
+            <div class="works__card-content">
+              <h3 class="works__card-title">Nodal</h3>
+              <p class="works__card-text">Констелляция на сыром WebGL без библиотек: свои GLSL-шейдеры, курсор становится узлом сети, по связям бегут пакеты данных.</p>
+              <span class="works__stack">Vanilla JS · WebGL · GLSL</span>
+            </div>
+          </a>
+          <a class="works__card" href="https://georgy-itech.github.io/aura-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #ff2d78">
+            <div class="works__preview works__preview--aura">
+              <img class="works__preview-img" src="images/works/aura.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Aura — лендинг AI-платформы с курсор-реактивным фоном">
+            </div>
+            <div class="works__card-content">
+              <h3 class="works__card-title">Aura</h3>
+              <p class="works__card-text">Живой aurora-фон, реагирующий на курсор, и интерактивное демо продукта — поиск по документам команды с ответами и ссылками на источник.</p>
+              <span class="works__stack">Vanilla JS · CSS-анимации · Интерактив</span>
+            </div>
+          </a>
+          <a class="works__card" href="https://krema-coffee.vercel.app/" target="_blank" rel="noopener noreferrer" style="--card-accent: #c8863c">
+            <div class="works__preview works__preview--krema">
+              <img class="works__preview-img" src="images/works/krema.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="КРЕМА — интернет-магазин спешелти-кофе на React">
+            </div>
+            <div class="works__card-content">
+              <h3 class="works__card-title">КРЕМА</h3>
+              <p class="works__card-text">Интернет-магазин спешелти-кофе: каталог с фильтрами в URL, варианты помола и веса, корзина и оформление заказа.</p>
+              <span class="works__stack">React · TypeScript · Vite · SCSS-модули</span>
+            </div>
+          </a>
+          <a class="works__card" href="https://georgy-itech.github.io/smilio-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #4f9b8e">
+            <div class="works__preview works__preview--smilio">
+              <img class="works__preview-img" src="images/works/smilio.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Smilio — многостраничный сайт стоматологии">
+            </div>
+            <div class="works__card-content">
+              <h3 class="works__card-title">Smilio</h3>
+              <p class="works__card-text">Сайт стоматологии под ключ: 4 страницы, форма записи с валидацией, кастомные UI-компоненты, карточки врачей и услуг.</p>
+              <span class="works__stack">Vanilla JS · Multi-page · Формы</span>
+            </div>
+          </a>
+          <a class="works__card" href="https://georgy-itech.github.io/bento-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #00c8ff">
+            <div class="works__preview works__preview--bento">
+              <img class="works__preview-img" src="images/works/bento.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Nebula — премиальный bento-лендинг">
+            </div>
+            <div class="works__card-content">
+              <h3 class="works__card-title">Nebula</h3>
+              <p class="works__card-text">Тёмный премиальный bento-лендинг: асимметричная сетка, cursor-spotlight, счётчики, график и параллакс.</p>
+              <span class="works__stack">Vanilla JS · Bento-grid · Анимации</span>
+            </div>
+          </a>
           <a class="works__card" href="https://georgy-itech.github.io/filmgovernment/" target="_blank" rel="noopener noreferrer" style="--card-accent: #f5c842">
             <div class="works__preview works__preview--film">
               <img class="works__preview-img" src="images/works/filmgovernment.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="FilmGovernment — поиск фильмов через TMDB API">
@@ -248,33 +312,13 @@
               <span class="works__stack">HTML · Pure CSS · Vanilla JS</span>
             </div>
           </a>
-          <a class="works__card" href="https://georgy-itech.github.io/expense-tracker/" target="_blank" rel="noopener noreferrer" style="--card-accent: #9b6dff">
-            <div class="works__preview works__preview--expense">
-              <img class="works__preview-img" src="images/works/expense-tracker.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Expense Tracker — трекер расходов">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Expense Tracker</h3>
-              <p class="works__card-text">Трекер расходов — glassmorphism UI, категории, фильтры, графики, localStorage.</p>
-              <span class="works__stack">Vanilla JS · CSS · localStorage</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/fitness-trainer-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #00e5c3">
+          <a class="works__card" href="https://georgy-itech.github.io/fitness-trainer-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #0a7c60">
             <div class="works__preview works__preview--fitness">
               <img class="works__preview-img" src="images/works/fitshift.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="FITSHIFT — лендинг персонального тренера">
             </div>
             <div class="works__card-content">
               <h3 class="works__card-title">FITSHIFT</h3>
               <p class="works__card-text">Лендинг персонального тренера — слайдер до/после, FAQ, тарифы, scroll-reveal.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/ui-animation-showcase/" target="_blank" rel="noopener noreferrer" style="--card-accent: #00c8ff">
-            <div class="works__preview works__preview--animation">
-              <img class="works__preview-img" src="images/works/ui-animation.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="UI Animation Showcase — витрина UI-анимаций">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">UI Animation Showcase</h3>
-              <p class="works__card-text">Витрина 16 UI-анимаций — scroll-reveal, parallax, tilt, marquee, modal, accordion.</p>
               <span class="works__stack">HTML · CSS · Vanilla JS</span>
             </div>
           </a>
