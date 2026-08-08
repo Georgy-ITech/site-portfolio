@@ -23,6 +23,9 @@
   }
 
   &__top-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
     font-weight: 600;
     color: var(--color-navy);
 

@@ -1,0 +1,12 @@
+# Georgy_Tech
+
+> Портфолио фронтенд-разработчика: лендинги, многостраничные сайты, интернет-магазины и веб-приложения.
+
+Сайт: https://georgy-itech.github.io/site-portfolio/
+
+## Разделы
+- [Главная](https://georgy-itech.github.io/site-portfolio/)
+
+## О проекте
+Концепт-проект. Дизайн и разработка — Georgy_Tech (https://kwork.ru/user/georgy_tech).
+Стек: HTML, CSS, JavaScript без внешних зависимостей; шрифты подключены локально.

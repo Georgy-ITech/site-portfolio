@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# AI-краулеры пускаем осознанно: цель — попадать в ответы AI-поиска
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://georgy-itech.github.io/site-portfolio/sitemap.xml

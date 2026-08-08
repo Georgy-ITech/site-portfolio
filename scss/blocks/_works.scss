@@ -61,6 +61,9 @@
     height: 170px;
     background-size: 180% 180%;
     animation: gradient-shift 7s ease infinite;
+    // Подложка видна, пока грузится превью: строится из акцента карточки,
+    // поэтому отдельный класс на каждый проект не нужен
+    background-image: linear-gradient(130deg, rgba(0, 0, 0, 0.72), var(--card-accent, #0aa6b8));
 
     &::after {
       content: 'Открыть проект';
@@ -78,41 +81,6 @@
       transition: opacity 0.25s ease;
     }
 
-    &--commerce {
-      background-image: linear-gradient(130deg, #0f172a, #1f8a9a, #80d6e3);
-    }
-
-    &--agency {
-      background-image: linear-gradient(130deg, #1e1b4b, #f97316, #fed7aa);
-    }
-
-    &--startup {
-      background-image: linear-gradient(130deg, #083344, #0891b2, #67e8f9);
-    }
-
-    &--film {
-      background-image: linear-gradient(130deg, #0d0a0a, #b8860b, #f5c842);
-    }
-
-    &--dofit {
-      background-image: linear-gradient(130deg, #0a1a0a, #4a7c2f, #c8f135);
-    }
-
-    &--design {
-      background-image: linear-gradient(130deg, #1a0a05, #cc3a1a, #ff5c35);
-    }
-
-    &--expense {
-      background-image: linear-gradient(130deg, #0d0714, #5a2fb8, #9b6dff);
-    }
-
-    &--fitness {
-      background-image: linear-gradient(130deg, #051a12, #0a7c60, #2ecc8a);
-    }
-
-    &--animation {
-      background-image: linear-gradient(130deg, #050d2a, #1a3bbf, #2955f5);
-    }
   }
 
   &__preview-img {
