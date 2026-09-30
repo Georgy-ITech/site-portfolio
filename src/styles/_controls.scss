@@ -1,0 +1,209 @@
+@use "tokens" as *;
+
+/*
+  Кнопки. Наведение — по BaseButton референса (obsidianassembly.com): снизу поднимается
+  «купол», который выпрямляется в прямоугольник, буквы уходят вверх, их копии
+  въезжают снизу, уменьшаясь до нормы (волной от середины слова).
+  Форма своя — еле видная тонкая рамка без заливки; при наведении она чуть светлеет.
+*/
+
+.btn, .cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  overflow: hidden;
+  border: 0;
+  font: 500 0.7rem/1 var(--sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  isolation: isolate;
+  transition: background-color 0.9s var(--f-cubic);
+
+  // купол
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--dome);
+    border-radius: 50% 50% 0 0;
+    translate: 0 101%;
+    transition: border-radius 0.9s var(--f-cubic), translate 0.9s var(--f-cubic);
+  }
+  // sr-only-копия текста должна остаться вне потока, иначе она занимает место под gap и сдвигает надпись.
+  > *:not(.sr-only) { position: relative; z-index: 1; }
+}
+
+.btn {
+  --dome: rgb(4 6 9 / 0.92);
+  --copy: var(--text);
+  --edge: rgb(255 255 255 / 0.1);
+  --edge-on: rgb(255 255 255 / 0.24);
+  min-width: 136px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 2px;
+  background-color: rgb(255 255 255 / 0.03);
+  color: var(--text);
+  // Рамка поверх купола: иначе тёмная заливка её закрывает.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px var(--edge);
+    pointer-events: none;
+    transition: box-shadow 0.9s var(--f-cubic);
+  }
+}
+.btn--light {
+  --dome: #030507;
+  --edge: transparent;
+  --edge-on: rgb(255 255 255 / 0.24);
+  background-color: var(--text);
+  box-shadow: none;
+  color: var(--bg);
+}
+.btn--glass {
+  background-color: rgb(8 10 14 / 0.5);
+  -webkit-backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(0.5rem);
+}
+
+// Хвостовой трекинг после последней буквы сдвигает слово влево — компенсируем.
+.btn__text { display: inline-flex; white-space: pre; margin-right: -0.1em; transition: color 0.3s var(--f-cubic); }
+.bch {
+  position: relative;
+  display: inline-block;
+  translate: 0 0;
+  transition: translate 0.9s var(--f-cubic);
+  &::after {
+    content: attr(data-ch);
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    scale: calc(1.2 + var(--c) * 0.1);
+    translate: 0 100%;
+    transition: translate 0.9s var(--f-cubic), color 0.9s var(--f-cubic), scale 0.9s var(--f-cubic);
+  }
+}
+
+@mixin btn-on {
+  &::before {
+    border-radius: 2px;
+    translate: 0 0;
+    transition: border-radius 0.3s var(--f-fast), translate 0.9s var(--f-cubic);
+  }
+  &::after { box-shadow: inset 0 0 0 1px var(--edge-on); }
+  .btn__text { color: transparent; }
+  .bch { translate: 0 -50%; transition-delay: calc(var(--c) * 0.03s); }
+  .bch::after { color: var(--copy); scale: 1; translate: 0 50%; transition-delay: calc(var(--c) * 0.03s); }
+  .btn__lines, .btn__icon { color: var(--copy); }
+  .btn__icon { translate: 0 -110%; }
+  .btn__icon--copy { translate: 0 0; scale: 1; transition-delay: 0.05s; }
+}
+@media (hover: hover) {
+  :is(.btn, .cta):hover { @include btn-on; }
+}
+// С клавиатуры — то же состояние, что при наведении.
+:is(.btn, .cta):focus-visible { @include btn-on; }
+.cta:is(:hover, :focus-visible)::before { border-radius: var(--r-btn); }
+
+.btn__ico {
+  position: relative;
+  flex: none;
+  width: 17px;
+  height: 17px;
+  overflow: hidden;
+}
+.btn__icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  transition: translate 0.9s var(--f-cubic), scale 0.9s var(--f-cubic), color 0.6s var(--f-cubic);
+}
+.btn__icon--copy { translate: 0 110%; scale: 1.4; }
+.btn--icon { gap: 12px; }
+
+/* ---------- кнопка меню: две линии, при наведении меняются длиной ---------- */
+
+.btn--menu { justify-content: space-between; gap: 18px; }
+.btn__lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 22px;
+  height: 7px;
+  &::before, &::after {
+    content: "";
+    display: block;
+    height: 1.5px;
+    width: 100%;
+    background: currentColor;
+    transition: scale 0.9s var(--f-cubic), background-color 0.9s var(--f-cubic);
+  }
+  &::before { transform-origin: 0 50%; }
+  &::after { transform-origin: 100% 50%; scale: 0.6 1; }
+}
+@media (hover: hover) {
+  .btn--menu:hover .btn__lines::before { scale: 0.6 1; }
+  .btn--menu:hover .btn__lines::after { scale: 1 1; }
+}
+
+/* ---------- главная кнопка: светлая карточка, текст сверху слева, отметка снизу справа ---------- */
+
+.cta {
+  --dome: #030507;
+  --copy: var(--text);
+  border-radius: var(--r-btn);
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 190px;
+  height: 58px;
+  padding: 10px 44px 0 14px;
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+  font-size: 0.72rem;
+  box-shadow: 0 14px 40px rgb(0 0 0 / 0.3);
+}
+.cta__dot {
+  position: absolute !important;
+  right: 12px;
+  bottom: 12px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--bg);
+  transition: scale 0.9s var(--f-cubic), background-color 0.9s var(--f-cubic);
+}
+@media (hover: hover) {
+  .cta:hover .cta__dot { scale: 0.5; background: var(--acc); }
+}
+
+/* ---------- подпись над главной кнопкой: три строки лесенкой, сдвигаются при наведении ---------- */
+
+.cta-label {
+  display: block;
+  margin-bottom: 14px;
+  font: 500 clamp(1.05rem, 1.5vw, 1.35rem)/1.1 var(--display);
+  font-style: italic;
+  color: var(--muted);
+  span { display: block; transition: translate 0.6s var(--f-cubic); }
+  span:nth-child(1) { translate: 0 0; }
+  span:nth-child(2) { translate: 2em 0; }
+  span:nth-child(3) { translate: 1em 0; }
+  b { font-weight: 400; color: var(--acc); }
+}
+@media (hover: hover) {
+  .cta-wrap:has(.cta:hover) .cta-label span:nth-child(1) { translate: 1em 0; transition: translate 0.6s var(--f-cubic-in); }
+  .cta-wrap:has(.cta:hover) .cta-label span:nth-child(2) { translate: 0 0; transition: translate 0.75s var(--f-cubic-in); }
+  .cta-wrap:has(.cta:hover) .cta-label span:nth-child(3) { translate: 2em 0; transition: translate 0.9s var(--f-cubic-in); }
+}

@@ -1,0 +1,314 @@
+@use "tokens" as *;
+
+.works {
+  position: relative;
+  z-index: 2;
+  background: var(--deep);
+  color: var(--text);
+  // Место под зубчатый край бумаги — чтобы он не ложился на список работ.
+  padding-bottom: clamp(70px, 12vw, 190px);
+}
+.works__pin {
+  position: relative;
+  padding: 88px var(--gutter) 72px;
+}
+
+.works__intro {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+.works__title {
+  font: 500 clamp(3.6rem, 13vw, 11rem)/0.86 var(--display);
+  letter-spacing: -0.04em;
+}
+.works__word { display: block; }
+// Низ второго слова растворяется — как «Places» у референса.
+.works__word--2 {
+  margin: -0.2em;
+  padding: 0.2em 0.2em 0.2em 1.1em;
+  -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 82%);
+  mask-image: linear-gradient(180deg, #000 45%, transparent 82%);
+}
+.works__caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 6px;
+  font: 500 clamp(1.05rem, 1.4vw, 1.3rem)/1.15 var(--display);
+  font-style: italic;
+  color: var(--muted);
+  span { display: block; }
+  span:nth-child(1) { translate: -0.25em 0; }
+  span:nth-child(2) { translate: 2em 0; }
+  span:nth-child(3) { translate: -0.5em 0; }
+}
+// Рельеф под курсором и орбита — фоном за заголовком.
+.works__relief { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; }
+.works:not(.is-pinned) .works__relief { display: none; }
+.orbit--works { z-index: 0; }
+.works__scatter { display: none; }
+
+/* ---------- закреплённая сцена (широкий экран) ---------- */
+
+.works.is-pinned {
+  .works__pin { height: 100svh; padding: 0; overflow: hidden; }
+  .works__intro {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    margin: 0;
+    place-content: center;
+    pointer-events: none;
+  }
+  .works__scatter { display: block; position: absolute; inset: 0; z-index: 1; }
+  .viewer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 14px;
+    padding-top: calc(var(--head-h) - 10px);
+    pointer-events: none;
+  }
+  .viewer__frame { pointer-events: auto; }
+  .viewer__index { pointer-events: auto; }
+}
+
+.works__shot {
+  position: absolute;
+  left: calc(var(--x) * 100%);
+  top: calc(var(--y) * 100%);
+  width: var(--w);
+  aspect-ratio: 16 / 10;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgb(0 0 0 / 0.5), 0 0 0 1px var(--line);
+  img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+}
+
+/* ---------- просмотрщик ---------- */
+
+.viewer { --work-accent: var(--acc); }
+.viewer__frame {
+  position: relative;
+  width: min(92vw, calc(72svh * 1.6), 1320px);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #05070a;
+  box-shadow: 0 50px 120px rgb(0 0 0 / 0.55), 0 0 0 1px var(--line);
+  transform-origin: 50% 50%;
+  touch-action: pan-y;
+}
+.viewer__imgs { position: absolute; inset: 0; overflow: hidden; }
+.viewer__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  will-change: clip-path, transform;
+}
+.viewer__shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgb(4 6 9 / 0.95) 0%, rgb(4 6 9 / 0.82) 22%, rgb(4 6 9 / 0.5) 40%, transparent 62%),
+    linear-gradient(to bottom, rgb(4 6 9 / 0.45), transparent 18%);
+  // Размытие под подписью: мелкий текст самих сайтов не спорит с описанием работы.
+  // Верх полосы — край названия работы (--blur-top считает gallery.js), выше не поднимается.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: var(--blur-top, 72%) 0 0;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 28px);
+    mask-image: linear-gradient(to bottom, transparent, #000 28px);
+  }
+}
+.viewer__ui { position: absolute; inset: 0; pointer-events: none; > * { pointer-events: auto; } }
+
+.viewer__meta {
+  position: absolute;
+  left: clamp(18px, 3vw, 44px);
+  bottom: clamp(18px, 3vw, 40px);
+  max-width: min(560px, 52%);
+  color: #f2f5f8;
+}
+.viewer__name {
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  font: 500 clamp(2rem, 4.6vw, 4.4rem)/1 var(--display);
+  letter-spacing: -0.02em;
+}
+.viewer__text {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgb(242 245 248 / 0.84);
+}
+.viewer__stack {
+  margin-top: 10px;
+  font: 400 0.62rem/1.4 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--work-accent);
+  transition: color 0.6s var(--ease);
+}
+
+.viewer__lh {
+  margin-top: 6px;
+  font: 400 0.6rem/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(242 245 248 / 0.7);
+}
+
+// Кнопка — общий стиль .btn .btn--glass; здесь только место и подсветка цветом проекта.
+.viewer__open {
+  position: absolute;
+  top: clamp(14px, 2vw, 24px);
+  right: clamp(14px, 2vw, 24px);
+  color: #f2f5f8;
+  @media (hover: hover) {
+    &:hover { background: var(--work-accent); color: #07090c; }
+  }
+}
+
+.viewer__nav {
+  position: absolute;
+  right: clamp(18px, 3vw, 44px);
+  bottom: clamp(18px, 3vw, 40px);
+  display: flex;
+  gap: 10px;
+}
+.viewer__btn {
+  --dir: 1;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  clip-path: circle(calc(50% - 1px) at 50%);
+  background: #07090c;
+  color: var(--text);
+  cursor: pointer;
+  // заливка снизу при наведении
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 50%;
+    background: var(--text);
+    scale: 1 0;
+    transform-origin: 50% 100%;
+    transition: scale 1.2s var(--f-cubic-in);
+  }
+  svg {
+    grid-area: 1 / 1;
+    position: relative;
+    z-index: 1;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    // стрелки вращаются вокруг точки далеко под кнопкой
+    transform-origin: 50% 400%;
+    transition: rotate 1.2s var(--f-cubic-in);
+  }
+  svg:first-child { rotate: 0deg; }
+  svg:nth-child(2) { rotate: calc(-90deg * var(--dir)); color: #07090c; }
+  &:active { transform: scale(0.95); }
+}
+.viewer__btn--prev { --dir: -1; }
+@media (hover: hover) {
+  .viewer__btn:hover {
+    &::before { scale: 1 1; transition: scale 0.9s var(--f-cubic); }
+    svg { transition: rotate 0.9s var(--f-cubic); }
+    svg:first-child { rotate: calc(90deg * var(--dir)); }
+    svg:nth-child(2) { rotate: 0deg; }
+  }
+}
+.viewer__btn:focus-visible {
+  &::before { scale: 1 1; }
+  svg:first-child { rotate: calc(90deg * var(--dir)); }
+  svg:nth-child(2) { rotate: 0deg; }
+}
+.viewer__btn--next { box-shadow: inset 0 0 0 1px rgb(199 164 90 / 0.5); }
+.viewer__name--ghost { position: absolute !important; left: 0; top: 0; pointer-events: none; }
+.viewer__count {
+  position: absolute;
+  right: calc(clamp(18px, 3vw, 44px) + 142px);
+  bottom: calc(clamp(18px, 3vw, 40px) + 18px);
+  font: 400 0.72rem/1 var(--mono);
+  letter-spacing: 0.1em;
+  color: rgb(242 245 248 / 0.8);
+  #viewerCur { color: var(--work-accent); }
+  // счётчик в двух тонких кругах — как у референса
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+    translate: -50% -50%;
+    pointer-events: none;
+  }
+  &::before { width: 52px; height: 52px; border: 1px solid rgb(199 164 90 / 0.25); }
+  &::after { width: 64px; height: 64px; border: 1px solid rgb(199 164 90 / 0.12); }
+}
+
+.viewer__index {
+  display: flex;
+  gap: 4px 18px;
+  width: min(92vw, 1320px);
+  overflow-x: auto;
+  padding: 6px 2px 10px;
+  scrollbar-width: none;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  &::-webkit-scrollbar { display: none; }
+}
+.viewer__pick {
+  flex: none;
+  padding: 9px 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: 400 0.66rem/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+  transition: color 0.3s var(--ease);
+  &:hover { color: var(--text); }
+  &[aria-current] { color: var(--acc); }
+}
+
+/* ---------- узкий экран: подписи под снимком, а не поверх ---------- */
+
+@media (max-width: 767px) {
+  .viewer__frame { width: 100%; aspect-ratio: auto; display: flex; flex-direction: column; }
+  .viewer__imgs { position: relative; aspect-ratio: 16 / 10; }
+  .viewer__shade { bottom: auto; height: 30%; background: linear-gradient(to bottom, rgb(4 6 9 / 0.5), transparent); &::after { display: none; } }
+  .viewer__ui { position: static; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 16px; padding: 18px 16px 20px; }
+  .viewer__meta { position: relative; max-width: none; grid-column: 1 / -1; }
+  .viewer__count { position: static; align-self: center; }
+  .viewer__nav { position: static; }
+  .viewer__btn { width: 50px; height: 50px; }
+  .viewer__index { flex-wrap: wrap; width: 100%; mask-image: none; margin-top: 18px; }
+}

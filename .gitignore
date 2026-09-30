@@ -6,3 +6,4 @@ node_modules/
 Thumbs.db
 _fav*.png
 _favtest.html
+dist/

@@ -1,60 +1,67 @@
-# Georgy — Frontend Developer · Portfolio
+# Georgy_Tech — личный сайт
 
-Личный сайт-портфолио фронтенд-разработчика. Тёмный премиум-минимализм: glassmorphism,
-свечение сквозь стекло, один цветовой акцент, продуманные микро-взаимодействия.
-Тёмная и светлая темы, адаптив, доступность, ноль зависимостей.
+Сайт разработчика сайтов под ключ: первый экран с часовым механизмом, отрендеренным
+трассировкой лучей, закреплённая галерея из 19 работ, светлая «бумажная» часть с составом
+работы, условиями, ценами и вопросами. Тёмная сцена, сдержанное латунное золото.
 
 **Live:** https://georgy-itech.github.io/site-portfolio/
 
-## Возможности
-
-- Тёмная / светлая тема с переключателем и сохранением в `localStorage`
-- Scroll-reveal анимации на `IntersectionObserver`
-- Индикатор прогресса прокрутки
-- Мобильное бургер-меню, плавные якорные переходы
-- Секция работ с карточками проектов и акцентом каждого проекта
-- Форма связи через Formspree (AJAX, состояния success / error, без `alert()`)
-- `prefers-reduced-motion`, семантичная разметка, aria-атрибуты
-
 ## Стек
 
-- HTML5 (семантика, полная мета-разметка, og / twitter card)
-- SCSS (BEM, архитектура `global/` + `blocks/`, CSS custom properties, темы)
-- Vanilla JavaScript (ES6+, без фреймворков и библиотек)
-- Formspree (обработка формы)
-- GitHub Pages (деплой)
+- Vite, vanilla JS (ES-модули), SCSS
+- GSAP + ScrollTrigger — закреплённая галерея, проявление текста, разъезд заголовков
+- Lenis — плавная прокрутка (отключается при `prefers-reduced-motion`)
+- Шрифты локально через Fontsource: Cormorant Garamond (заголовки), Geist (текст), Martian Mono (служебный слой)
+
+## Механизм
+
+Три зацеплённых колеса построены кодом (эвольвентный профиль зуба, реальные передаточные
+числа) и отрендерены трассировкой лучей в `brand/preview/gear-render.html`
+(three-gpu-pathtracer, студийное окружение Poly Haven, CC0). Цикл бесшовный: за 120 кадров
+большое колесо проходит 60° и совпадает само с собой.
+
+- `public/mech/mech-800.webm`, `mech-520.webm` — VP9 с прозрачностью (Chrome, Яндекс Браузер, Firefox, Edge)
+- `public/mech/frames/` — 60 WebP-кадров для Safari и iPhone (там прозрачность VP9 не поддерживается)
+- `public/mech/still.webp` — одиночный кадр для меню
+
+## Разработка
+
+```bash
+npm install
+npm run dev      # разработка
+npm run build    # сборка в dist/
+npm run preview  # проверка собранного dist на http://localhost:5548/site-portfolio/
+```
+
+Деплой — GitHub Actions (`.github/workflows/deploy.yml`) при пуше в `main`.
+В настройках репозитория: **Settings → Pages → Source: GitHub Actions**.
+
+## Статистика
+
+Яндекс Метрика подключается по той же схеме, что на doctorgabriel.ru: скрипт не грузится
+до согласия, есть баннер, политика и отдельное согласие. Всё выключено, пока в
+`src/data/analytics.js` не заполнены номер счётчика, ФИО и почта оператора: без них не
+собираются ни баннер, ни страницы `/privacy/` и `/consent/`, ни ссылки в подвале.
+
+Цели для Метрики («JavaScript-событие»): `kwork_open`, `telegram_open`, `github_open`, `work_open`,
+`viewer_next`, `price_view`, `menu_open`.
+
+Ссылки с метками — чтобы видеть, откуда пришли:
+
+| Где стоит ссылка | Адрес |
+|---|---|
+| Профиль Kwork | `https://georgy-itech.github.io/site-portfolio/?utm_source=kwork&utm_medium=profile` |
+| Telegram-канал | `https://georgy-itech.github.io/site-portfolio/?utm_source=telegram&utm_medium=social` |
+| GitHub-профиль | `https://georgy-itech.github.io/site-portfolio/?utm_source=github&utm_medium=profile` |
 
 ## Структура
 
 ```
-site-portfolio/
-├── index.html
-├── favicon.svg
-├── og-image.png
-├── css/            # скомпилированный style.css
-├── scss/
-│   ├── global/     # variables, mixins, fonts, reboot, container…
-│   └── blocks/     # header, hero, about, services, skills, works, contacts…
-├── js/main.js      # тема, reveal, меню, форма, scroll-progress
-├── fonts/          # Noto Sans (self-hosted)
-└── images/         # sprite.svg + превью работ
+index.html            разметка главной
+privacy/, consent/    политика и согласие (собираются только со статистикой)
+src/main.js           сборка модулей: прокрутка, заставка, первый экран, вкладки, часы
+src/ui/               mechanism, gallery, menu, split, consent
+src/data/             works.js (19 работ, вопросы), analytics.js
+src/styles/           tokens, base, controls, chrome, hero, works, paper, final
+public/               снимки работ, механизм, favicon, robots, sitemap, llms.txt
 ```
-
-## Локальный запуск
-
-Статический сайт — открыть `index.html` или поднять любой статик-сервер:
-
-```bash
-npx serve .
-```
-
-Сборка стилей (если правишь SCSS):
-
-```bash
-sass scss/style.scss css/style.css --style=expanded
-```
-
-## Контакты
-
-- GitHub: [Georgy-ITech](https://github.com/Georgy-ITech)
-- Kwork: [georgy_tech](https://kwork.ru/user/georgy_tech)

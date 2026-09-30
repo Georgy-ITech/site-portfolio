@@ -1,479 +1,344 @@
-﻿<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Портфолио фронтенд-разработчика Georgy: лендинги, веб-приложения и 3D-интерфейсы на JavaScript, React, Next.js и Three.js. Pixel-perfect, адаптив, живые анимации.">
-  <meta name="theme-color" content="#070b14">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Georgy_Tech — превращаю замысел в работающий сайт</title>
+  <meta name="description" content="Сайты под ключ: структура, тексты, дизайн, анимация, заявки и публикация. Работаю один — от замысла до запуска. Сахалин, МСК+8.">
   <link rel="canonical" href="https://georgy-itech.github.io/site-portfolio/">
+  <meta name="theme-color" content="#0c1116">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Georgy_Tech">
   <meta property="og:url" content="https://georgy-itech.github.io/site-portfolio/">
-  <meta property="og:title" content="Georgy — Frontend Developer">
-  <meta property="og:description" content="Лендинги, веб-приложения и 3D-интерфейсы на React, Next.js и Three.js. Pixel-perfect, адаптив, живые анимации.">
-  <meta property="og:image" content="https://georgy-itech.github.io/site-portfolio/og-image.png">
+  <meta property="og:title" content="Georgy_Tech — превращаю замысел в работающий сайт">
+  <meta property="og:description" content="Сайты под ключ — от замысла до запуска. Структура, тексты, дизайн, анимация и публикация.">
+  <meta property="og:image" content="https://georgy-itech.github.io/site-portfolio/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="ru_RU">
-
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Georgy — Frontend Developer">
-  <meta name="twitter:description" content="Лендинги, веб-приложения и 3D-интерфейсы на React, Next.js и Three.js. Pixel-perfect, адаптив, живые анимации.">
-  <meta name="twitter:image" content="https://georgy-itech.github.io/site-portfolio/og-image.png">
+  <meta name="twitter:title" content="Georgy_Tech — превращаю замысел в работающий сайт">
+  <meta name="twitter:description" content="Сайты под ключ — от замысла до запуска.">
+  <meta name="twitter:image" content="https://georgy-itech.github.io/site-portfolio/og-image.jpg">
 
-  <link rel="preload" href="fonts/noto-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/noto-sans-bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=fix-hover-1">
-  <script src="js/main.js?v=fix-hover-1" defer></script>
-  <title>Georgy | Frontend Developer Portfolio</title>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Georgy_Tech",
-  "description": "Портфолио фронтенд-разработчика: лендинги, многостраничные сайты, интернет-магазины и веб-приложения.",
-  "url": "https://georgy-itech.github.io/site-portfolio/",
-  "inLanguage": "ru-RU",
-  "jobTitle": "Frontend-разработчик"
-}
-</script>
+  <script>document.documentElement.classList.add("js");</script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Georgy_Tech",
+    "description": "Разработка сайтов под ключ: структура, тексты, дизайн, анимация, публикация.",
+    "url": "https://georgy-itech.github.io/site-portfolio/",
+    "image": "https://georgy-itech.github.io/site-portfolio/og-image.jpg",
+    "areaServed": "RU",
+    "address": { "@type": "PostalAddress", "addressRegion": "Сахалинская область", "addressCountry": "RU" },
+    "priceRange": "от 1 500 ₽",
+    "email": "georgy.tech@yandex.ru",
+    "sameAs": ["https://t.me/GeorgyTech", "https://t.me/georgy_tech_web", "https://kwork.ru/user/georgy_tech", "https://github.com/Georgy-ITech"],
+    "founder": { "@type": "Person", "name": "Георгий Дзасохов", "alternateName": "Georgy_Tech", "jobTitle": "Разработчик сайтов" }
+  }
+  </script>
 </head>
-
 <body>
-  <div class="scroll-progress" aria-hidden="true">
-    <span class="scroll-progress__bar"></span>
+  <!-- Иконки площадок: Telegram и GitHub — Simple Icons (CC0), Kwork — упрощённый знак. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-kwork" viewBox="0 0 24 24"><path d="M2.5 2.5h6.2v6.2L6 6.1H2.5z"/><path d="M5 7.2h3.7V21H5z"/><path d="M8.7 12.6 15.8 3h4.6l-7.9 10.4z"/><path d="M11.4 11.9 20.7 21h-4.9l-7.1-7.3z"/></symbol>
+    <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1.4 2L12 12.3 19.6 7H4.4zM20 8.4l-7.4 5.2a1 1 0 0 1-1.2 0L4 8.4V17h16V8.4z"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+  </svg>
+
+  <a class="skip" href="#main">К содержанию</a>
+
+  <!-- Заставка: механизм проворачивается, пока подгружается. -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__stage" id="loaderStage">
+      <canvas class="loader__mech" id="loaderMech" width="560" height="358"></canvas>
+      <img class="loader__part" data-origin="36.6% 47.7%" src="/mech/parts/p0.webp" alt="" width="800" height="512" decoding="async" fetchpriority="high">
+      <img class="loader__part" data-origin="73.6% 64.4%" src="/mech/parts/p1.webp" alt="" width="800" height="512" decoding="async" fetchpriority="high">
+      <img class="loader__part" data-origin="75.7% 31.4%" src="/mech/parts/p2.webp" alt="" width="800" height="512" decoding="async" fetchpriority="high">
+    </div>
+    <p class="loader__count"><span id="loaderCount">0</span></p>
+    <p class="loader__label" id="loaderLabel"><span>Разрабатываю ваш сайт</span></p>
+    <div class="loader__bar" id="loaderBar"></div>
   </div>
-  <header class="header" id="top">
-    <div class="container">
-      <div class="header__wrapper">
-        <a class="header__logo-link" href="#main" aria-label="Перейти на главный экран">
-          <span class="header__logo-dot"></span>
-          <span class="header__logo-text">Georgy.dev</span>
-        </a>
 
-        <nav class="header-nav" id="site-menu" aria-label="Основная навигация">
-          <button class="header-nav__close" type="button" aria-label="Закрыть меню">
-            <span class="header-nav__close-line"></span>
-            <span class="header-nav__close-line"></span>
-          </button>
-          <ul class="header-nav__list">
-            <li class="header-nav__item"><a class="header__link" href="#main">Main</a></li>
-            <li class="header-nav__item"><a class="header__link" href="#about">About me</a></li>
-            <li class="header-nav__item"><a class="header__link" href="#services">Services</a></li>
-            <li class="header-nav__item"><a class="header__link" href="#skills">Skills</a></li>
-            <li class="header-nav__item"><a class="header__link" href="#works">My works</a></li>
-            <li class="header-nav__item"><a class="header__link" href="#contacts">Contacts</a></li>
-          </ul>
-        </nav>
+  <div class="veil" id="veil" aria-hidden="true"><div class="veil__dim"></div><div class="veil__cols"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><p class="veil__mark">Georgy<b>_</b>Tech</p></div>
 
-        <div class="header__actions">
-          <button class="header__menu-toggle" type="button" aria-label="Открыть меню" aria-controls="site-menu" aria-expanded="false">
-            <span class="header__menu-line"></span>
-            <span class="header__menu-line"></span>
-            <span class="header__menu-line"></span>
-          </button>
-          <button class="theme-toggle" type="button" aria-label="Переключить тему" aria-pressed="false">
-            <span class="theme-toggle__icon" aria-hidden="true">
-              <svg class="theme-toggle__svg theme-toggle__svg--moon" width="16" height="16">
-                <use href="images/sprite.svg#icon-moon"></use>
-              </svg>
-              <svg class="theme-toggle__svg theme-toggle__svg--sun" width="16" height="16">
-                <use href="images/sprite.svg#icon-sun"></use>
-              </svg>
-            </span>
-            <span class="theme-toggle__text">Theme</span>
-          </button>
-          <a class="header__button btn btn--primary" href="#contacts">Start project</a>
-        </div>
-      </div>
+  <header class="head" id="head">
+    <a class="head__brand" href="#top" aria-label="Georgy_Tech — в начало"><span>Georgy</span><span><b>_</b>Tech</span></a>
+    <nav class="head__nav" aria-label="Разделы">
+      <a class="btn" href="#works" data-roll>Работы</a>
+      <span class="head__sep" aria-hidden="true"></span>
+      <a class="btn" href="#prices" data-roll>Цены</a>
+    </nav>
+    <div class="head__right">
+      <a class="btn head__contact" href="#contacts" data-roll>Связаться</a>
+      <button class="btn btn--menu" id="menuOpen" type="button" aria-expanded="false" aria-controls="menu" aria-label="Меню"><span class="btn__lines" aria-hidden="true"></span><span class="btn--menu__label" aria-hidden="true" data-roll>Меню</span></button>
     </div>
   </header>
 
-  <main>
-    <section class="hero" id="main">
-      <div class="container">
-        <div class="hero__banner">
-          <div class="hero__content">
-            <p class="hero__label">Frontend Developer</p>
-            <h1 class="hero__title">Создаю сайты, которые цепляют дизайном и двигают бизнес-метрики</h1>
-            <p class="hero__text">Собираю быстрые, живые и адаптивные интерфейсы: от лендингов до сложных веб-приложений с продуманной UX-логикой и аккуратной анимацией.</p>
+  <div class="menu" id="menu" role="dialog" aria-modal="true" aria-labelledby="menuTitle" hidden>
+    <div class="menu__veil" data-menu-close></div>
+    <div class="menu__disk">
+      <div class="menu__blueprint" aria-hidden="true"></div>
+      <p class="menu__title" id="menuTitle">Навигация</p>
+      <nav class="menu__nav" aria-label="Меню">
+        <a class="menu__link menu__link--1" href="#works">Работы</a>
+        <a class="menu__link menu__link--2" href="#how">Как работаю</a>
+        <a class="menu__link menu__link--3" href="#about">Обо мне</a>
+        <a class="menu__link menu__link--4" href="#prices">Цены</a>
+        <a class="menu__link menu__link--5" href="#contacts">Связаться</a>
+      </nav>
+    </div>
+    <button class="btn menu__close" type="button" data-menu-close data-roll>Закрыть</button>
+  </div>
 
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="#works">Смотреть проекты</a>
-              <a class="btn btn--secondary" href="#contacts">Обсудить задачу</a>
+  <main id="main">
+    <section class="hero" id="top" data-progress="hero" data-header="light" aria-labelledby="heroTitle">
+      <canvas class="hero__sky" id="heroSky" aria-hidden="true"></canvas>
+      <svg class="hero__defs" width="0" height="0" aria-hidden="true"><defs><clipPath id="arch" clipPathUnits="objectBoundingBox"><path d="M 0 1 L 0 .75 Q .5 0 1 .75 L 1 1 Z"/></clipPath></defs></svg>
+      <div class="hero__grid">
+        <p class="hero__aside hero__aside--l a-up" style="--d:.2">Сайты под ключ —<br>для дела и для себя</p>
+        <p class="hero__aside hero__aside--r a-up" style="--d:.35">Сахалин<br>МСК+8</p>
+        <div class="hero__inst" aria-hidden="true">
+          <div class="hero__inst-i hero__inst-i--a"><svg viewBox="-90 -90 180 180"><g fill="none" stroke="currentColor" stroke-width="1"><circle r="84"/><circle r="76" stroke-opacity=".5"/><path d="M0.0,-76.0L0.0,-68.0"/><path d="M7.9,-75.6L7.6,-72.1"/><path d="M15.8,-74.3L15.1,-70.9"/><path d="M23.5,-72.3L22.4,-69.0"/><path d="M30.9,-69.4L29.5,-66.2"/><path d="M38.0,-65.8L34.0,-58.9"/><path d="M44.7,-61.5L42.6,-58.7"/><path d="M50.9,-56.5L48.5,-53.9"/><path d="M56.5,-50.9L53.9,-48.5"/><path d="M61.5,-44.7L58.7,-42.6"/><path d="M65.8,-38.0L58.9,-34.0"/><path d="M69.4,-30.9L66.2,-29.5"/><path d="M72.3,-23.5L69.0,-22.4"/><path d="M74.3,-15.8L70.9,-15.1"/><path d="M75.6,-7.9L72.1,-7.6"/><path d="M76.0,0.0L68.0,0.0"/><path d="M75.6,7.9L72.1,7.6"/><path d="M74.3,15.8L70.9,15.1"/><path d="M72.3,23.5L69.0,22.4"/><path d="M69.4,30.9L66.2,29.5"/><path d="M65.8,38.0L58.9,34.0"/><path d="M61.5,44.7L58.7,42.6"/><path d="M56.5,50.9L53.9,48.5"/><path d="M50.9,56.5L48.5,53.9"/><path d="M44.7,61.5L42.6,58.7"/><path d="M38.0,65.8L34.0,58.9"/><path d="M30.9,69.4L29.5,66.2"/><path d="M23.5,72.3L22.4,69.0"/><path d="M15.8,74.3L15.1,70.9"/><path d="M7.9,75.6L7.6,72.1"/><path d="M0.0,76.0L0.0,68.0"/><path d="M-7.9,75.6L-7.6,72.1"/><path d="M-15.8,74.3L-15.1,70.9"/><path d="M-23.5,72.3L-22.4,69.0"/><path d="M-30.9,69.4L-29.5,66.2"/><path d="M-38.0,65.8L-34.0,58.9"/><path d="M-44.7,61.5L-42.6,58.7"/><path d="M-50.9,56.5L-48.5,53.9"/><path d="M-56.5,50.9L-53.9,48.5"/><path d="M-61.5,44.7L-58.7,42.6"/><path d="M-65.8,38.0L-58.9,34.0"/><path d="M-69.4,30.9L-66.2,29.5"/><path d="M-72.3,23.5L-69.0,22.4"/><path d="M-74.3,15.8L-70.9,15.1"/><path d="M-75.6,7.9L-72.1,7.6"/><path d="M-76.0,0.0L-68.0,0.0"/><path d="M-75.6,-7.9L-72.1,-7.6"/><path d="M-74.3,-15.8L-70.9,-15.1"/><path d="M-72.3,-23.5L-69.0,-22.4"/><path d="M-69.4,-30.9L-66.2,-29.5"/><path d="M-65.8,-38.0L-58.9,-34.0"/><path d="M-61.5,-44.7L-58.7,-42.6"/><path d="M-56.5,-50.9L-53.9,-48.5"/><path d="M-50.9,-56.5L-48.5,-53.9"/><path d="M-44.7,-61.5L-42.6,-58.7"/><path d="M-38.0,-65.8L-34.0,-58.9"/><path d="M-30.9,-69.4L-29.5,-66.2"/><path d="M-23.5,-72.3L-22.4,-69.0"/><path d="M-15.8,-74.3L-15.1,-70.9"/><path d="M-7.9,-75.6L-7.6,-72.1"/><g class="hero__inst-hand"><path d="M0,14L0,-70"/><circle r="3.5" fill="currentColor"/></g></g><g class="hero__inst-nums" fill="currentColor"><text x="0.0" y="-58.0">60</text><text x="50.2" y="-29.0">10</text><text x="50.2" y="29.0">20</text><text x="0.0" y="58.0">30</text><text x="-50.2" y="29.0">40</text><text x="-50.2" y="-29.0">50</text></g></svg></div>
+          <div class="hero__inst-i hero__inst-i--b"><svg viewBox="-40 -40 80 80"><g fill="none" stroke="currentColor" stroke-width="1"><circle r="34"/><circle r="24" stroke-dasharray="2 4"/><circle r="6"/><path d="M-40,0h28M12,0h28M0,-40v28M0,12v28" stroke-opacity=".6"/><g class="hero__inst-orbit"><circle cx="0" cy="-34" r="2.2" fill="currentColor" stroke="none"/></g></g></svg></div>
+          <div class="hero__inst-i hero__inst-i--c"><svg viewBox="-72 -82 144 62"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M-60.6,-35.0L-52.8,-30.5"/><path d="M-58.0,-39.1L-54.7,-36.9"/><path d="M-55.2,-43.1L-52.0,-40.6"/><path d="M-52.0,-46.8L-49.0,-44.2"/><path d="M-48.6,-50.4L-45.8,-47.5"/><path d="M-45.0,-53.6L-39.2,-46.7"/><path d="M-41.1,-56.6L-38.8,-53.4"/><path d="M-37.1,-59.4L-35.0,-56.0"/><path d="M-32.9,-61.8L-31.0,-58.3"/><path d="M-28.5,-63.9L-26.8,-60.3"/><path d="M-23.9,-65.8L-20.9,-57.3"/><path d="M-19.3,-67.3L-18.2,-63.4"/><path d="M-14.6,-68.5L-13.7,-64.6"/><path d="M-9.7,-69.3L-9.2,-65.4"/><path d="M-4.9,-69.8L-4.6,-65.8"/><path d="M0.0,-70.0L0.0,-61.0"/><path d="M4.9,-69.8L4.6,-65.8"/><path d="M9.7,-69.3L9.2,-65.4"/><path d="M14.6,-68.5L13.7,-64.6"/><path d="M19.3,-67.3L18.2,-63.4"/><path d="M23.9,-65.8L20.9,-57.3"/><path d="M28.5,-63.9L26.8,-60.3"/><path d="M32.9,-61.8L31.0,-58.3"/><path d="M37.1,-59.4L35.0,-56.0"/><path d="M41.1,-56.6L38.8,-53.4"/><path d="M45.0,-53.6L39.2,-46.7"/><path d="M48.6,-50.4L45.8,-47.5"/><path d="M52.0,-46.8L49.0,-44.2"/><path d="M55.2,-43.1L52.0,-40.6"/><path d="M58.0,-39.1L54.7,-36.9"/><path d="M60.6,-35.0L52.8,-30.5"/><path d="M-60.6,-35.0A70,70 0 0 1 60.6,-35.0"/><g class="hero__inst-index"><path d="M0,-78L-3.5,-86L3.5,-86Z" fill="currentColor" stroke="none" transform="translate(0,8)"/></g></g><g class="hero__inst-nums" fill="currentColor"><text x="-45.0" y="-26.0">0</text><text x="-33.4" y="-39.8">1</text><text x="-17.8" y="-48.9">2</text><text x="0.0" y="-52.0">3</text><text x="17.8" y="-48.9">4</text><text x="33.4" y="-39.8">5</text><text x="45.0" y="-26.0">6</text></g></svg></div>
+          <div class="hero__inst-i hero__inst-i--d"><svg viewBox="-76 -76 152 84"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M-70,0A70,70 0 0 1 70,0"/><path d="M-58,0A58,58 0 0 1 58,0" stroke-opacity=".45"/><path d="M-70.0,-0.0L-61.0,-0.0"/><path d="M-69.8,-5.5L-65.8,-5.2"/><path d="M-69.1,-11.0L-65.2,-10.3"/><path d="M-68.1,-16.3L-64.2,-15.4"/><path d="M-66.6,-21.6L-62.8,-20.4"/><path d="M-64.7,-26.8L-56.4,-23.3"/><path d="M-62.4,-31.8L-58.8,-30.0"/><path d="M-59.7,-36.6L-56.3,-34.5"/><path d="M-56.6,-41.1L-53.4,-38.8"/><path d="M-53.2,-45.5L-50.2,-42.9"/><path d="M-49.5,-49.5L-43.1,-43.1"/><path d="M-45.5,-53.2L-42.9,-50.2"/><path d="M-41.1,-56.6L-38.8,-53.4"/><path d="M-36.6,-59.7L-34.5,-56.3"/><path d="M-31.8,-62.4L-30.0,-58.8"/><path d="M-26.8,-64.7L-23.3,-56.4"/><path d="M-21.6,-66.6L-20.4,-62.8"/><path d="M-16.3,-68.1L-15.4,-64.2"/><path d="M-11.0,-69.1L-10.3,-65.2"/><path d="M-5.5,-69.8L-5.2,-65.8"/><path d="M0.0,-70.0L0.0,-61.0"/><path d="M5.5,-69.8L5.2,-65.8"/><path d="M11.0,-69.1L10.3,-65.2"/><path d="M16.3,-68.1L15.4,-64.2"/><path d="M21.6,-66.6L20.4,-62.8"/><path d="M26.8,-64.7L23.3,-56.4"/><path d="M31.8,-62.4L30.0,-58.8"/><path d="M36.6,-59.7L34.5,-56.3"/><path d="M41.1,-56.6L38.8,-53.4"/><path d="M45.5,-53.2L42.9,-50.2"/><path d="M49.5,-49.5L43.1,-43.1"/><path d="M53.2,-45.5L50.2,-42.9"/><path d="M56.6,-41.1L53.4,-38.8"/><path d="M59.7,-36.6L56.3,-34.5"/><path d="M62.4,-31.8L58.8,-30.0"/><path d="M64.7,-26.8L56.4,-23.3"/><path d="M66.6,-21.6L62.8,-20.4"/><path d="M68.1,-16.3L64.2,-15.4"/><path d="M69.1,-11.0L65.2,-10.3"/><path d="M69.8,-5.5L65.8,-5.2"/><path d="M70.0,0.0L61.0,0.0"/><path d="M-76,0H76" stroke-opacity=".35"/><g class="hero__inst-needle"><path d="M0,0L0,-60"/><circle r="4" fill="currentColor"/></g></g></svg></div>
+        </div>
+        <div class="hero__dial" aria-hidden="true"><svg viewBox="-500 -320 1000 640"><g class="hero__dial-turn"><g class="hero__dial-spin" fill="none" stroke="currentColor" stroke-width="1"><circle r="300"/><circle r="286"/><circle r="232" stroke-dasharray="2 6"/><path d="M0.0,-286.0L0.0,-272.0"/><path d="M29.9,-284.4L29.3,-278.5"/><path d="M59.5,-279.8L58.2,-273.9"/><path d="M88.4,-272.0L86.5,-266.3"/><path d="M116.3,-261.3L113.9,-255.8"/><path d="M143.0,-247.7L136.0,-235.6"/><path d="M168.1,-231.4L164.6,-226.5"/><path d="M191.4,-212.5L187.4,-208.1"/><path d="M212.5,-191.4L208.1,-187.4"/><path d="M231.4,-168.1L226.5,-164.6"/><path d="M247.7,-143.0L235.6,-136.0"/><path d="M261.3,-116.3L255.8,-113.9"/><path d="M272.0,-88.4L266.3,-86.5"/><path d="M279.8,-59.5L273.9,-58.2"/><path d="M284.4,-29.9L278.5,-29.3"/><path d="M286.0,0.0L272.0,0.0"/><path d="M284.4,29.9L278.5,29.3"/><path d="M279.8,59.5L273.9,58.2"/><path d="M272.0,88.4L266.3,86.5"/><path d="M261.3,116.3L255.8,113.9"/><path d="M247.7,143.0L235.6,136.0"/><path d="M231.4,168.1L226.5,164.6"/><path d="M212.5,191.4L208.1,187.4"/><path d="M191.4,212.5L187.4,208.1"/><path d="M168.1,231.4L164.6,226.5"/><path d="M143.0,247.7L136.0,235.6"/><path d="M116.3,261.3L113.9,255.8"/><path d="M88.4,272.0L86.5,266.3"/><path d="M59.5,279.8L58.2,273.9"/><path d="M29.9,284.4L29.3,278.5"/><path d="M0.0,286.0L0.0,272.0"/><path d="M-29.9,284.4L-29.3,278.5"/><path d="M-59.5,279.8L-58.2,273.9"/><path d="M-88.4,272.0L-86.5,266.3"/><path d="M-116.3,261.3L-113.9,255.8"/><path d="M-143.0,247.7L-136.0,235.6"/><path d="M-168.1,231.4L-164.6,226.5"/><path d="M-191.4,212.5L-187.4,208.1"/><path d="M-212.5,191.4L-208.1,187.4"/><path d="M-231.4,168.1L-226.5,164.6"/><path d="M-247.7,143.0L-235.6,136.0"/><path d="M-261.3,116.3L-255.8,113.9"/><path d="M-272.0,88.4L-266.3,86.5"/><path d="M-279.8,59.5L-273.9,58.2"/><path d="M-284.4,29.9L-278.5,29.3"/><path d="M-286.0,0.0L-272.0,0.0"/><path d="M-284.4,-29.9L-278.5,-29.3"/><path d="M-279.8,-59.5L-273.9,-58.2"/><path d="M-272.0,-88.4L-266.3,-86.5"/><path d="M-261.3,-116.3L-255.8,-113.9"/><path d="M-247.7,-143.0L-235.6,-136.0"/><path d="M-231.4,-168.1L-226.5,-164.6"/><path d="M-212.5,-191.4L-208.1,-187.4"/><path d="M-191.4,-212.5L-187.4,-208.1"/><path d="M-168.1,-231.4L-164.6,-226.5"/><path d="M-143.0,-247.7L-136.0,-235.6"/><path d="M-116.3,-261.3L-113.9,-255.8"/><path d="M-88.4,-272.0L-86.5,-266.3"/><path d="M-59.5,-279.8L-58.2,-273.9"/><path d="M-29.9,-284.4L-29.3,-278.5"/></g><g class="hero__dial-spin hero__dial-nums" fill="currentColor"><text x="0.0" y="-252.0">XII</text><text x="126.0" y="-218.2">I</text><text x="218.2" y="-126.0">II</text><text x="252.0" y="0.0">III</text><text x="218.2" y="126.0">IV</text><text x="126.0" y="218.2">V</text><text x="0.0" y="252.0">VI</text><text x="-126.0" y="218.2">VII</text><text x="-218.2" y="126.0">VIII</text><text x="-252.0" y="0.0">IX</text><text x="-218.2" y="-126.0">X</text><text x="-126.0" y="-218.2">XI</text></g></g></svg></div>
+        <h1 class="hero__title" id="heroTitle">
+          <span class="hero__line hero__line--1" data-split="big">Превращаю</span>
+          <span class="hero__line hero__line--2" data-split="big">замысел</span>
+          <span class="hero__line hero__line--3" data-split="big">в сайт</span>
+        </h1>
+        <div class="hero__mech-wrap">
+          <canvas class="hero__mech" id="heroMech" width="960" height="614" role="img" aria-label="Часовой механизм: три зацеплённых колеса медленно вращаются"></canvas>
+        </div>
+        <div class="cta-wrap hero__cta a-up" style="--d:.6">
+          <span class="cta-label" aria-hidden="true"><span>Один</span><span>от замысла</span><span>до запуска <b>/</b></span></span>
+          <a class="cta hero__cta-btn" href="#contacts" data-roll>Обсудить задачу<span class="cta__dot" aria-hidden="true"></span></a>
+          <p class="hero__cta-note">Отвечаю в тот же день</p>
+        </div>
+        <a class="hero__card hero__card--l" href="#works" data-open-work="0" aria-label="Смотреть работу: Доктор Габриель">
+          <span class="hero__card-in">
+            <span class="hero__card-img"><img src="/images/works/doctor-gabriel.jpg" alt="" width="1440" height="900" loading="lazy" decoding="async"></span>
+            <span class="hero__card-name">Доктор Габриель<i aria-hidden="true">Смотреть →</i></span>
+          </span>
+        </a>
+        <a class="hero__card hero__card--r" href="#works" data-open-work="1" aria-label="Смотреть работу: Октан">
+          <span class="hero__card-in">
+            <span class="hero__card-img"><img src="/images/works/oktan.jpg" alt="" width="1440" height="900" loading="lazy" decoding="async"></span>
+            <span class="hero__card-name">Октан<i aria-hidden="true">Смотреть →</i></span>
+          </span>
+        </a>
+      </div>
+      <!-- Линия-орбита: тонкая кривая с градиентом, сдвигается за курсором. -->
+      <svg class="orbit orbit--hero" viewBox="0 0 1440 1080" preserveAspectRatio="none" aria-hidden="true">
+        <linearGradient id="orbitHero" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7a45a" stop-opacity=".9"/><stop offset=".55" stop-color="#8fa2b4" stop-opacity=".6"/><stop offset="1" stop-color="#0c1116" stop-opacity="0"/></linearGradient>
+        <path d="M905,0 C1390,120 1300,430 840,590 C400,740 150,860 560,1080" fill="none" stroke="url(#orbitHero)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </svg>
+    </section>
+
+    <section class="works" id="works" data-progress="enter" aria-labelledby="worksTitle">
+      <div class="works__pin">
+        <canvas class="works__relief" id="relief" aria-hidden="true"></canvas>
+        <svg class="orbit orbit--works" viewBox="0 0 1440 1080" preserveAspectRatio="none" aria-hidden="true">
+          <linearGradient id="orbitWorks" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1116" stop-opacity="0"/><stop offset=".5" stop-color="#c7a45a" stop-opacity=".55"/><stop offset="1" stop-color="#0c1116" stop-opacity="0"/></linearGradient>
+          <path d="M520,0 C780,130 1330,150 1270,240 C1230,300 850,330 610,260 C390,200 150,215 160,240 C175,300 560,90 700,200 C900,360 60,630 260,1080" fill="none" stroke="url(#orbitWorks)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <div class="works__intro">
+          <h2 class="works__title" id="worksTitle"><span class="works__word" data-split="big">Мои</span> <span class="works__word works__word--2" data-split="big">работы</span></h2>
+          <p class="works__caption a-up"><span>Сделано</span><span>от первой строки</span><span>до публикации</span></p>
+        </div>
+        <ul class="works__scatter" id="scatter" aria-hidden="true"></ul>
+
+        <div class="viewer" id="viewer" aria-roledescription="карусель" aria-label="Работы по одной">
+          <div class="viewer__frame" id="viewerFrame">
+            <div class="viewer__imgs" id="viewerImgs"></div>
+            <div class="viewer__shade" aria-hidden="true"></div>
+            <div class="viewer__ui">
+              <a class="btn btn--glass viewer__open" id="viewerOpen" href="https://doctorgabriel.ru" target="_blank" rel="noopener noreferrer">Открыть сайт <span aria-hidden="true">↗</span></a>
+              <div class="viewer__meta" aria-live="polite">
+                <h3 class="viewer__name" id="viewerName"></h3>
+                <p class="viewer__text" id="viewerText"></p>
+                <p class="viewer__stack" id="viewerStack"></p>
+                <p class="viewer__lh" id="viewerLh"></p>
+              </div>
+              <div class="viewer__nav">
+                <button class="viewer__btn viewer__btn--prev" id="viewerPrev" type="button" aria-label="Предыдущая работа"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></button>
+                <button class="viewer__btn viewer__btn--next" id="viewerNext" type="button" aria-label="Следующая работа"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+              </div>
+              <p class="viewer__count"><span id="viewerCur">1</span>/<span id="viewerTotal">19</span></p>
             </div>
-
-            <ul class="hero__metrics" aria-label="Ключевые показатели">
-              <li class="hero__metric">
-                <span class="hero__metric-value">18</span>
-                <span class="hero__metric-label">проектов в портфолио</span>
-              </li>
-              <li class="hero__metric">
-                <span class="hero__metric-value">375px+</span>
-                <span class="hero__metric-label">адаптив на всех проектах</span>
-              </li>
-              <li class="hero__metric">
-                <span class="hero__metric-value">React · 3D</span>
-                <span class="hero__metric-label">и чистый JS без фреймворков</span>
-              </li>
-            </ul>
           </div>
-
-          <div class="hero__visual" aria-hidden="true">
-            <div class="hero__glow hero__glow--orange"></div>
-            <div class="hero__glow hero__glow--cyan"></div>
-            <article class="hero__code-card">
-              <h2 class="hero__code-title">app.js</h2>
-              <pre class="hero__code-snippet"><code>const interfaceScore = {
-  speed: "A+",
-  accessibility: "AA",
-  animations: "smooth"
-};</code></pre>
-            </article>
-            <article class="hero__stack-card">
-              <h2 class="hero__stack-title">Core stack</h2>
-              <ul class="hero__stack-list">
-                <li class="hero__stack-item">HTML5 / CSS3 / SCSS</li>
-                <li class="hero__stack-item">JavaScript ES6+</li>
-                <li class="hero__stack-item">React / TypeScript</li>
-                <li class="hero__stack-item">Three.js / WebGL</li>
-              </ul>
-            </article>
-          </div>
+          <ol class="viewer__index" id="viewerIndex" aria-label="Все работы"></ol>
         </div>
       </div>
     </section>
 
-    <section class="about" id="about">
-      <div class="container">
-        <div class="about__wrapper">
-          <div class="about__content">
-            <p class="about__label">About me</p>
-            <h2 class="about__title">Не просто верстаю, а проектирую удобный пользовательский путь</h2>
-            <p class="about__text">Работаю на стыке дизайна и разработки: превращаю макеты в интерфейсы с четкой иерархией, правильной типографикой и вниманием к деталям. Люблю решения, где эстетика поддерживает конверсию.</p>
+    <div class="paper" data-header="dark">
+      <section class="how" id="how" data-progress="enter" aria-labelledby="howTitle">
+        <!-- Как «карта» и второй камень у референса: чертёж механизма плывёт под краем, колесо всплывает и поворачивается. -->
+        <div class="blueprint" aria-hidden="true"><svg class="blueprint__svg" viewBox="-364 -586 1130 950" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"><path d="M281.0,-9.8 L305.7,-5.7 L305.7,5.7 L281.0,9.8 L280.3,22.9 L304.3,29.8 L303.0,41.1 L278.0,42.4 L275.7,55.3 L298.8,65.0 L296.2,76.0 L271.2,74.4 L267.4,86.9 L289.2,99.2 L285.3,109.9 L260.7,105.3 L255.5,117.4 L275.7,132.1 L270.6,142.3 L246.7,134.9 L240.2,146.2 L258.5,163.2 L252.3,172.7 L229.4,162.6 L221.6,173.1 L237.8,192.1 L230.5,200.9 L209.0,188.2 L200.0,197.7 L213.9,218.5 L205.6,226.3 L185.7,211.1 L175.7,219.6 L187.1,241.8 L178.0,248.6 L159.9,231.3 L149.0,238.5 L157.8,261.9 L147.9,267.6 L132.0,248.3 L120.3,254.1 L126.3,278.5 L115.9,283.0 L102.3,261.9 L90.0,266.4 L93.1,291.2 L82.2,294.5 L71.2,272.0 L58.5,275.0 L58.7,300.1 L47.5,302.1 L39.1,278.5 L26.1,280.0 L23.5,304.9 L12.1,305.5 L6.5,281.1 L-6.5,281.1 L-12.1,305.5 L-23.5,304.9 L-26.1,280.0 L-39.1,278.5 L-47.5,302.1 L-58.7,300.1 L-58.5,275.0 L-71.2,272.0 L-82.2,294.5 L-93.1,291.2 L-90.0,266.4 L-102.3,261.9 L-115.9,283.0 L-126.3,278.5 L-120.3,254.1 L-132.0,248.3 L-147.9,267.6 L-157.8,261.9 L-149.0,238.5 L-159.9,231.3 L-178.0,248.6 L-187.1,241.8 L-175.7,219.6 L-185.7,211.1 L-205.6,226.3 L-213.9,218.5 L-200.0,197.7 L-209.0,188.2 L-230.5,200.9 L-237.8,192.1 L-221.6,173.1 L-229.4,162.6 L-252.3,172.7 L-258.5,163.2 L-240.2,146.2 L-246.7,134.9 L-270.6,142.3 L-275.7,132.1 L-255.5,117.4 L-260.7,105.3 L-285.3,109.9 L-289.2,99.2 L-267.4,86.9 L-271.2,74.4 L-296.2,76.0 L-298.8,65.0 L-275.7,55.3 L-278.0,42.4 L-303.0,41.1 L-304.3,29.8 L-280.3,22.9 L-281.0,9.8 L-305.7,5.7 L-305.7,-5.7 L-281.0,-9.8 L-280.3,-22.9 L-304.3,-29.8 L-303.0,-41.1 L-278.0,-42.4 L-275.7,-55.3 L-298.8,-65.0 L-296.2,-76.0 L-271.2,-74.4 L-267.4,-86.9 L-289.2,-99.2 L-285.3,-109.9 L-260.7,-105.3 L-255.5,-117.4 L-275.7,-132.1 L-270.6,-142.3 L-246.7,-134.9 L-240.2,-146.2 L-258.5,-163.2 L-252.3,-172.7 L-229.4,-162.6 L-221.6,-173.1 L-237.8,-192.1 L-230.5,-200.9 L-209.0,-188.2 L-200.0,-197.7 L-213.9,-218.5 L-205.6,-226.3 L-185.7,-211.1 L-175.7,-219.6 L-187.1,-241.8 L-178.0,-248.6 L-159.9,-231.3 L-149.0,-238.5 L-157.8,-261.9 L-147.9,-267.6 L-132.0,-248.3 L-120.3,-254.1 L-126.3,-278.5 L-115.9,-283.0 L-102.3,-261.9 L-90.0,-266.4 L-93.1,-291.2 L-82.2,-294.5 L-71.2,-272.0 L-58.5,-275.0 L-58.7,-300.1 L-47.5,-302.1 L-39.1,-278.5 L-26.1,-280.0 L-23.5,-304.9 L-12.1,-305.5 L-6.5,-281.1 L6.5,-281.1 L12.1,-305.5 L23.5,-304.9 L26.1,-280.0 L39.1,-278.5 L47.5,-302.1 L58.7,-300.1 L58.5,-275.0 L71.2,-272.0 L82.2,-294.5 L93.1,-291.2 L90.0,-266.4 L102.3,-261.9 L115.9,-283.0 L126.3,-278.5 L120.3,-254.1 L132.0,-248.3 L147.9,-267.6 L157.8,-261.9 L149.0,-238.5 L159.9,-231.3 L178.0,-248.6 L187.1,-241.8 L175.7,-219.6 L185.7,-211.1 L205.6,-226.3 L213.9,-218.5 L200.0,-197.7 L209.0,-188.2 L230.5,-200.9 L237.8,-192.1 L221.6,-173.1 L229.4,-162.6 L252.3,-172.7 L258.5,-163.2 L240.2,-146.2 L246.7,-134.9 L270.6,-142.3 L275.7,-132.1 L255.5,-117.4 L260.7,-105.3 L285.3,-109.9 L289.2,-99.2 L267.4,-86.9 L271.2,-74.4 L296.2,-76.0 L298.8,-65.0 L275.7,-55.3 L278.0,-42.4 L303.0,-41.1 L304.3,-29.8 L280.3,-22.9Z"/><circle cx="0.0" cy="0.0" r="294.8" stroke-dasharray="6 5"/><circle cx="0.0" cy="0.0" r="9.1"/><path d="M-41.6,0.0h83.2M0.0,-41.6v83.2"/><path d="M0.0,0.0L258.8,0.0"/><path d="M0.0,0.0L129.4,224.1"/><path d="M0.0,0.0L-129.4,224.1"/><path d="M0.0,0.0L-258.8,0.0"/><path d="M0.0,0.0L-129.4,-224.1"/><path d="M0.0,0.0L129.4,-224.1"/><path d="M466.6,-231.4 L491.4,-227.7 L491.4,-216.1 L466.6,-212.3 L465.5,-199.6 L489.2,-191.6 L487.2,-180.1 L462.2,-180.7 L458.9,-168.4 L480.8,-156.4 L476.9,-145.5 L452.3,-150.4 L446.9,-138.8 L466.5,-123.2 L460.7,-113.1 L437.4,-122.2 L430.0,-111.8 L446.6,-93.0 L439.1,-84.1 L417.7,-97.1 L408.7,-88.1 L421.7,-66.7 L412.8,-59.3 L394.0,-75.8 L383.6,-68.5 L392.7,-45.1 L382.7,-39.4 L367.0,-58.9 L355.4,-53.5 L360.3,-28.9 L349.5,-25.0 L337.4,-46.9 L325.1,-43.6 L325.7,-18.6 L314.3,-16.6 L306.3,-40.3 L293.5,-39.2 L289.8,-14.5 L278.2,-14.5 L274.4,-39.2 L261.7,-40.3 L253.7,-16.6 L242.2,-18.6 L242.8,-43.6 L230.5,-46.9 L218.5,-25.0 L207.6,-28.9 L212.5,-53.5 L200.9,-58.9 L185.3,-39.4 L175.3,-45.1 L184.3,-68.5 L173.9,-75.8 L155.1,-59.3 L146.2,-66.7 L159.2,-88.1 L150.2,-97.1 L128.8,-84.1 L121.4,-93.0 L137.9,-111.8 L130.6,-122.2 L107.3,-113.1 L101.5,-123.2 L121.0,-138.8 L115.6,-150.4 L91.1,-145.5 L87.1,-156.4 L109.0,-168.4 L105.7,-180.7 L80.7,-180.1 L78.7,-191.6 L102.4,-199.6 L101.3,-212.3 L76.6,-216.1 L76.6,-227.7 L101.3,-231.4 L102.4,-244.2 L78.7,-252.2 L80.7,-263.6 L105.7,-263.0 L109.0,-275.3 L87.1,-287.4 L91.1,-298.2 L115.6,-293.3 L121.0,-304.9 L101.5,-320.5 L107.3,-330.6 L130.6,-321.5 L137.9,-331.9 L121.4,-350.7 L128.8,-359.6 L150.2,-346.6 L159.2,-355.6 L146.2,-377.0 L155.1,-384.5 L173.9,-367.9 L184.3,-375.3 L175.3,-398.6 L185.3,-404.4 L200.9,-384.8 L212.5,-390.2 L207.6,-414.8 L218.5,-418.7 L230.5,-396.8 L242.8,-400.1 L242.2,-425.1 L253.7,-427.1 L261.7,-403.4 L274.4,-404.5 L278.2,-429.3 L289.8,-429.3 L293.5,-404.5 L306.3,-403.4 L314.3,-427.1 L325.7,-425.1 L325.1,-400.1 L337.4,-396.8 L349.5,-418.7 L360.3,-414.8 L355.4,-390.2 L367.0,-384.8 L382.7,-404.4 L392.7,-398.6 L383.6,-375.3 L394.0,-367.9 L412.8,-384.5 L421.7,-377.0 L408.7,-355.6 L417.7,-346.6 L439.1,-359.6 L446.6,-350.7 L430.0,-331.9 L437.4,-321.5 L460.7,-330.6 L466.5,-320.5 L446.9,-304.9 L452.3,-293.3 L476.9,-298.2 L480.8,-287.4 L458.9,-275.3 L462.2,-263.0 L487.2,-263.6 L489.2,-252.2 L465.5,-244.2Z"/><circle cx="284.0" cy="-221.9" r="196.6" stroke-dasharray="6 5"/><path d="M335.2,-230.0 L360.1,-228.3 L360.1,-215.5 L335.2,-213.7 L332.4,-203.3 L353.1,-189.3 L346.7,-178.2 L324.3,-189.2 L316.6,-181.5 L327.6,-159.1 L316.5,-152.7 L302.6,-173.4 L292.1,-170.6 L290.4,-145.7 L277.6,-145.7 L275.9,-170.6 L265.4,-173.4 L251.4,-152.7 L240.3,-159.1 L251.3,-181.5 L243.7,-189.2 L221.2,-178.2 L214.8,-189.3 L235.5,-203.3 L232.7,-213.7 L207.8,-215.5 L207.8,-228.3 L232.7,-230.0 L235.5,-240.4 L214.8,-254.4 L221.2,-265.5 L243.7,-254.5 L251.3,-262.2 L240.3,-284.6 L251.4,-291.0 L265.4,-270.3 L275.9,-273.1 L277.6,-298.0 L290.4,-298.0 L292.1,-273.1 L302.6,-270.3 L316.5,-291.0 L327.6,-284.6 L316.6,-262.2 L324.3,-254.5 L346.7,-265.5 L353.1,-254.4 L332.4,-240.4Z"/><circle cx="284.0" cy="-221.9" r="65.5" stroke-dasharray="6 5"/><circle cx="284.0" cy="-221.9" r="9.1"/><path d="M242.4,-221.9h83.2M284.0,-263.5v83.2"/><path d="M284.0,-221.9L444.5,-221.9"/><path d="M284.0,-221.9L284.0,-61.3"/><path d="M284.0,-221.9L123.4,-221.9"/><path d="M284.0,-221.9L284.0,-382.4"/><path d="M442.1,-7.8 L467.1,-6.7 L467.1,6.5 L442.1,7.6 L438.9,17.3 L458.5,32.9 L450.8,43.5 L429.9,29.8 L421.6,35.8 L428.3,59.9 L415.8,63.9 L407.0,40.5 L396.7,40.5 L388.0,63.9 L375.5,59.9 L382.2,35.8 L373.8,29.8 L353.0,43.5 L345.3,32.9 L364.8,17.3 L361.7,7.6 L336.7,6.5 L336.7,-6.7 L361.7,-7.8 L364.8,-17.5 L345.3,-33.1 L353.0,-43.7 L373.8,-29.9 L382.2,-36.0 L375.5,-60.1 L388.0,-64.1 L396.7,-40.7 L407.0,-40.7 L415.8,-64.1 L428.3,-60.1 L421.6,-36.0 L429.9,-29.9 L450.8,-43.7 L458.5,-33.1 L438.9,-17.5Z"/><circle cx="401.9" cy="-0.1" r="54.6" stroke-dasharray="6 5"/><circle cx="401.9" cy="-0.1" r="9.1"/><path d="M360.3,-0.1h83.2M401.9,-41.7v83.2"/><path d="M0.0,0.0L284.0,-221.9" stroke-dasharray="2 4"/><path d="M284.0,-221.9L401.9,-0.1" stroke-dasharray="2 4"/></g></svg></div>
+        <img class="how__wheel" src="/mech/wheel.webp" alt="" width="720" height="720" loading="lazy" decoding="async">
+        <p class="kicker a-up" id="howTitle">Как я работаю</p>
+        <p class="how__text" data-lines>Приходить с готовым техническим заданием не нужно. Достаточно общего представления о том, каким должен быть сайт.</p>
+      </section>
 
-            <ul class="about__list">
-              <li class="about__item">Pixel-perfect и семантичная верстка</li>
-              <li class="about__item">Адаптив под mobile/tablet/desktop</li>
-              <li class="about__item">Микроанимации без перегруза UX</li>
-              <li class="about__item">Оптимизация производительности</li>
-            </ul>
-          </div>
-
-          <div class="about__panel">
-            <div class="about__panel-item">
-              <span class="about__panel-value">100%</span>
-              <p class="about__panel-text">внимание к качеству кода и поддерживаемой архитектуре</p>
-            </div>
-            <div class="about__panel-item">
-              <span class="about__panel-value">24h</span>
-              <p class="about__panel-text">среднее время ответа по рабочим задачам</p>
-            </div>
-            <div class="about__panel-item">
-              <span class="about__panel-value">Figma → Prod</span>
-              <p class="about__panel-text">полный цикл: от идеи и прототипа до деплоя</p>
-            </div>
-          </div>
+      <section class="about" id="about" aria-labelledby="aboutTitle">
+        <div class="about__head">
+          <p class="kicker a-up">Обо мне</p>
+          <h2 class="h2 about__title" id="aboutTitle" data-split="big">Георгий</h2>
+          <dl class="about__facts a-up" style="--d:.2">
+            <div><dt>Где</dt><dd>Сахалин, МСК+8</dd></div>
+            <div><dt>Делаю</dt><dd>Сайты под ключ</dd></div>
+          </dl>
         </div>
-      </div>
-    </section>
-
-    <section class="services" id="services">
-      <div class="container">
-        <p class="services__label">Services</p>
-        <h2 class="services__title">Чем могу быть полезен проекту</h2>
-        <div class="services__grid">
-          <article class="services__card">
-            <h3 class="services__card-title">Landing pages</h3>
-            <p class="services__card-text">Выразительные промо-страницы с четким сценарием взаимодействия и высокой конверсией.</p>
-          </article>
-          <article class="services__card">
-            <h3 class="services__card-title">Web applications</h3>
-            <p class="services__card-text">Простые веб-приложения на Vanilla JS: трекеры, менеджеры задач, интерактивные интерфейсы.</p>
-          </article>
-          <article class="services__card">
-            <h3 class="services__card-title">UI animation</h3>
-            <p class="services__card-text">Осмысленная анимация, которая направляет пользователя и усиливает восприятие продукта.</p>
-          </article>
-          <article class="services__card">
-            <h3 class="services__card-title">Code refactoring</h3>
-            <p class="services__card-text">Чистка legacy-верстки, улучшение структуры CSS и ускорение загрузки страницы.</p>
-          </article>
+        <div class="about__body">
+          <p data-lines>Веду проект сам: от первого разговора до публикации. Замысел не теряется по дороге.</p>
+          <p data-lines>Сдаю сайт, который быстро открывается, аккуратно выглядит на телефоне и находится в поиске. Оценки Lighthouse стоят под каждой работой.</p>
         </div>
+      </section>
+
+      <section class="skills" id="skills" aria-labelledby="skillsTitle">
+        <p class="kicker">Навыки</p>
+        <h2 class="h2" id="skillsTitle" data-split="big">Что умею</h2>
+        <ul class="skills__list">
+          <li class="skill" data-reveal>
+            <h3 class="skill__name">Вёрстка и адаптив</h3>
+            <ul class="skill__tags"><li>HTML</li><li>CSS</li><li>SCSS</li><li>Адаптив от 320 px</li><li>Вёрстка по Figma</li><li>Многостраничные сайты</li></ul>
+            <p class="skill__where"><span>Где видно</span>Октан, Кедр, Smilio, DoFit</p>
+          </li>
+          <li class="skill" data-reveal>
+            <h3 class="skill__name">Интерактив</h3>
+            <ul class="skill__tags"><li>JavaScript без библиотек</li><li>Калькуляторы и квизы</li><li>Фильтры каталога</li><li>Формы с проверкой</li><li>GSAP</li><li>Плавная прокрутка</li></ul>
+            <p class="skill__where"><span>Где видно</span>Фактура, Кедр, Верста, Aura</p>
+          </li>
+          <li class="skill" data-reveal>
+            <h3 class="skill__name">3D и графика</h3>
+            <ul class="skill__tags"><li>Three.js</li><li>React Three Fiber</li><li>WebGL и шейдеры GLSL</li><li>Фотореалистичный рендер</li></ul>
+            <p class="skill__where"><span>Где видно</span>Sable, Артель, Nodal, механизм этого сайта</p>
+          </li>
+          <li class="skill" data-reveal>
+            <h3 class="skill__name">Фреймворки и приложения</h3>
+            <ul class="skill__tags"><li>React</li><li>TypeScript</li><li>Vite</li><li>Next.js</li><li>Astro</li></ul>
+            <p class="skill__where"><span>Где видно</span>КРЕМА, Артель, Доктор Габриель, Expense Flow</p>
+          </li>
+          <li class="skill" data-reveal>
+            <h3 class="skill__name">Запуск и качество</h3>
+            <ul class="skill__tags"><li>Домен и хостинг</li><li>GitHub Pages, Vercel</li><li>SEO-основа и микроразметка</li><li>Доступность WCAG</li><li>Скорость по Lighthouse</li><li>Яндекс Метрика</li></ul>
+            <p class="skill__where"><span>Где видно</span>doctorgabriel.ru и все работы из списка</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="includes" aria-labelledby="includesTitle">
+        <p class="kicker">Состав работы</p>
+        <h2 class="h2" id="includesTitle" data-split="big">Что входит в работу</h2>
+        <ul class="includes__list">
+          <li class="includes__item" data-reveal><h3>Структура</h3><p>Какие блоки нужны и в каком порядке, чтобы посетитель дошёл до заявки.</p></li>
+          <li class="includes__item" data-reveal><h3>Тексты</h3><p>Пишу по разговору о вашем деле. Готовить их заранее не нужно.</p></li>
+          <li class="includes__item" data-reveal><h3>Дизайн</h3><p>Свой под задачу: цвет, шрифты, фотографии.</p></li>
+          <li class="includes__item" data-reveal><h3>Вид на телефоне</h3><p>Проверяю на экранах от 320 px: большинство заходит именно с телефона.</p></li>
+          <li class="includes__item" data-reveal><h3>Анимация</h3><p>В меру: сайт живой, но не отвлекает от главного.</p></li>
+          <li class="includes__item" data-reveal><h3>Функционал</h3><p>Формы, калькуляторы, квизы, каталог — то, что нужно именно вам.</p></li>
+          <li class="includes__item" data-reveal><h3>Основа для поиска</h3><p>Заголовки, описания и карта сайта, чтобы сайт находили.</p></li>
+          <li class="includes__item" data-reveal><h3>Домен и публикация</h3><p>Подключаю домен и выкладываю сайт в интернет.</p></li>
+        </ul>
+      </section>
+
+      <section class="steps" data-progress="enter" aria-labelledby="stepsTitle">
+        <h2 class="steps__title" id="stepsTitle">
+          <span class="steps__word steps__word--a">От разговора</span>
+          <span class="steps__gap" aria-hidden="true">
+            <img src="/images/works/faktura.jpg" alt="" width="1440" height="900" loading="lazy" decoding="async">
+            <img src="/images/works/artel.jpg" alt="" width="1440" height="900" loading="lazy" decoding="async">
+            <img src="/images/works/kedr.jpg" alt="" width="1440" height="900" loading="lazy" decoding="async">
+          </span>
+          <span class="steps__word steps__word--b">до запуска</span>
+        </h2>
+        <ol class="steps__list">
+          <li class="steps__item" data-reveal><p class="steps__when">День 1</p><h3>Обсуждаем задачу</h3><p>Двадцать минут: чем вы занимаетесь, для кого сайт, что должно на нём происходить. Бесплатно.</p></li>
+          <li class="steps__item" data-reveal><p class="steps__when">День 1–2</p><h3>Фиксирую смету и срок</h3><p>Письменно: что входит, сколько стоит, когда сдаю. Дальше цена не меняется.</p></li>
+          <li class="steps__item" data-reveal><p class="steps__when">День 3</p><h3>Показываю первый экран</h3><p>Раньше, чем готово всё остальное. Направление правим в самом начале.</p></li>
+          <li class="steps__item" data-reveal><p class="steps__when">По смете</p><h3>Публикую сайт</h3><p>Подключаю домен, проверяю формы и заявки, показываю, как менять тексты.</p></li>
+        </ol>
+      </section>
+
+      <section class="why" aria-labelledby="whyTitle">
+        <p class="kicker">Гарантии</p>
+        <h2 class="h2" id="whyTitle" data-split="big">Что остаётся у вас</h2>
+        <ul class="why__list">
+          <li class="why__item" data-reveal><h3>Сайт и исходники</h3><p>Домен и хостинг оформлены на вас, код отдаю целиком. Смените подрядчика — ничего не потеряете.</p></li>
+          <li class="why__item" data-reveal><h3>Заявки, которые доходят</h3><p>В Telegram или на почту. После публикации проверяю форму сам.</p></li>
+          <li class="why__item" data-reveal><h3>Две недели правок</h3><p>После сдачи бесплатно. Нашли, что поправить, — пишете, я исправляю.</p></li>
+        </ul>
+      </section>
+
+      <section class="prices" id="prices" aria-labelledby="pricesTitle">
+        <p class="kicker">Цены</p>
+        <h2 class="h2" id="pricesTitle" data-split="big">Сколько это стоит</h2>
+        <ul class="prices__list">
+          <li class="price" data-reveal>
+            <div class="price__head"><h3 class="price__name">Визитка</h3><p class="price__term">3–5 дней</p></div>
+            <p class="price__text">Одна страница до пяти блоков, форма заявки, вид на телефоне, публикация.</p>
+            <p class="price__sum">от <b>6 000</b> ₽</p>
+          </li>
+          <li class="price price--main" data-reveal>
+            <div class="price__head"><h3 class="price__name">Сайт под задачу</h3><p class="price__term">7–10 дней</p><p class="price__badge">Чаще всего берут</p></div>
+            <p class="price__text">Свой дизайн, до десяти блоков, калькулятор или квиз, заявки в Telegram, основа для поиска.</p>
+            <p class="price__sum">от <b>15 000</b> ₽</p>
+          </li>
+          <li class="price" data-reveal>
+            <div class="price__head"><h3 class="price__name">С интерактивом и 3D</h3><p class="price__term">от 2 недель</p></div>
+            <p class="price__text">Анимация, 3D-сцена, каталог — механика, которой нет у конкурентов.</p>
+            <p class="price__sum">от <b>35 000</b> ₽</p>
+          </li>
+          <li class="price" data-reveal>
+            <div class="price__head"><h3 class="price__name">Правки готового сайта</h3><p class="price__term">1–2 дня</p></div>
+            <p class="price__text">Починить вёрстку, ускорить загрузку, поправить вид на телефоне.</p>
+            <p class="price__sum">от <b>1 500</b> ₽</p>
+          </li>
+        </ul>
+        <p class="prices__note" data-lines>Точную цену называю после разговора, в письменной смете.</p>
+      </section>
+
+      <section class="faq" aria-labelledby="faqTitle">
+        <p class="kicker">Вопросы</p>
+        <h2 class="h2" id="faqTitle" data-split="big">Что обычно спрашивают</h2>
+        <div class="faq__list" id="faq"></div>
+      </section>
+    </div>
+
+    <section class="final" id="contacts" aria-labelledby="finalTitle">
+      <canvas class="final__mech" id="finalMech" width="560" height="358" aria-hidden="true"></canvas>
+      <h2 class="final__title" id="finalTitle"><span data-split="big">Расскажите</span> <span data-split="big">свою идею</span></h2>
+      <p class="final__text" data-lines>Не нужно формулировать задачу — достаточно рассказать, чем занимаетесь и чего хотите от сайта. Остальное разложу по полкам я.</p>
+      <div class="final__actions">
+        <a class="btn btn--light btn--icon" href="https://kwork.ru/user/georgy_tech" target="_blank" rel="noopener noreferrer" data-roll data-goal="kwork_open"><svg class="btn__icon" aria-hidden="true"><use href="#i-kwork"/></svg>Написать на Kwork</a>
+        <a class="btn btn--icon" href="https://t.me/GeorgyTech" target="_blank" rel="noopener noreferrer" data-roll data-goal="telegram_write"><svg class="btn__icon" aria-hidden="true"><use href="#i-telegram"/></svg>Написать в Telegram</a>
+        <a class="btn btn--icon" href="mailto:georgy.tech@yandex.ru" data-roll data-goal="mail_open"><svg class="btn__icon" aria-hidden="true"><use href="#i-mail"/></svg>Написать на почту</a>
       </div>
-    </section>
-
-    <section class="skills" id="skills">
-      <div class="container">
-        <p class="skills__label">Skills</p>
-        <h2 class="skills__title">Технологии, с которыми работаю каждый день</h2>
-        <div class="skills__tags">
-          <span class="skills__tag">HTML5</span>
-          <span class="skills__tag">CSS3</span>
-          <span class="skills__tag">SCSS</span>
-          <span class="skills__tag">JavaScript ES6+</span>
-          <span class="skills__tag">React</span>
-          <span class="skills__tag">TypeScript</span>
-          <span class="skills__tag">Vite</span>
-          <span class="skills__tag">Three.js / WebGL</span>
-          <span class="skills__tag">BEM</span>
-          <span class="skills__tag">Git / GitHub</span>
-          <span class="skills__tag">REST API</span>
-          <span class="skills__tag">Figma</span>
-          <span class="skills__tag">адаптивная верстка</span>
-          <span class="skills__tag">GitHub Pages</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="works" id="works">
-      <div class="container">
-        <p class="works__label">My works</p>
-        <h2 class="works__title">Проекты, где дизайн и разработка работают вместе</h2>
-        <div class="works__grid">
-          <a class="works__card" href="https://georgy-itech.github.io/oktan-auto/" target="_blank" rel="noopener noreferrer" style="--card-accent: #e5484d">
-            <div class="works__preview works__preview--oktan">
-              <img class="works__preview-img" src="images/works/oktan.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Октан — лендинг автосервиса">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Октан</h3>
-              <p class="works__card-text">Лендинг автосервиса: калькулятор работ по марке и типу ремонта, блок сравнения «как обычно / как у нас», гарантийный талон и таймлайн приёмки.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/kedr-dom/" target="_blank" rel="noopener noreferrer" style="--card-accent: #3f7d5c">
-            <div class="works__preview works__preview--kedr">
-              <img class="works__preview-img" src="images/works/kedr.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Кедр — строительство домов под ключ">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Кедр</h3>
-              <p class="works__card-text">Строительство домов под ключ: каталог проектов с фильтрами, смета с разбивкой по разделам, ипотечный расчёт и график траншей оплаты.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/faktura-kuhni/" target="_blank" rel="noopener noreferrer" style="--card-accent: #8b3a4a">
-            <div class="works__preview works__preview--faktura">
-              <img class="works__preview-img" src="images/works/faktura.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Фактура — кухни на заказ">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Фактура</h3>
-              <p class="works__card-text">Кухни на заказ: многошаговый квиз с вилкой цены и возвратом к прошлым шагам, конфигуратор материалов со свотчами, шкала производства на 30 дней.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/versta-cargo/" target="_blank" rel="noopener noreferrer" style="--card-accent: #1d4ed8">
-            <div class="works__preview works__preview--versta">
-              <img class="works__preview-img" src="images/works/versta.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Верста — грузоперевозки">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Верста</h3>
-              <p class="works__card-text">Грузоперевозки: расчёт по отраслевому правилу «вес или объём — что больше» с объяснением, отслеживание по накладной, парк машин и схема маршрута.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/appartment-recover/" target="_blank" rel="noopener noreferrer" style="--card-accent: #d96c3e">
-            <div class="works__preview works__preview--remont">
-              <img class="works__preview-img" src="images/works/remont.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Remont.Krd — ремонт квартир под ключ">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Remont.Krd</h3>
-              <p class="works__card-text">Ремонт квартир под ключ: расчёт стоимости по площади и типу отделки, галерея объектов и заявка со сметой за сутки.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/smilio-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #4f9b8e">
-            <div class="works__preview works__preview--smilio">
-              <img class="works__preview-img" src="images/works/smilio.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Smilio — сайт стоматологии под ключ">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Smilio</h3>
-              <p class="works__card-text">Сайт стоматологии под ключ: 4 страницы, форма записи с валидацией, кастомные UI-компоненты, карточки врачей и услуг.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS · Multi-page</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/fitness-trainer-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #0a7c60">
-            <div class="works__preview works__preview--fitshift">
-              <img class="works__preview-img" src="images/works/fitshift.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="FITSHIFT — лендинг персонального тренера">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">FITSHIFT</h3>
-              <p class="works__card-text">Лендинг персонального тренера: слайдер «до/после» с перетаскиванием, тарифы, FAQ-аккордеон и запись на консультацию.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://krema-coffee.vercel.app/" target="_blank" rel="noopener noreferrer" style="--card-accent: #c8863c">
-            <div class="works__preview works__preview--krema">
-              <img class="works__preview-img" src="images/works/krema.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="КРЕМА — интернет-магазин спешелти-кофе">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">КРЕМА</h3>
-              <p class="works__card-text">Интернет-магазин спешелти-кофе: каталог с фильтрами в URL, варианты помола и веса, корзина и оформление заказа.</p>
-              <span class="works__stack">React · TypeScript · Vite · SCSS-модули</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/ecommerce-homepage-showcase/" target="_blank" rel="noopener noreferrer" style="--card-accent: #2f6fed">
-            <div class="works__preview works__preview--northstar">
-              <img class="works__preview-img" src="images/works/northstar.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Полярис — главная интернет-магазина одежды">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Полярис</h3>
-              <p class="works__card-text">Главная интернет-магазина одежды: сетка товаров с бейджами, карточки категорий, hover-взаимодействия и аккуратный адаптив.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/dofit-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #c8f135">
-            <div class="works__preview works__preview--dofit">
-              <img class="works__preview-img" src="images/works/dofit.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="DoFit — лендинг фитнес-приложения">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">DoFit</h3>
-              <p class="works__card-text">Лендинг фитнес-приложения: тёмный UI, SCSS-архитектура, переключатель темы и анимации появления блоков при скролле.</p>
-              <span class="works__stack">HTML · SCSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/designshift-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #ff5c35">
-            <div class="works__preview works__preview--designshift">
-              <img class="works__preview-img" src="images/works/designshift.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="DesignShift — лендинг курса по веб-дизайну">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">DesignShift</h3>
-              <p class="works__card-text">Лендинг курса по веб-дизайну: бегущая строка, форма записи с валидацией без alert, переключатель темы и scroll-reveal.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://artel-masters.vercel.app/" target="_blank" rel="noopener noreferrer" style="--card-accent: #d6452d">
-            <div class="works__preview works__preview--artel">
-              <img class="works__preview-img" src="images/works/artel.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Артель — кольцо из фотокарточек услуг на главной странице площадки частных мастеров">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Артель</h3>
-              <p class="works__card-text">Площадка частных мастеров: девять услуг висят по кругу фотокарточками, каждая ведёт на свою страницу. Каталог с двумя видами, штора перехода между разделами.</p>
-              <span class="works__stack">Next.js · TypeScript · Three.js / R3F · GSAP</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/sable-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #6366f1">
-            <div class="works__preview works__preview--sable">
-              <img class="works__preview-img" src="images/works/sable.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Sable — 3d-конфигуратор парфюма">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Sable</h3>
-              <p class="works__card-text">3D-конфигуратор парфюма: флакон построен процедурно в коде, без готовых моделей. Гранёное стекло, отражения, три аромата — у каждого своя форма и атмосфера.</p>
-              <span class="works__stack">React · TypeScript · Three.js / R3F</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/nodal-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #00e5c3">
-            <div class="works__preview works__preview--nodal">
-              <img class="works__preview-img" src="images/works/nodal.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Nodal — констелляция на сыром webgl без библиотек">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Nodal</h3>
-              <p class="works__card-text">Констелляция на сыром WebGL без библиотек: свои GLSL-шейдеры, курсор становится узлом сети, по связям бегут пакеты данных.</p>
-              <span class="works__stack">Vanilla JS · WebGL · GLSL</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/aura-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #ff2d78">
-            <div class="works__preview works__preview--aura">
-              <img class="works__preview-img" src="images/works/aura.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Aura — живой aurora-фон, реагирующий на курсор, и интерактивное демо продукта — поиск по документам команды с ответами и ссылками на источник.">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Aura</h3>
-              <p class="works__card-text">Живой aurora-фон, реагирующий на курсор, и интерактивное демо продукта — поиск по документам команды с ответами и ссылками на источник.</p>
-              <span class="works__stack">Vanilla JS · CSS-анимации · Интерактив</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/bento-landing/" target="_blank" rel="noopener noreferrer" style="--card-accent: #00c8ff">
-            <div class="works__preview works__preview--bento">
-              <img class="works__preview-img" src="images/works/bento.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Nebula — тёмный премиальный bento-лендинг аналитики">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Nebula</h3>
-              <p class="works__card-text">Тёмный премиальный bento-лендинг аналитики: асимметричная сетка, cursor-spotlight, счётчики, живой график и параллакс.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/expense-tracker/" target="_blank" rel="noopener noreferrer" style="--card-accent: #9b6dff">
-            <div class="works__preview works__preview--expense-tracker">
-              <img class="works__preview-img" src="images/works/expense-tracker.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Expense Flow — веб-приложение учёта финансов">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">Expense Flow</h3>
-              <p class="works__card-text">Веб-приложение учёта финансов: доходы и расходы по категориям, фильтры и сортировка с сохранением, баланс и разбор трат.</p>
-              <span class="works__stack">Vanilla JS · localStorage</span>
-            </div>
-          </a>
-          <a class="works__card" href="https://georgy-itech.github.io/ui-animation-showcase/" target="_blank" rel="noopener noreferrer" style="--card-accent: #2955f5">
-            <div class="works__preview works__preview--ui-animation">
-              <img class="works__preview-img" src="images/works/ui-animation.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="UI Motion — витрина интерфейсных анимаций">
-            </div>
-            <div class="works__card-content">
-              <h3 class="works__card-title">UI Motion</h3>
-              <p class="works__card-text">Витрина интерфейсных анимаций: scroll-reveal, hover-эффекты, счётчики, магнитная кнопка, аккордеон и модальное окно — всё на чистом CSS и JS.</p>
-              <span class="works__stack">HTML · CSS · Vanilla JS</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section class="contacts" id="contacts">
-      <div class="container">
-        <div class="contacts__wrapper">
-          <div class="contacts__content">
-            <p class="contacts__label">Contacts</p>
-            <h2 class="contacts__title">Давайте соберем ваш следующий сильный интерфейс</h2>
-            <p class="contacts__text">Напишите пару слов о задаче: цели проекта, сроки и желаемый стек. Предложу рабочий план и этапы реализации.</p>
-            <ul class="contacts__contacts">
-              <li class="contacts__contact-item">
-                <a class="contacts__contact-link" href="https://github.com/Georgy-ITech" target="_blank" rel="noopener noreferrer">
-                  <span class="contacts__contact-icon" aria-hidden="true">
-                    <svg class="contacts__contact-svg" width="18" height="18">
-                      <use href="images/sprite.svg#icon-github"></use>
-                    </svg>
-                  </span>
-                  <span class="contacts__contact-text">Georgy-ITech</span>
-                </a>
-              </li>
-              <li class="contacts__contact-item">
-                <a class="contacts__contact-link" href="https://kwork.ru/user/georgy_tech" target="_blank" rel="noopener noreferrer">
-                  <span class="contacts__contact-icon" aria-hidden="true">
-                    <svg class="contacts__contact-svg" width="18" height="18">
-                      <use href="images/sprite.svg#icon-kwork"></use>
-                    </svg>
-                  </span>
-                  <span class="contacts__contact-text">georgy_tech</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <form class="contacts__form" action="https://formspree.io/f/xkolbqzw" method="POST">
-            <label class="contacts__form-label" for="name">Ваше имя</label>
-            <input class="contacts__form-input" id="name" name="name" type="text" placeholder="Например, Алексей" required>
-
-            <label class="contacts__form-label" for="email">Email</label>
-            <input class="contacts__form-input" id="email" name="email" type="email" placeholder="you@company.com" required>
-
-            <label class="contacts__form-label" for="message">О проекте</label>
-            <textarea class="contacts__form-textarea" id="message" name="message" placeholder="Кратко опишите задачу"></textarea>
-
-            <button class="btn btn--primary contacts__form-button" type="submit">Отправить запрос</button>
-          </form>
-        </div>
-      </div>
+      <p class="final__mail"><svg aria-hidden="true"><use href="#i-github"/></svg>Код работ — на <a href="https://github.com/Georgy-ITech" target="_blank" rel="noopener noreferrer" data-goal="github_open">GitHub</a></p>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__wrapper">
-        <p class="footer__copyright">© 2026 Georgy, Frontend Developer</p>
-        <a class="footer__top-link" href="#top">Back to top</a>
-      </div>
-    </div>
+  <footer class="foot">
+    <p class="foot__copy">© 2026 Georgy_Tech · Сайты под ключ · Сахалин</p>
+    <nav class="foot__links" id="footLinks" aria-label="Ссылки">
+      <a href="https://kwork.ru/user/georgy_tech" target="_blank" rel="noopener noreferrer" data-goal="kwork_open"><svg aria-hidden="true"><use href="#i-kwork"/></svg>Kwork</a>
+      <a href="https://t.me/GeorgyTech" target="_blank" rel="noopener noreferrer" data-goal="telegram_write"><svg aria-hidden="true"><use href="#i-telegram"/></svg>Telegram</a>
+      <a href="https://t.me/georgy_tech_web" target="_blank" rel="noopener noreferrer" data-goal="telegram_open"><svg aria-hidden="true"><use href="#i-telegram"/></svg>Канал</a>
+      <a href="https://github.com/Georgy-ITech" target="_blank" rel="noopener noreferrer" data-goal="github_open"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+      <a href="mailto:georgy.tech@yandex.ru" data-goal="mail_open"><svg aria-hidden="true"><use href="#i-mail"/></svg>Почта</a>
+    </nav>
   </footer>
+
+  <script type="module" src="/src/main.js"></script>
 </body>
-
 </html>
-

@@ -1,0 +1,53 @@
+# Georgy_Tech
+
+> Сайты под ключ — для дела и для себя: структура, тексты, дизайн, анимация, публикация. Работаю один — от замысла до запуска. Сахалин, МСК+8 (МСК+8).
+
+Сайт: https://georgy-itech.github.io/site-portfolio/
+
+## Как работаю
+- Готовое техническое задание не нужно — достаточно общего представления о сайте.
+- Смета и срок фиксируются письменно до начала; дальше цена не меняется.
+- Первый экран показываю на третий день.
+- Домен, хостинг и исходники оформляются на заказчика.
+- Две недели правок после сдачи — бесплатно.
+
+## Цены
+- Визитка — от 6 000 ₽, 3–5 дней.
+- Сайт под задачу — от 15 000 ₽, 7–10 дней.
+- С интерактивом и 3D — от 35 000 ₽, от 2 недель.
+- Правки готового сайта — от 1 500 ₽, 1–2 дня.
+
+## Работы
+- [Доктор Габриель](https://doctorgabriel.ru) — сайт врача-эндокринолога, реальный заказ под ключ.
+- [Октан](https://georgy-itech.github.io/oktan-auto/) — лендинг автосервиса с калькулятором работ.
+- [Кедр](https://georgy-itech.github.io/kedr-dom/) — строительство домов: каталог, смета, ипотечный расчёт.
+- [Фактура](https://georgy-itech.github.io/faktura-kuhni/) — кухни на заказ: квиз с вилкой цены.
+- [Верста](https://georgy-itech.github.io/versta-cargo/) — грузоперевозки: расчёт и отслеживание.
+- [Remont.Krd](https://georgy-itech.github.io/appartment-recover/) — ремонт квартир.
+- [Smilio](https://georgy-itech.github.io/smilio-landing/) — стоматология, 4 страницы.
+- [FITSHIFT](https://georgy-itech.github.io/fitness-trainer-landing/) — персональный тренер.
+- [КРЕМА](https://krema-coffee.vercel.app/) — интернет-магазин кофе на React.
+- [Полярис](https://georgy-itech.github.io/ecommerce-homepage-showcase/) — главная магазина одежды.
+- [DoFit](https://georgy-itech.github.io/dofit-landing/) — фитнес-приложение.
+- [DesignShift](https://georgy-itech.github.io/designshift-landing/) — курс по веб-дизайну.
+- [Артель](https://artel-masters.vercel.app/) — площадка мастеров на Next.js и Three.js.
+- [Sable](https://georgy-itech.github.io/sable-landing/) — 3D-конфигуратор парфюма.
+- [Nodal](https://georgy-itech.github.io/nodal-landing/) — WebGL без библиотек.
+- [Aura](https://georgy-itech.github.io/aura-landing/) — живой aurora-фон.
+- [Nebula](https://georgy-itech.github.io/bento-landing/) — bento-лендинг аналитики.
+- [Expense Flow](https://georgy-itech.github.io/expense-tracker/) — учёт финансов.
+- [UI Motion](https://georgy-itech.github.io/ui-animation-showcase/) — витрина интерфейсных анимаций.
+
+## Навыки
+- Вёрстка и адаптив: HTML, CSS, SCSS, вёрстка по Figma, многостраничные сайты.
+- Интерактив: JavaScript без библиотек, калькуляторы, квизы, фильтры, формы, GSAP.
+- 3D и графика: Three.js, React Three Fiber, WebGL и шейдеры GLSL.
+- Фреймворки: React, TypeScript, Vite, Next.js, Astro.
+- Запуск и качество: домен и хостинг, SEO-основа, доступность WCAG, Lighthouse, Яндекс Метрика.
+
+## Связь
+- Kwork: https://kwork.ru/user/georgy_tech
+- Telegram (написать): https://t.me/GeorgyTech
+- Telegram-канал: https://t.me/georgy_tech_web
+- GitHub: https://github.com/Georgy-ITech
+- Почта: georgy.tech@yandex.ru

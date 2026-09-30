@@ -1,0 +1,118 @@
+@use "tokens" as *;
+
+*, *::before, *::after { box-sizing: border-box; }
+// Отступ под фиксированную шапку: якоря и фокус с клавиатуры не уходят под неё (WCAG 2.4.11).
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; scroll-padding-top: calc(var(--head-h) + 16px); }
+body { overflow-x: clip; }
+html.is-locked { overflow: hidden; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 1rem/1.65 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.5s var(--ease), color 0.5s var(--ease);
+}
+img, canvas, video { display: block; max-width: 100%; }
+// Механизм — видео с прозрачностью; вписывается целиком, без обрезки.
+video { object-fit: contain; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+::selection { background: var(--acc); color: var(--on-acc); }
+
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 3px; border-radius: 2px; }
+.paper :focus-visible { outline-color: var(--acc-ink); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip {
+  position: fixed; left: 12px; top: -60px; z-index: 200;
+  padding: 10px 16px; border-radius: var(--r-btn);
+  background: var(--text); color: var(--bg); font-weight: 600; text-decoration: none;
+  transition: top 0.2s var(--ease);
+  &:focus { top: 12px; }
+}
+
+// Буквы из splitChars: каждая — отдельный блок, чтобы её можно было двигать.
+.wd { display: inline-block; white-space: nowrap; }
+.ch { display: inline-block; }
+
+/*
+  Появление крупных заголовков — как у референса: буква из размытия, увеличенная вдвое,
+  перекошенная и сдвинутая, встаёт на место за 1.5 с; порядок случайный (--r * 75 мс).
+*/
+.js [data-split="big"] .ch {
+  margin: -0.25em -0.1em;
+  padding: 0.25em 0.1em;
+  opacity: 0;
+  filter: blur(0.05em);
+  scale: 2;
+  transform: skew(15deg, 30deg);
+  translate: 0.25em 1em;
+}
+// Заголовок первого экрана — без размытия: у букв такого кегля, увеличенных вдвое, оно
+// стоит видеокарте 30–45 мс на кадр прямо в момент посадки механизма. Остальное движение то же.
+.js .hero [data-split="big"] .ch { filter: none; }
+.js [data-split="big"].is-in .ch {
+  opacity: 1;
+  // none, а не blur(0): иначе у каждой буквы навсегда остаётся слой фильтра.
+  filter: none;
+  scale: 1;
+  transform: none;
+  translate: 0 0;
+  transition: opacity 1.5s var(--f-fast), scale 1.5s var(--f-fast), translate 1.5s var(--f-fast), transform 1.5s var(--f-fast), filter 1.5s var(--f-fast);
+  transition-delay: calc(var(--r) * 75ms);
+}
+
+// Абзацы — построчно из-под маски, 75 мс на строку.
+.ln { display: block; clip-path: inset(0 0 100% 0); translate: 0 3em; }
+.is-in .ln {
+  clip-path: inset(-10% 0 -10% 0);
+  translate: 0 0;
+  transition: translate 1.5s var(--f-cubic), clip-path 1.5s var(--f-cubic);
+  transition-delay: calc(var(--l) * 75ms + var(--d, 0) * 1s);
+}
+html:not(.js) .ln { clip-path: none; translate: none; }
+
+// Мелкие подписи — подъём снизу с задержкой --d.
+.js .a-up { opacity: 0; translate: 0 1.1rem; }
+.js .a-up.is-in, html.is-loaded .hero .a-up {
+  opacity: 1;
+  translate: 0 0;
+  transition: translate 1.5s var(--f-cubic), opacity 1.5s var(--f-cubic);
+  transition-delay: calc(var(--d, 0) * 1s + 0.15s);
+}
+
+.kicker {
+  font: 400 0.68rem/1.4 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--acc-ink);
+}
+.kicker--dark { color: var(--acc); }
+
+.h2 {
+  font: 500 clamp(2.4rem, 6vw, 5.2rem)/1 var(--display);
+  letter-spacing: -0.02em;
+  margin: 0.35em 0 0.75em;
+  text-wrap: balance;
+}
+
+// Появление при прокрутке — только когда JS точно работает, иначе текст просто виден.
+.js [data-reveal], .js [data-rise] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+.js [data-reveal].is-in, .js [data-rise].is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; transition-delay: 0s !important; animation-duration: 0.01ms !important; }
+  .js [data-reveal], .js [data-rise] { opacity: 1; transform: none; }
+  .js [data-split="big"] .ch, .ln, .js .a-up { opacity: 1; filter: none; scale: 1; transform: none; translate: none; clip-path: none; }
+}

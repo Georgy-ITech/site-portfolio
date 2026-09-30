@@ -1,0 +1,360 @@
+@use "tokens" as *;
+@use "edge" as *;
+
+// Светлая часть — «бумага», как нижняя половина референса: мало текста, много воздуха.
+.paper {
+  position: relative;
+  // Выше секции работ: зубчатый край наезжает на её низ.
+  z-index: 3;
+  background: var(--paper);
+  color: var(--ink);
+  padding: clamp(96px, 12vw, 170px) var(--gutter) clamp(90px, 10vw, 150px);
+  color-scheme: light;
+  // Верхний край — обод зубчатого колеса (как силуэт-маска у референса).
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(1px - clamp(70px, 12vw, 190px));
+    height: clamp(70px, 12vw, 190px);
+    background: var(--paper);
+    -webkit-mask: $edge-gear 0 0 / 100% 100% no-repeat;
+    mask: $edge-gear 0 0 / 100% 100% no-repeat;
+    pointer-events: none;
+  }
+  > section { position: relative; max-width: 1180px; margin: 0 auto; }
+  > section + section { margin-top: clamp(110px, 14vw, 200px); }
+  .h2 { color: var(--ink); }
+}
+
+/* ---------- как я работаю ---------- */
+
+.how { --p: 0; }
+.how__text {
+  position: relative;
+  z-index: 1;
+  margin-top: 26px;
+  max-width: 24ch;
+  font: 500 clamp(2rem, 4.8vw, 4.2rem)/1.08 var(--display);
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+// Чертёж механизма под краем бумаги — едет медленнее текста (как карта у референса).
+.blueprint {
+  position: absolute;
+  z-index: 0;
+  right: -6%;
+  top: -18%;
+  width: min(62vw, 760px);
+  color: var(--acc-ink);
+  opacity: 0.16;
+  pointer-events: none;
+  translate: 0 calc(-12vh + 24vh * var(--p));
+  svg { display: block; width: 100%; height: auto; }
+}
+// Второй механизм: одиночное колесо всплывает и проворачивается по прокрутке.
+.how__wheel {
+  position: absolute;
+  z-index: 1;
+  right: 4%;
+  bottom: -30%;
+  width: clamp(130px, 17vw, 250px);
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 24px 30px rgb(12 17 22 / 0.28));
+  transform: translateY(calc(-26vh * var(--p))) rotate(calc(var(--p) * 60deg));
+}
+@media (max-width: 767px) {
+  .blueprint { width: 110vw; right: -40%; top: -8%; }
+  // На телефоне абзац во всю ширину — колесо уходит к подписи, над текстом.
+  .how__wheel { top: -64px; bottom: auto; right: 0; width: 92px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .blueprint { translate: none; }
+  .how__wheel { transform: none; }
+}
+/* ---------- обо мне ---------- */
+
+.about {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+  @media (min-width: $desktop) { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: start; }
+}
+.about__title { margin-bottom: 0.5em; }
+.about__facts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--acc-line); }
+  div:last-child { border-bottom: 1px solid var(--acc-line); }
+  dt { font: 400 0.64rem/1.6 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--acc-ink); }
+  dd { margin: 0; color: var(--ink); text-align: right; }
+}
+.about__body {
+  display: grid;
+  gap: 1.1em;
+  font: 500 clamp(1.35rem, 2.2vw, 1.85rem)/1.3 var(--display);
+  letter-spacing: -0.01em;
+  @media (min-width: $desktop) { padding-top: 0.6em; }
+  p:nth-child(n + 2) { color: var(--ink-2); }
+}
+
+/* ---------- навыки ---------- */
+
+// Строки как у цен: группа слева, теги посередине, где это видно в работах — справа.
+.skill {
+  display: grid;
+  gap: 14px 32px;
+  padding: 26px 0;
+  border-top: 1px solid var(--ink-line);
+  &:last-child { border-bottom: 1px solid var(--ink-line); }
+  @media (min-width: $desktop) { grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.6fr) minmax(0, 0.9fr); align-items: baseline; }
+}
+.skill__name { font: 500 clamp(1.4rem, 2.2vw, 1.85rem)/1.1 var(--display); }
+.skill__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  li {
+    padding: 7px 11px;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px var(--ink-line);
+    font: 400 0.66rem/1.2 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+}
+.skill__where {
+  font-size: 0.92rem;
+  color: var(--ink-2);
+  span {
+    display: block;
+    margin-bottom: 4px;
+    font: 400 0.62rem/1.4 var(--mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--acc-ink);
+  }
+}
+
+/* ---------- что входит в работу ---------- */
+
+.includes__list {
+  display: grid;
+  gap: 0 clamp(24px, 3vw, 44px);
+  @media (min-width: 640px) { grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: $desktop) { grid-template-columns: repeat(4, 1fr); }
+}
+.includes__item {
+  padding: 22px 0 30px;
+  // Золотая линия сверху — метка пункта вместо номеров и иконок.
+  border-top: 1px solid var(--acc-line);
+  h3 {
+    font: 500 clamp(1.3rem, 1.8vw, 1.55rem)/1.15 var(--display);
+  }
+  p { margin-top: 10px; color: var(--ink-2); font-size: 0.95rem; }
+}
+
+/* ---------- почему я ---------- */
+
+.why__list {
+  display: grid;
+  gap: 0 clamp(28px, 5vw, 80px);
+  @media (min-width: $tablet) { grid-template-columns: repeat(3, 1fr); }
+}
+.why__item {
+  padding: 28px 0 34px;
+  border-top: 1px solid var(--acc-line);
+  h3 {
+    font: 500 clamp(1.4rem, 2.2vw, 1.8rem)/1.15 var(--display);
+    letter-spacing: -0.01em;
+  }
+  p { margin-top: 12px; color: var(--ink-2); max-width: 48ch; }
+}
+
+/* ---------- этапы ---------- */
+
+.steps__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  font: 500 clamp(2.6rem, 7.4vw, 7rem)/0.95 var(--display);
+  letter-spacing: -0.03em;
+}
+.steps { --p: 0; }
+.steps__word { white-space: nowrap; }
+.steps__gap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: clamp(70px, 9vw, 130px);
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: left top;
+    border-radius: 2px;
+    margin: 0 -0.6vw;
+    box-shadow: 0 20px 40px rgb(0 0 0 / 0.22);
+  }
+  img:nth-child(1) { rotate: -6deg; }
+  img:nth-child(2) { rotate: 2deg; z-index: 1; }
+  img:nth-child(3) { rotate: 7deg; }
+}
+// На широком экране слова стоят в строку и разъезжаются от прокрутки, освобождая место снимкам
+// (как «Origin Objects» у референса). Раскрытие — от --p секции: 0 у входа, 1 к середине экрана.
+@media (min-width: 900px) {
+  .steps__title {
+    --open: clamp(0, calc((var(--p) - 0.08) * 4), 1);
+    flex-direction: row;
+    justify-content: center;
+    gap: 0;
+    font-size: clamp(2.4rem, 4.8vw, 5.4rem);
+  }
+  .steps__gap {
+    flex-shrink: 0;
+    // Закрытый промежуток — обычный пробел между словами, а не ноль.
+    width: calc(0.28em + (min(24vw, 330px) - 0.28em) * var(--open));
+    overflow: visible;
+  }
+  .steps__gap img {
+    width: clamp(60px, 6.6vw, 104px);
+    opacity: var(--open);
+    scale: calc(0.6 + 0.4 * var(--open));
+  }
+  .steps__gap img:nth-child(1) { rotate: calc(-6deg * var(--open)); }
+  .steps__gap img:nth-child(3) { rotate: calc(7deg * var(--open)); }
+  .steps__word { scale: calc(1.08 - 0.08 * var(--open)); }
+}
+@media (min-width: 900px) and (prefers-reduced-motion: reduce) {
+  .steps__title { --open: 1; }
+}
+
+.steps__list {
+  display: grid;
+  gap: 0 32px;
+  margin-top: clamp(56px, 7vw, 100px);
+  @media (min-width: 640px) { grid-template-columns: 1fr 1fr; }
+  @media (min-width: $desktop) { grid-template-columns: repeat(4, 1fr); }
+}
+.steps__item {
+  padding: 24px 0 30px;
+  border-top: 1px solid var(--acc-ink);
+  h3 {
+    margin-top: 14px;
+    font: 500 1.45rem/1.15 var(--display);
+  }
+  p:last-child { margin-top: 10px; color: var(--ink-2); font-size: 0.95rem; }
+}
+.steps__when {
+  font: 400 0.66rem/1 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--acc-ink);
+}
+
+/* ---------- цены ---------- */
+
+.price {
+  display: grid;
+  gap: 10px 32px;
+  padding: 30px 0;
+  border-top: 1px solid var(--ink-line);
+  @media (min-width: $tablet) {
+    grid-template-columns: minmax(220px, 1fr) minmax(0, 1.3fr) auto;
+    align-items: baseline;
+  }
+  &:last-child { border-bottom: 1px solid var(--ink-line); }
+}
+.price__name {
+  font: 500 clamp(1.5rem, 2.4vw, 2rem)/1.1 var(--display);
+}
+.price__term {
+  margin-top: 6px;
+  font: 400 0.64rem/1.4 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.price__text { color: var(--ink-2); max-width: 46ch; }
+.price__sum {
+  white-space: nowrap;
+  color: var(--ink-2);
+  b {
+    font: 500 clamp(2rem, 4vw, 3.3rem)/1 var(--display);
+    font-variant-numeric: lining-nums;
+    color: var(--ink);
+  }
+}
+// Обычный выбор подписан словами, а не безымянной точкой: клиенту должно быть понятно, что это.
+.price__badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 10px;
+  border-radius: var(--r-btn);
+  background: rgb(122 90 8 / 0.1);
+  box-shadow: inset 0 0 0 1px var(--acc-line);
+  font: 400 0.62rem/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--acc-ink);
+}
+.price--main { border-top-color: var(--acc-ink); }
+.price__sum b { color: var(--acc-ink); }
+.prices__note { margin-top: 26px; color: var(--ink-2); max-width: 60ch; }
+
+/* ---------- вопросы ---------- */
+
+.qa { border-top: 1px solid var(--ink-line); }
+.qa:last-child { border-bottom: 1px solid var(--ink-line); }
+.qa__h { margin: 0; }
+.qa__q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 24px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font: 500 clamp(1.2rem, 2vw, 1.55rem)/1.25 var(--display);
+  color: var(--ink);
+  transition: color 0.3s var(--ease);
+  &:hover { color: var(--acc-ink); }
+}
+.qa__i {
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--acc-line);
+  color: var(--acc-ink);
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 1.5px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform 0.4s var(--ease);
+  }
+  &::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .is-open &::after { transform: translate(-50%, -50%) rotate(0deg); }
+}
+.qa__a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s var(--ease);
+  > div { overflow: hidden; }
+  p { padding: 0 0 26px; max-width: 64ch; color: var(--ink-2); }
+  .is-open & { grid-template-rows: 1fr; }
+}

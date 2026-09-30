@@ -1,0 +1,356 @@
+@use "tokens" as *;
+
+/* ---------- шапка ---------- */
+
+.head {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: var(--head-h);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 0 var(--gutter);
+  --brand-c: var(--text);
+  color: var(--text);
+  transition: color 0.9s var(--f-cubic), transform 2.1s var(--f-cubic-in);
+  // Не полоса, а тающий вниз градиент — как у референса.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 -60%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgb(12 17 22 / 0.7) 0%, rgb(12 17 22 / 0.45) 35%, rgb(12 17 22 / 0.15) 70%, transparent 100%);
+    transition: opacity 0.9s var(--f-cubic);
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 -60%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(180deg, rgb(232 237 241 / 0.92) 0%, rgb(232 237 241 / 0.6) 40%, transparent 100%);
+    transition: opacity 0.9s var(--f-cubic);
+  }
+  // Пока открыто меню, шапка прячется — иначе «Меню» выглядывает из-под «Закрыть».
+  html.is-locked & { opacity: 0; visibility: hidden; }
+  // Вход при загрузке: сверху, с перекосом, который выпрямляется.
+  html.js:not(.is-loaded) & { transform: translate3d(0, -150%, 0) skew(-10deg, -5deg); }
+}
+// Над светлой «бумагой» шапка тёмная.
+.head.is-dark {
+  --brand-c: var(--ink);
+  color: var(--ink);
+  &::before { opacity: 0; }
+  &::after { opacity: 1; }
+  .btn:not(.btn--light) {
+    --dome: var(--ink);
+    --copy: var(--paper);
+    --edge: var(--ink-line);
+    --edge-on: rgb(12 17 22 / 0.4);
+    background-color: rgb(12 17 22 / 0.03);
+    color: var(--ink);
+  }
+  .head__sep { background: var(--ink-line); }
+}
+
+.head__brand {
+  justify-self: start;
+  display: inline-flex;
+  flex-direction: column;
+  min-height: 32px;
+  font: 500 1.3rem/0.9 var(--display);
+  letter-spacing: -0.01em;
+  color: inherit;
+  text-decoration: none;
+  // Строки — окна: буквы уходят вверх целиком, их копии поднимаются снизу.
+  > span { display: flex; overflow: hidden; padding: 0.06em 0 0.12em; margin: -0.06em 0 -0.12em; }
+  > span:last-child { margin-left: 0.9em; }
+  .btn__text { margin-right: 0; }
+  .bch { transition-duration: 0.7s; }
+  .bch::after { scale: 1; }
+  // Подчёркивание в засечном шрифте тонкое — берём моноширинный.
+  b { font-weight: 400; color: var(--acc); font-family: var(--mono); font-size: 0.8em; align-self: flex-end; }
+}
+@media (hover: hover) {
+  .head__brand:hover {
+    .btn__text { color: transparent; }
+    .bch { translate: 0 -100%; transition-delay: calc(var(--c) * 0.04s); }
+    .bch::after { color: var(--brand-c); translate: 0 100%; }
+    > span:last-child .bch { transition-delay: calc(0.12s + var(--c) * 0.04s); }
+    b { animation: caret 0.9s steps(1) infinite; }
+  }
+}
+.head__brand:focus-visible {
+  .btn__text { color: transparent; }
+  .bch { translate: 0 -100%; }
+  .bch::after { color: var(--brand-c); translate: 0 100%; }
+}
+// «_» превращается в мигающую каретку — как курсор в редакторе кода.
+@keyframes caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .head__brand:hover b { animation: none; }
+}
+.head__nav { display: none; align-items: center; gap: 12px; }
+.head__sep { width: 1px; height: 30px; background: var(--line); }
+.head__right { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 8px; }
+// «Связаться» выезжает при прокрутке, «Меню» сжимается до иконки — как «Send request» у референса.
+.head__contact {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+  translate: 0 -120%;
+  transition: translate 0.9s var(--f-cubic), opacity 0.3s var(--f-cubic), background-color 0.9s var(--f-cubic);
+}
+.head.is-scrolled .head__contact { opacity: 1; pointer-events: auto; translate: 0 0; transition: translate 0.9s var(--f-cubic-in), opacity 0.9s var(--f-cubic-in), background-color 0.9s var(--f-cubic); }
+// Ширина меняется сразу, без анимации: анимировать размер — пересчёт раскладки на каждом кадре.
+// Плавность даёт подпись, которая уезжает вверх и гаснет.
+.btn--menu { min-width: 136px; }
+.btn--menu__label { transition: opacity 0.9s var(--f-cubic), translate 0.9s var(--f-cubic); }
+.head.is-scrolled .btn--menu { min-width: 64px; justify-content: center; }
+.head.is-scrolled .btn--menu__label { opacity: 0; translate: 0 -100%; position: absolute !important; }
+@media (min-width: 640px) { .head__nav { display: flex; } }
+@media (min-width: 900px) { .head__contact { display: inline-flex; } }
+
+/* ---------- затемнение для переходов по странице ---------- */
+
+// Переход «лесенкой», как между страницами у референса: старая страница притемняется,
+// её накрывают колонки одна за другой, посередине остаётся знак; колонки уходят так же
+// лесенкой, и уже на открытой странице собирается название работы.
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  visibility: hidden;
+  pointer-events: none;
+}
+.veil__dim { position: absolute; inset: 0; background: #020305; opacity: 0; }
+.veil__cols {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  span {
+    display: block;
+    // чуть внахлёст, чтобы между колонками не светились щели
+    margin: 0 -1px;
+    // чуть светлее страницы и с латунной кромкой — чтобы лесенка читалась на тёмном
+    background: linear-gradient(180deg, #1a232c, #10161c);
+    box-shadow: inset 1px 0 0 rgb(199 164 90 / 0.22);
+    transform: scaleY(0);
+  }
+}
+.veil__mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  font: 500 1.35rem/1 var(--display);
+  color: var(--text);
+  opacity: 0;
+  b { font-weight: 400; font-family: var(--mono); font-size: 0.8em; color: var(--acc); }
+}
+
+/* ---------- заставка ---------- */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  background: var(--hero-bg);
+  background-color: var(--bg);
+  // Не 1, а 0.998: под полностью непрозрачным слоем браузер не отрисовывает первый экран
+  // и делает это разом, когда заставка начинает растворяться, — посреди перелёта механизма.
+  // На глаз разницы нет, а первый экран успевает отрисоваться заранее.
+  opacity: 0.998;
+}
+html:not(.js) .loader { display: none; }
+.loader__stage { position: relative; width: min(440px, 76vw); aspect-ratio: 1000 / 640; }
+// Та же тень, что у механизма первого экрана, — поделённая на масштаб перелёта (--fly-k):
+// в конце полёта холст растянут в --fly-k раз, и тень совпадает с тенью на месте до пикселя.
+.loader__mech {
+  --fly-k: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: saturate(1.12) contrast(1.03) drop-shadow(0 calc(40px / var(--fly-k)) calc(50px / var(--fly-k)) rgb(0 0 0 / 0.45));
+  transition: opacity 0.35s linear;
+  // Слой заранее: создавать его в момент, когда механизм трогается, — это рывок.
+  will-change: opacity, transform;
+}
+// Детали механизма поодиночке: прилетают, сцепляются, потом их сменяет вращающийся механизм.
+.loader__part {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  filter: saturate(1.12) contrast(1.03);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+.loader.is-assembling .loader__mech { opacity: 0; }
+.loader__count {
+  font: 500 clamp(3rem, 8vw, 5.5rem)/1 var(--display);
+  font-variant-numeric: tabular-nums;
+  &::after { content: "%"; font-size: 0.4em; color: var(--acc); margin-left: 4px; vertical-align: top; }
+}
+.loader__label {
+  position: relative;
+  width: 30ch;
+  height: 1.4em;
+  overflow: hidden;
+  font: 400 0.66rem/1.4 var(--mono);
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--muted);
+  span {
+    position: absolute;
+    inset: 0;
+    transition: translate 0.55s var(--f-cubic), opacity 0.55s var(--f-cubic);
+  }
+  .is-next { translate: 0 100%; opacity: 0; transition: none; }
+  .is-gone { translate: 0 -100%; opacity: 0; }
+}
+
+// Полоса загрузки: волосяная линия, латунь заполняет её слева направо вместе со счётчиком.
+.loader__bar {
+  --k: 0;
+  position: relative;
+  width: min(260px, 60vw);
+  height: 1px;
+  margin-top: 14px;
+  background: rgb(255 255 255 / 0.1);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(199 164 90 / 0.35), var(--acc));
+    transform: scaleX(var(--k));
+    transform-origin: 0 50%;
+  }
+}
+
+/* ---------- меню ---------- */
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  // Раскрывается кругом из центра кнопки «Меню».
+  clip-path: circle(0px at var(--ox, 90%) var(--oy, 5%));
+  transition: clip-path 0.62s cubic-bezier(0.7, 0, 0.2, 1);
+  &.is-open { clip-path: circle(150vmax at var(--ox, 90%) var(--oy, 5%)); }
+  // display: grid перебивает атрибут hidden — без этого закрытое меню остаётся
+  // в порядке фокуса и ловушка держит клавиатуру внутри невидимого диска.
+  &[hidden] { display: none; }
+}
+.menu__veil {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg) 74%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.menu__disk {
+  position: relative;
+  width: min(90vmin, 640px);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--acc) 10%, transparent), transparent 55%),
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--bg-glow) 90%, #000), var(--deep) 72%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--acc) 22%, transparent), 0 40px 140px rgb(0 0 0 / 0.55);
+  transform: scale(0.92);
+  transition: transform 0.8s var(--ease-out);
+  .is-open & { transform: none; }
+}
+// Фон диска — тот же чертёж механизма, что в светлой части: при открытии линии прорисовываются.
+.menu__blueprint {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150%;
+  translate: -50% -50%;
+  color: var(--acc);
+  opacity: 0.42;
+  pointer-events: none;
+  svg { display: block; width: 100%; height: auto; animation: menu-drift 40s linear infinite; }
+  path, circle { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.8s var(--f-cubic); }
+  .is-open & :is(path, circle) { stroke-dashoffset: 0; }
+  .is-open & :is(path, circle):nth-child(3n) { transition-delay: 0.15s; }
+  .is-open & :is(path, circle):nth-child(3n + 1) { transition-delay: 0.3s; }
+}
+@keyframes menu-drift { to { rotate: 360deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .menu__blueprint svg { animation: none; }
+  .menu__blueprint :is(path, circle) { stroke-dashoffset: 0; transition: none; }
+}
+.menu__title {
+  position: absolute;
+  left: 50%;
+  top: 15%;
+  transform: translateX(-50%);
+  font: 400 0.64rem/1 var(--mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--acc);
+}
+.menu__nav { position: absolute; inset: 0; }
+.menu__link {
+  position: absolute;
+  font: 500 clamp(1.9rem, 7vmin, 3.6rem)/1 var(--display);
+  letter-spacing: -0.015em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s var(--ease-out), transform 0.7s var(--ease-out), color 0.25s var(--ease);
+  .is-open & { opacity: 1; transform: none; }
+  .mch {
+    position: relative;
+    display: inline-block;
+    transition: translate calc(0.9s + var(--i) * 0.15s) var(--f-cubic);
+    &::after {
+      content: attr(data-ch);
+      position: absolute;
+      inset: 0;
+      color: var(--acc);
+      rotate: 60deg;
+      scale: 1.5;
+      transform-origin: 0 100%;
+      translate: 0 135%;
+      transition: scale calc(0.9s + var(--i) * 0.15s) var(--f-cubic), rotate calc(0.9s + var(--i) * 0.15s) var(--f-cubic), translate calc(0.9s + var(--i) * 0.15s) var(--f-cubic);
+    }
+  }
+  overflow: hidden;
+  // Запас снизу под выносные элементы (р, у, д): иначе хвост буквы остаётся видимым после ухода.
+  padding-bottom: 0.25em;
+  &:hover .mch, &:focus-visible .mch { translate: 0 -135%; }
+  &:hover .mch::after, &:focus-visible .mch::after { rotate: 0deg; scale: 1; }
+}
+// Пункты разбросаны по диску лесенкой, как у референса.
+.menu__link--1 { left: 20%; top: 23%; transition-delay: 0.18s; }
+.menu__link--2 { right: 12%; top: 35%; transition-delay: 0.24s; }
+.menu__link--3 { left: 13%; top: 47%; transition-delay: 0.3s; }
+.menu__link--4 { right: 22%; top: 59%; transition-delay: 0.36s; }
+.menu__link--5 { left: 22%; top: 71%; transition-delay: 0.42s; }
+.menu.is-closing .menu__link { transition-delay: 0s; }
+.menu__close {
+  position: fixed;
+  top: 16px;
+  right: var(--gutter);
+  span { font-size: 1.1rem; line-height: 1; }
+}

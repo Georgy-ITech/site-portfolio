@@ -1,0 +1,45 @@
+// Тёмная сцена сверху, светлая «бумага» ниже. Акцент — сдержанное латунное золото
+// (тот же тон, что у кикеров на бумаге, только светлее — чтобы читался на тёмном).
+:root {
+  --bg: #0c1116;
+  --bg-glow: #17212b;
+  --deep: #080b0f;
+  --text: #e4ecf2;
+  --muted: #94a3af;
+  --dim: #748190;
+  --line: rgb(228 236 242 / 0.12);
+  --glass: rgb(228 236 242 / 0.1);
+  --acc: #c7a45a;
+  --on-acc: #0c1116;
+
+  --paper: #e8edf1;
+  --ink: #0c1116;
+  --ink-2: #3b4652;
+  --ink-line: rgb(12 17 22 / 0.14);
+  --acc-ink: #7a5a08;
+  --acc-line: rgb(122 90 8 / 0.45);
+
+  --hero-bg: radial-gradient(120% 80% at 50% 0%, var(--bg-glow) 0%, var(--bg) 62%);
+
+  --display: "Cormorant Garamond Variable", "Cormorant Garamond", Georgia, serif;
+  --sans: "Geist Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Martian Mono", ui-monospace, monospace;
+
+  --ease: cubic-bezier(0.35, 0.35, 0, 1);
+  // Кривые референса (obsidianassembly.com): основная, «вход», быстрая, мягкая.
+  --f-cubic: cubic-bezier(0.35, 0.35, 0, 1);
+  --f-cubic-in: cubic-bezier(0.69, 0, 0, 1);
+  --f-fast: cubic-bezier(0.2, 0.75, 0.35, 1);
+  --f-smooth: cubic-bezier(0.5, 0, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: clamp(16px, 4vw, 56px);
+  --head-h: 76px;
+  // Кнопки — как у референса: прямоугольник со скруглением 0.4rem (6.4 px) (осознанное
+  // исключение из правила бренда «999 или 2–4 px», см. VISUAL-DNA, раздел 10).
+  --r-btn: 0.4rem;
+
+  color-scheme: dark;
+}
+
+$tablet: 768px;
+$desktop: 1024px;
