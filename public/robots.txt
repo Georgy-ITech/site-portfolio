@@ -17,4 +17,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://georgy-itech.github.io/site-portfolio/sitemap.xml
+Sitemap: https://georgy-tech.ru/sitemap.xml

@@ -30,8 +30,8 @@ if (analyticsOn) {
 }
 
 export default defineConfig({
-  // Сайт живёт в подпапке: georgy-itech.github.io/site-portfolio/
-  base: "/site-portfolio/",
+  // Сайт живёт в корне своего домена georgy-tech.ru (файл public/CNAME).
+  base: "/",
   build: { rollupOptions: { input }, assetsInlineLimit: 0 },
   plugins: [{
     name: "static-content",

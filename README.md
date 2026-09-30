@@ -4,7 +4,7 @@
 трассировкой лучей, закреплённая галерея из 19 работ, светлая «бумажная» часть с составом
 работы, условиями, ценами и вопросами. Тёмная сцена, сдержанное латунное золото.
 
-**Live:** https://georgy-itech.github.io/site-portfolio/
+**Live:** https://georgy-tech.ru/
 
 ## Стек
 
@@ -30,7 +30,7 @@
 npm install
 npm run dev      # разработка
 npm run build    # сборка в dist/
-npm run preview  # проверка собранного dist на http://localhost:5548/site-portfolio/
+npm run preview  # проверка собранного dist на http://localhost:5548/
 ```
 
 Деплой — GitHub Actions (`.github/workflows/deploy.yml`) при пуше в `main`.
@@ -50,9 +50,9 @@ npm run preview  # проверка собранного dist на http://localh
 
 | Где стоит ссылка | Адрес |
 |---|---|
-| Профиль Kwork | `https://georgy-itech.github.io/site-portfolio/?utm_source=kwork&utm_medium=profile` |
-| Telegram-канал | `https://georgy-itech.github.io/site-portfolio/?utm_source=telegram&utm_medium=social` |
-| GitHub-профиль | `https://georgy-itech.github.io/site-portfolio/?utm_source=github&utm_medium=profile` |
+| Профиль Kwork | `https://georgy-tech.ru/?utm_source=kwork&utm_medium=profile` |
+| Telegram-канал | `https://georgy-tech.ru/?utm_source=telegram&utm_medium=social` |
+| GitHub-профиль | `https://georgy-tech.ru/?utm_source=github&utm_medium=profile` |
 
 ## Структура
 
