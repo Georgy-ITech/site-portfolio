@@ -3,12 +3,13 @@
   см. brand/preview/gear-render.html). За цикл большое колесо проходит 60°
   и совпадает само с собой, поэтому повтор не виден.
 
-  Источник кадров — один из двух:
-  - video — VP9 с прозрачностью (Chrome, Яндекс Браузер, Firefox, Edge). Цикл весит
-    ~1 МБ против ~5 МБ кадрами. Скачивается один раз с настоящим прогрессом для заставки
-    и раздаётся всем плеерам через blob-ссылку.
-  - frames — WebP-кадры для WebKit (Safari, все браузеры на iPhone): прозрачность
-    в VP9 там не поддерживается. 60 кадров на 12 к/с — та же длина цикла.
+  Источник кадров — одно видео на все холсты, скачанное с настоящим прогрессом для
+  заставки и розданное через blob-ссылку:
+  - video — VP9 с прозрачностью (Chrome, Яндекс Браузер, Firefox, Edge);
+  - packed — H.264 для WebKit (Safari, все браузеры на iPhone): прозрачность VP9 там
+    не играет, поэтому альфа лежит в нижней половине кадра и собирается обратно на WebGL.
+    Раньше здесь были 60 WebP по 480 px на 12 к/с — на телефоне это читалось как мыло и рывки.
+  - frames — те же WebP, только если WebGL недоступен.
 
   Показ всегда на <canvas>: поверх кадра можно рисовать свет за курсором и затемнение
   по прокрутке (fx), и они ложатся только на металл — фон остаётся прозрачным.
@@ -22,10 +23,10 @@ function isWebKitOnly() {
 }
 
 export function createMechanism() {
-  const mode = isWebKitOnly() ? "frames" : "video";
+  const mode = !isWebKitOnly() ? "video" : hasWebGL() ? "packed" : "frames";
   const listeners = new Set();
   const emit = (p) => listeners.forEach((fn) => fn(p));
-  const source = mode === "video" ? videoSource(emit) : frameSource(emit);
+  const source = mode === "frames" ? frameSource(emit) : videoSource(emit, mode);
   const clock = createClock(source, mode);
   return {
     mode,
@@ -49,7 +50,7 @@ function createClock(source, mode) {
     held: false, still: false, video: null,
     rate: 1, velocity: 0, phase: 0, prevT: null, lastT: 0,
   };
-  if (mode === "video") {
+  if (mode !== "frames") {
     // Одно видео на всех. Лежит в углу окна прозрачным, чтобы браузер считал его видимым
     // и не останавливал; показывают его холсты.
     source.ready.then((url) => {
@@ -59,6 +60,10 @@ function createClock(source, mode) {
       v.preload = "auto"; v.className = "mech-src"; v.src = url;
       document.body.append(v);
       c.video = v;
+      if (mode === "packed") c.unpack = createUnpacker(v);
+      // Режим энергосбережения на iPhone запрещает автозапуск — тогда пускаем с первого касания.
+      const kick = () => { if (!c.held && !c.still) v.play().catch(() => {}); };
+      addEventListener("touchstart", kick, { once: true, passive: true });
       if (!c.held && !c.still) v.play().catch(() => {});
       else if (c.held) {
         // Разогрев декодера: пока механизм ждёт сборки, видео коротко проигрывается и
@@ -105,8 +110,11 @@ function createClock(source, mode) {
     });
   };
   c.frame = () => {
-    if (c.video) return c.video.readyState >= 2 ? c.video : null;
-    if (mode === "video") return null;
+    if (c.video) {
+      if (c.video.readyState < 2) return null;
+      return c.unpack ? c.unpack() : c.video;
+    }
+    if (mode !== "frames") return null;
     const p = c.still || c.held ? 0 : Math.floor(c.phase);
     return source.get(((p % FRAME_COUNT) + FRAME_COUNT) % FRAME_COUNT);
   };
@@ -115,11 +123,13 @@ function createClock(source, mode) {
 
 /* ---------- источник: видео ---------- */
 
-function videoSource(emit) {
+function videoSource(emit, mode) {
   // Полная версия (888 px — родное разрешение рендера) — всем, кроме узких экранов телефонов:
   // раньше порог срабатывал и на небольших окнах ноутбука, и механизм выглядел мыльным.
+  // Для WebKit версия одна, полная: у iPhone плотность экрана 3, меньшая была бы мыльной.
   const need = Math.min(window.innerWidth * 0.62, 680) * Math.min(window.devicePixelRatio || 1, 2);
-  const url = `${base}mech/mech-${need > 420 ? 800 : 520}.webm`;
+  const type = mode === "packed" ? "video/mp4" : "video/webm";
+  const url = mode === "packed" ? `${base}mech/mech-800.mp4` : `${base}mech/mech-${need > 420 ? 800 : 520}.webm`;
   const state = { url: null };
   state.ready = (async () => {
     try {
@@ -136,7 +146,7 @@ function videoSource(emit) {
         got += value.length;
         if (total) emit(got / total);
       }
-      state.url = URL.createObjectURL(new Blob(chunks, { type: "video/webm" }));
+      state.url = URL.createObjectURL(new Blob(chunks, { type }));
     } catch {
       state.url = url; // пусть браузер попробует сам — заставка всё равно отпустит по таймеру
     }
@@ -146,7 +156,50 @@ function videoSource(emit) {
   return state;
 }
 
-/* ---------- источник: кадры (WebKit) ---------- */
+/* ---------- сборка прозрачности из H.264 (WebKit) ---------- */
+
+function hasWebGL() {
+  try { return !!document.createElement("canvas").getContext("webgl"); } catch { return false; }
+}
+
+// Цвет в верхней половине уже умножен на альфу, поэтому края чистые и без ореола.
+function createUnpacker(video) {
+  const cv = document.createElement("canvas");
+  const gl = cv.getContext("webgl", { premultipliedAlpha: true, preserveDrawingBuffer: true, antialias: false });
+  const sh = (type, src) => { const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; };
+  const prog = gl.createProgram();
+  gl.attachShader(prog, sh(gl.VERTEX_SHADER, "attribute vec2 p;varying vec2 uv;void main(){uv=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}"));
+  gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, "precision mediump float;varying vec2 uv;uniform sampler2D t;void main(){vec3 c=texture2D(t,vec2(uv.x,uv.y*.5)).rgb;float a=texture2D(t,vec2(uv.x,uv.y*.5+.5)).r;gl_FragColor=vec4(min(c,vec3(a)),a);}"));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  // Перезаливаем текстуру, только когда видео действительно сменило кадр, — холстов три, а кадр один.
+  let dirty = true, lastTime = -1;
+  if ("requestVideoFrameCallback" in video) {
+    const onFrame = () => { dirty = true; video.requestVideoFrameCallback(onFrame); };
+    video.requestVideoFrameCallback(onFrame);
+  }
+  return () => {
+    if (!dirty && video.currentTime === lastTime) return cv;
+    dirty = false; lastTime = video.currentTime;
+    const w = video.videoWidth, h = video.videoHeight >> 1;
+    if (!w || !h) return null;
+    if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    return cv;
+  };
+}
+
+/* ---------- источник: кадры (WebKit без WebGL) ---------- */
 
 const FRAME_COUNT = 60;
 const FPS = 12;
@@ -209,7 +262,7 @@ function mountPlayer(canvas, clock, { fx = null } = {}) {
       if (!visible || !active) return;
       const img = clock.frame();
       if (!img) return;
-      const iw = img.videoWidth || img.naturalWidth, ih = img.videoHeight || img.naturalHeight;
+      const iw = img.videoWidth || img.naturalWidth || img.width, ih = img.videoHeight || img.naturalHeight || img.height;
       if (!iw || !ih) return;
       const s = Math.min(w / iw, h / ih);
       const dw = iw * s, dh = ih * s, dx = (w - dw) / 2, dy = (h - dh) / 2;
