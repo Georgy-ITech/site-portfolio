@@ -28,6 +28,7 @@ export function createMechanism() {
   const emit = (p) => listeners.forEach((fn) => fn(p));
   const source = mode === "frames" ? frameSource(emit) : videoSource(emit, mode);
   const clock = createClock(source, mode);
+  if (/[?&]debug(&|=|$)/.test(location.search)) debugOverlay(clock, mode);
   return {
     mode,
     ready: source.ready,
@@ -47,8 +48,16 @@ export function createMechanism() {
 
 function createClock(source, mode) {
   const c = {
-    held: false, still: false, video: null,
+    held: false, still: false, video: null, frames: null, why: "",
     rate: 1, velocity: 0, phase: 0, prevT: null, lastT: 0,
+  };
+  // Страховка для WebKit: если видео не дало ни кадра (автозапуск запрещён, декодер или WebGL
+  // отказали), механизм переходит на WebP-кадры, а не исчезает с экрана.
+  c.fallback = (why) => {
+    if (c.frames || mode === "video") return;
+    c.why = why;
+    c.frames = frameSource(() => {});
+    if (c.video) { c.video.pause(); c.video.remove(); c.video = null; }
   };
   if (mode !== "frames") {
     // Одно видео на всех. Лежит в углу окна прозрачным, чтобы браузер считал его видимым
@@ -60,7 +69,11 @@ function createClock(source, mode) {
       v.preload = "auto"; v.className = "mech-src"; v.src = url;
       document.body.append(v);
       c.video = v;
-      if (mode === "packed") c.unpack = createUnpacker(v);
+      if (mode === "packed") {
+        try { c.unpack = createUnpacker(v); } catch { c.fallback("webgl"); return; }
+        v.addEventListener("error", () => c.fallback("error"), { once: true });
+        setTimeout(() => { if (c.video && c.video.readyState < 2) c.fallback("no-data"); }, 3000);
+      }
       // Режим энергосбережения на iPhone запрещает автозапуск — тогда пускаем с первого касания.
       const kick = () => { if (!c.held && !c.still) v.play().catch(() => {}); };
       addEventListener("touchstart", kick, { once: true, passive: true });
@@ -97,6 +110,7 @@ function createClock(source, mode) {
     c.rate = 1; c.phase = 0;
     const v = c.video;
     if (!v) return Promise.resolve();
+    if (mode === "packed") setTimeout(() => { if (c.video && c.video.currentTime < 0.05) c.fallback("no-play"); }, 1500);
     v.currentTime = 0;
     v.playbackRate = 1;
     v.play().catch(() => {});
@@ -112,11 +126,13 @@ function createClock(source, mode) {
   c.frame = () => {
     if (c.video) {
       if (c.video.readyState < 2) return null;
-      return c.unpack ? c.unpack() : c.video;
+      if (!c.unpack) return c.video;
+      try { return c.unpack(); } catch { c.fallback("unpack"); return null; }
     }
-    if (mode !== "frames") return null;
+    const src = c.frames || (mode === "frames" ? source : null);
+    if (!src) return null;
     const p = c.still || c.held ? 0 : Math.floor(c.phase);
-    return source.get(((p % FRAME_COUNT) + FRAME_COUNT) % FRAME_COUNT);
+    return src.get(((p % FRAME_COUNT) + FRAME_COUNT) % FRAME_COUNT);
   };
   return c;
 }
@@ -154,6 +170,26 @@ function videoSource(emit, mode) {
     return state.url;
   })();
   return state;
+}
+
+/* ---------- ?debug — состояние механизма на телефоне, где нет консоли ---------- */
+
+function debugOverlay(c, mode) {
+  const el = document.createElement("pre");
+  el.style.cssText = "position:fixed;left:4px;bottom:4px;z-index:99999;margin:0;padding:6px 8px;font:11px/1.35 monospace;color:#0f0;background:rgb(0 0 0 / .8);pointer-events:none;white-space:pre-wrap;max-width:96vw";
+  document.body.append(el);
+  const errs = [];
+  addEventListener("error", (e) => errs.push(String(e.message).slice(0, 80)));
+  setInterval(() => {
+    const v = c.video;
+    el.textContent = [
+      `mode=${mode} fallback=${c.why || "-"} held=${c.held}`,
+      v ? `rs=${v.readyState} ns=${v.networkState} paused=${v.paused} t=${v.currentTime.toFixed(2)} ${v.videoWidth}x${v.videoHeight} err=${v.error ? v.error.code : "-"}` : "video=none",
+      c.frames ? `frames=${c.frames.imgs.filter(Boolean).length}/60` : "",
+      `ua=${navigator.userAgent.slice(0, 90)}`,
+      errs.length ? "js: " + errs.slice(-2).join(" | ") : "",
+    ].filter(Boolean).join("\n");
+  }, 400);
 }
 
 /* ---------- сборка прозрачности из H.264 (WebKit) ---------- */
