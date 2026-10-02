@@ -22,9 +22,14 @@
     inset: 0 0 -60%;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(180deg, rgb(12 17 22 / 0.7) 0%, rgb(12 17 22 / 0.45) 35%, rgb(12 17 22 / 0.15) 70%, transparent 100%);
+    // Плотно под самой шапкой (она — верхние 62% этой полосы), тает уже ниже неё:
+    // иначе прокручиваемый текст проступал сквозь логотип и кнопки.
+    background: linear-gradient(180deg, rgb(12 17 22 / 0.97) 0%, rgb(12 17 22 / 0.93) 54%, rgb(12 17 22 / 0.4) 78%, transparent 100%);
+    // Над первым экраном — вполсилы: там под шапкой ничего не едет, а верх сцены затемнять незачем.
+    opacity: 0.55;
     transition: opacity 0.9s var(--f-cubic);
   }
+  &.is-scrolled::before { opacity: 1; }
   &::after {
     content: "";
     position: absolute;
@@ -32,7 +37,7 @@
     z-index: -1;
     pointer-events: none;
     opacity: 0;
-    background: linear-gradient(180deg, rgb(232 237 241 / 0.92) 0%, rgb(232 237 241 / 0.6) 40%, transparent 100%);
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper) 54%, rgb(232 237 241 / 0.5) 78%, transparent 100%);
     transition: opacity 0.9s var(--f-cubic);
   }
   // Пока открыто меню, шапка прячется — иначе «Меню» выглядывает из-под «Закрыть».
@@ -44,7 +49,7 @@
 .head.is-dark {
   --brand-c: var(--ink);
   color: var(--ink);
-  &::before { opacity: 0; }
+  &::before, &.is-scrolled::before { opacity: 0; }
   &::after { opacity: 1; }
   .btn:not(.btn--light) {
     --dome: var(--ink);

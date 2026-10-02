@@ -136,14 +136,27 @@ const head = $("#head");
 const onScrollHead = () => head.classList.toggle("is-scrolled", window.scrollY > 40);
 window.addEventListener("scroll", onScrollHead, { passive: true });
 onScrollHead();
-$$("[data-header='dark']").forEach((sec) => {
-  ScrollTrigger.create({
-    trigger: sec,
-    start: () => `top ${head.offsetHeight / 2}px`,
-    end: () => `bottom ${head.offsetHeight / 2}px`,
-    onToggle: (self) => head.classList.toggle("is-dark", self.isActive),
-  });
-});
+// Тема шапки — по тому, что под ней сейчас, а не по заранее посчитанным границам: высота страницы
+// меняется уже после их расчёта (разбивка строк, картинки, закрепление работ), и шапка ошибалась
+// на десятки пикселей — светлела над тёмным и темнела над бумагой.
+const darkZones = $$("[data-header='dark']");
+let headTicking = false;
+const syncHeadTheme = () => {
+  headTicking = false;
+  const mid = head.offsetHeight / 2;
+  head.classList.toggle("is-dark", darkZones.some((z) => {
+    const r = z.getBoundingClientRect();
+    return r.top <= mid && r.bottom >= mid;
+  }));
+};
+const queueHeadTheme = () => {
+  if (headTicking) return;
+  headTicking = true;
+  requestAnimationFrame(syncHeadTheme);
+};
+window.addEventListener("scroll", queueHeadTheme, { passive: true });
+window.addEventListener("resize", queueHeadTheme);
+syncHeadTheme();
 
 /* ---------- прогресс секций → --p ---------- */
 
@@ -229,9 +242,11 @@ if (lenis) lenis.on("scroll", ({ velocity }) => mech.nudge(velocity));
 
 const loader = $("#loader");
 const countEl = $("#loaderCount");
-// Счётчик идёт плавно от 0 до 100: не быстрее реальной загрузки и не быстрее сборки механизма.
+// Счётчик идёт плавно от 0 до 100: не быстрее реальной загрузки и заканчивает вместе со сборкой
+// механизма (последняя деталь садится через 2.25 с). Раньше он шёл 2.9 с и догонял ещё ~0.4 с —
+// механизм почти секунду стоял собранным на «97, 98, 99», и это читалось как зависание.
 const barEl = $("#loaderBar");
-const LOADER_TIME = reduce ? 0 : 2.9;
+const LOADER_TIME = reduce ? 0 : 2.05;
 let loadStart = reduce ? performance.now() : Infinity;
 let real = 0, shown = 0;
 mech.onProgress((p) => { real = Math.min(1, p); });
@@ -240,7 +255,7 @@ const counted = new Promise((r) => { countDone = r; });
 const tickCount = () => {
   const byTime = LOADER_TIME ? Math.min(1, Math.max(0, (performance.now() - loadStart) / 1000 / LOADER_TIME)) : 1;
   const target = Math.min(real, byTime);
-  shown += (target - shown) * 0.12;
+  shown += (target - shown) * 0.2;
   if (target - shown < 0.004) shown = target;
   countEl.textContent = String(Math.round(shown * 100));
   barEl.style.setProperty("--k", shown.toFixed(4));
@@ -336,15 +351,16 @@ function finishLoading() {
   // Буквы заголовка (размытие на каждой) собираются уже вокруг севшего механизма.
   // Холст первого экрана пока рисует (невидимо): первый кадр в новом холсте дорогой,
   // пусть он случится сейчас. На время полёта рисование выключаем, ближе к посадке включаем.
-  // 1) Пока всё неподвижно, детали сменяются механизмом: он стоит на том же первом кадре,
-  //    поза совпадает — подмена не видна. Раньше детали растворялись поверх уже вращающегося
-  //    механизма, и застывшая картинка поверх движения читалась как остановка.
-  // 2) Когда браузер спокоен, механизм трогается и одновременно летит в первый экран.
+  // 1) Детали сменяются механизмом коротким растворением (поза совпадает с первым кадром цикла).
+  // 2) Сразу после подмены шестерни трогаются на месте — собрались и закрутились.
+  // 3) Перелёт начинается, когда браузер спокоен, но механизм к этому времени уже крутится.
+  //    Раньше все три шага ждали друг друга неподвижно: 0.4 с растворения, 0.45 с паузы,
+  //    ровные кадры и первый кадр видео — механизм стоял собранным 1.2 с (на слабом телефоне 2.3 с).
   loader.classList.remove("is-assembling");
-  gsap.to(".loader__part", { autoAlpha: 0, duration: 0.4, ease: "power1.inOut" });
-  new Promise((r) => setTimeout(r, 450))
-    .then(() => whenCalm())
+  gsap.to(".loader__part", { autoAlpha: 0, duration: 0.2, ease: "power1.out" });
+  new Promise((r) => setTimeout(r, 200))
     .then(() => { heroMech.setActive(false); return mech.start(); })
+    .then(() => whenCalm(6, 450))
     .then(() => {
       gsap.timeline({ onComplete: done })
         .to(stage, { x: to.left - from.left, y: to.top - from.top, scale: to.width / from.width, transformOrigin: "0 0", duration: 1.7, ease: "power2.inOut" }, 0)

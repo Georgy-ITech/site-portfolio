@@ -130,7 +130,10 @@ export function initGallery({ reduce, onGoal }) {
     lhEl.textContent = w.lh ? `Lighthouse · скорость ${w.lh.p} · доступность ${w.lh.a} · SEO ${w.lh.s}` : "";
     lhEl.hidden = !w.lh;
     openEl.href = w.url;
-    openEl.setAttribute("aria-label", `Открыть сайт «${w.title}» в новой вкладке`);
+    // Имя ссылки — из скрытой подписи, которую создаёт splitButton: так оно начинается с видимого
+    // «Открыть сайт», и озвучка совпадает с тем, что на кнопке (WCAG 2.5.3).
+    const sr = openEl.querySelector(".sr-only");
+    if (sr) sr.textContent = `Открыть сайт «${w.title}», в новой вкладке`;
     curEl.textContent = String(index + 1);
     viewer.style.setProperty("--work-accent", lighten(w.accent));
     indexBtns.forEach((b, k) => b.toggleAttribute("aria-current", k === index));
