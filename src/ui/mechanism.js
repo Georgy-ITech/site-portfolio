@@ -1,36 +1,25 @@
 /*
   Механизм — заранее отрендеренный бесшовный цикл (трассировка лучей, студийный свет,
-  см. brand/preview/gear-render.html). За цикл большое колесо проходит 60°
-  и совпадает само с собой, поэтому повтор не виден.
+  см. brand/preview/gear-render.html). С 2026-10 — макросъёмка: камера у ступицы большого
+  колеса, малая глубина резкости, кадр 1600×900 во всю ширину первого экрана.
+  За цикл (5 с, 48 к/с) колесо проходит 60° и совпадает само с собой — повтор не виден.
 
-  Источник кадров — одно видео на все холсты, скачанное с настоящим прогрессом для
-  заставки и розданное через blob-ссылку:
-  - packed — H.264 (crf 17), альфа лежит в нижней половине кадра и собирается обратно на WebGL.
-    Основной режим везде, где есть WebGL: H.264 декодирует видеокарта. VP9 с прозрачностью
-    Chrome декодирует только программно — стоило процессору отвлечься, видео ждало кадров
-    по 0.2 с, и шестерни замирали посреди перелёта в первый экран (замер на MSI, 2026-10-03).
-  - video — VP9 с прозрачностью, если WebGL нет, а браузер не WebKit;
-  - frames — 60 WebP по 480 px на 12 к/с: WebKit без WebGL или когда видео не дало кадра.
+  Источник кадров — одно видео на все холсты, скачанное с настоящим прогрессом для заставки:
+  - packed — H.264, альфа в нижней половине кадра, собирается на WebGL. H.264 декодирует
+    видеокарта; VP9 с альфой Chrome декодирует программно, и под нагрузкой видео замирало
+    на 0.2 с (замер на MSI, 2026-10-03).
+  - poster — один кадр, если WebGL нет или видео не дало ни кадра (автозапуск запрещён и т. п.).
 
-  Показ всегда на <canvas>: поверх кадра можно рисовать свет за курсором и затемнение
-  по прокрутке (fx), и они ложатся только на металл — фон остаётся прозрачным.
+  Показ на <canvas>: поверх кадра рисуется свет за курсором и затемнение по прокрутке (fx),
+  только по металлу — фон остаётся прозрачным.
 */
 const base = import.meta.env.BASE_URL;
 
-function isWebKitOnly() {
-  const ua = navigator.userAgent;
-  if (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) return true;
-  return /AppleWebKit/.test(ua) && !/Chrome|Chromium|Edg|OPR|YaBrowser|Firefox/.test(ua);
-}
-
 export function createMechanism() {
-  // H.264 с альфой в нижней половине кадра — всем, у кого есть WebGL: его декодирует видеокарта.
-  // VP9 с прозрачностью Chrome декодирует только программно, и стоило процессору отвлечься,
-  // видео ждало кадров по 0.2 с — шестерни замирали посреди перелёта (замер на MSI, 2026-10-03).
-  const mode = hasWebGL() ? "packed" : isWebKitOnly() ? "frames" : "video";
+  const mode = hasWebGL() ? "packed" : "poster";
   const listeners = new Set();
   const emit = (p) => listeners.forEach((fn) => fn(p));
-  const source = mode === "frames" ? frameSource(emit) : videoSource(emit, mode);
+  const source = mode === "poster" ? posterSource(emit) : videoSource(emit);
   const clock = createClock(source, mode);
   if (/[?&]debug(&|=|$)/.test(location.search)) debugOverlay(clock, mode);
   return {
@@ -52,18 +41,18 @@ export function createMechanism() {
 
 function createClock(source, mode) {
   const c = {
-    held: false, still: false, video: null, frames: null, why: "",
-    rate: 1, velocity: 0, phase: 0, prevT: null, lastT: 0,
+    held: false, still: false, video: null, poster: null, why: "",
+    rate: 1, velocity: 0,
   };
-  // Страховка для WebKit: если видео не дало ни кадра (автозапуск запрещён, декодер или WebGL
-  // отказали), механизм переходит на WebP-кадры, а не исчезает с экрана.
+  // Страховка: если видео не дало ни кадра (автозапуск запрещён, декодер или WebGL отказали),
+  // показываем неподвижный кадр, а не пустоту.
   c.fallback = (why) => {
-    if (c.frames || mode === "video") return;
+    if (c.poster) return;
     c.why = why;
-    c.frames = frameSource(() => {});
+    c.poster = posterSource(() => {}).img;
     if (c.video) { c.video.pause(); c.video.remove(); c.video = null; }
   };
-  if (mode !== "frames") {
+  if (mode === "packed") {
     // Одно видео на всех. Лежит в углу окна прозрачным, чтобы браузер считал его видимым
     // и не останавливал; показывают его холсты.
     source.ready.then((url) => {
@@ -73,11 +62,9 @@ function createClock(source, mode) {
       v.preload = "auto"; v.className = "mech-src"; v.src = url;
       document.body.append(v);
       c.video = v;
-      if (mode === "packed") {
-        try { c.unpack = createUnpacker(v); } catch { c.fallback("webgl"); return; }
-        v.addEventListener("error", () => c.fallback("error"), { once: true });
-        setTimeout(() => { if (c.video && c.video.readyState < 2) c.fallback("no-data"); }, 3000);
-      }
+      try { c.unpack = createUnpacker(v); } catch { c.fallback("webgl"); return; }
+      v.addEventListener("error", () => c.fallback("error"), { once: true });
+      setTimeout(() => { if (c.video && c.video.readyState < 2) c.fallback("no-data"); }, 3000);
       // Режим энергосбережения на iPhone запрещает автозапуск — тогда пускаем с первого касания.
       const kick = () => { if (!c.held && !c.still) v.play().catch(() => {}); };
       addEventListener("touchstart", kick, { once: true, passive: true });
@@ -90,10 +77,6 @@ function createClock(source, mode) {
     });
   }
   c.tick = (t) => {
-    if (t === c.lastT) return;
-    c.lastT = t;
-    if (c.prevT !== null && !c.held && !c.still) c.phase += (t - c.prevT) * FPS;
-    c.prevT = t;
     const v = c.video;
     if (v && !c.still && !c.held) {
       // Прокрутка разгоняет колёса, потом они плавно возвращаются к своему ходу.
@@ -103,18 +86,16 @@ function createClock(source, mode) {
       if (Math.abs(v.playbackRate - c.rate) > 0.02) v.playbackRate = c.rate;
     }
   };
-  c.nudge = (v) => { c.velocity = v; c.phase += v * 0.02; };
+  c.nudge = (v) => { c.velocity = v; };
   // Старт после сборки. Промис — когда кадры уже действительно пошли: до этого механизм
   // не показываем, иначе видно, как он «стоит» на первом кадре, пока видео раскачивается.
   c.start = () => {
     if (!c.held) return Promise.resolve();
     c.held = false;
-    // Сразу обычный ход. Цикл отрендерен на 24 к/с: на замедленном старте кадры меняются
-    // реже 10 раз в секунду, и глаз читает это как подвисание. Разгон прячет перелёт в первый экран.
-    c.rate = 1; c.phase = 0;
+    c.rate = 1;
     const v = c.video;
     if (!v) return Promise.resolve();
-    if (mode === "packed") setTimeout(() => { if (c.video && c.video.currentTime < 0.05) c.fallback("no-play"); }, 1500);
+    setTimeout(() => { if (c.video && c.video.currentTime < 0.05) c.fallback("no-play"); }, 1500);
     v.currentTime = 0;
     v.playbackRate = 1;
     v.play().catch(() => {});
@@ -133,23 +114,17 @@ function createClock(source, mode) {
       if (!c.unpack) return c.video;
       try { return c.unpack(); } catch { c.fallback("unpack"); return null; }
     }
-    const src = c.frames || (mode === "frames" ? source : null);
-    if (!src) return null;
-    const p = c.still || c.held ? 0 : Math.floor(c.phase);
-    return src.get(((p % FRAME_COUNT) + FRAME_COUNT) % FRAME_COUNT);
+    const img = c.poster || source.img;
+    return img && img.complete && img.naturalWidth ? img : null;
   };
   return c;
 }
 
 /* ---------- источник: видео ---------- */
 
-function videoSource(emit, mode) {
-  // Полная версия (888 px — родное разрешение рендера) — всем, кроме узких экранов телефонов:
-  // раньше порог срабатывал и на небольших окнах ноутбука, и механизм выглядел мыльным.
-  // H.264 одна версия, полная: у iPhone плотность экрана 3, меньшая была бы мыльной.
-  const need = Math.min(window.innerWidth * 0.62, 680) * Math.min(window.devicePixelRatio || 1, 2);
-  const type = mode === "packed" ? "video/mp4" : "video/webm";
-  const url = mode === "packed" ? `${base}mech/mech-800.mp4` : `${base}mech/mech-${need > 420 ? 800 : 520}.webm`;
+function videoSource(emit) {
+  const type = "video/mp4";
+  const url = `${base}mech/mech-macro.mp4`;
   const state = { url: null };
   state.ready = (async () => {
     try {
@@ -189,7 +164,7 @@ function debugOverlay(c, mode) {
     el.textContent = [
       `mode=${mode} fallback=${c.why || "-"} held=${c.held}`,
       v ? `rs=${v.readyState} ns=${v.networkState} paused=${v.paused} t=${v.currentTime.toFixed(2)} ${v.videoWidth}x${v.videoHeight} err=${v.error ? v.error.code : "-"}` : "video=none",
-      c.frames ? `frames=${c.frames.imgs.filter(Boolean).length}/60` : "",
+      c.poster ? "poster" : "",
       `ua=${navigator.userAgent.slice(0, 90)}`,
       errs.length ? "js: " + errs.slice(-2).join(" | ") : "",
     ].filter(Boolean).join("\n");
@@ -239,47 +214,24 @@ function createUnpacker(video) {
   };
 }
 
-/* ---------- источник: кадры (WebKit без WebGL) ---------- */
+/* ---------- источник: один кадр ---------- */
 
-const FRAME_COUNT = 60;
-const FPS = 12;
-
-function frameSource(emit) {
-  const imgs = new Array(FRAME_COUNT).fill(null);
-  const order = [];
-  for (let i = 0; i < FRAME_COUNT; i += 4) order.push(i);
-  for (let i = 0; i < FRAME_COUNT; i++) if (i % 4) order.push(i);
-  let loaded = 0;
-  const load = (i) => new Promise((resolve) => {
-    const img = new Image();
-    img.decoding = "async";
-    img.onload = () => { imgs[i] = img; loaded++; emit(loaded / FRAME_COUNT); resolve(); };
-    img.onerror = () => resolve();
-    img.src = `${base}mech/frames/${String(i).padStart(3, "0")}.webp`;
-  });
-  async function run(list) {
-    let next = 0;
-    const worker = async () => { while (next < list.length) await load(list[next++]); };
-    await Promise.all(Array.from({ length: 6 }, worker));
-  }
-  const firstPass = order.slice(0, FRAME_COUNT / 4);
-  const ready = run(firstPass).then(() => { run(order.slice(firstPass.length)); });
-  return {
-    ready,
-    imgs,
-    get(i) {
-      for (let k = 0; k < FRAME_COUNT; k++) {
-        const img = imgs[(i - k + FRAME_COUNT) % FRAME_COUNT];
-        if (img) return img;
-      }
-      return null;
-    },
-  };
+function posterSource(emit) {
+  const img = new Image();
+  img.decoding = "async";
+  const ready = new Promise((ok) => { img.onload = img.onerror = () => { emit(1); ok(); }; });
+  img.src = `${base}mech/macro-poster.webp`;
+  return { img, ready };
 }
 
 /* ---------- проигрыватель ---------- */
 
-function mountPlayer(canvas, clock, { fx = null } = {}) {
+// fit: "contain" — весь кадр внутри холста; "cover" — заполнить холст (фон первого экрана).
+// При cover точка кадра focus (ступица колеса) ставится в точку холста anchor, насколько
+// позволяют края: на узком экране телефона ступица не уходит за край.
+// mix() → { img, k }: второй кадр поверх цикла с прозрачностью k (отъезд камеры при прокрутке);
+// при k = 1 цикл не рисуется вовсе.
+function mountPlayer(canvas, clock, { fx = null, fit = "contain", focus = [0.5, 0.5], anchor = () => [0.5, 0.5], mix = null } = {}) {
   const ctx = canvas.getContext("2d");
   let visible = true, w = 0, h = 0, res = 1, active = true;
   const resize = () => {
@@ -300,15 +252,29 @@ function mountPlayer(canvas, clock, { fx = null } = {}) {
     draw(t) {
       clock.tick(t);
       if (!visible || !active) return;
-      const img = clock.frame();
+      const m = mix ? mix() : null;
+      const over = m && m.k > 0.001 && m.img ? m.img : null;
+      const loop = over && m.k >= 0.999 ? null : clock.frame();
+      const img = loop || over;
       if (!img) return;
       const iw = img.videoWidth || img.naturalWidth || img.width, ih = img.videoHeight || img.naturalHeight || img.height;
       if (!iw || !ih) return;
-      const s = Math.min(w / iw, h / ih);
-      const dw = iw * s, dh = ih * s, dx = (w - dw) / 2, dy = (h - dh) / 2;
+      const s = fit === "cover" ? Math.max(w / iw, h / ih) : Math.min(w / iw, h / ih);
+      const dw = iw * s, dh = ih * s;
+      let dx = (w - dw) / 2, dy = (h - dh) / 2;
+      if (fit === "cover") {
+        const [ax, ay] = anchor(w, h);
+        dx = Math.min(0, Math.max(w - dw, w * ax - focus[0] * dw));
+        dy = Math.min(0, Math.max(h - dh, h * ay - focus[1] * dh));
+      }
       ctx.globalCompositeOperation = "source-over";
       ctx.clearRect(0, 0, w, h);
       ctx.drawImage(img, dx, dy, dw, dh);
+      if (over && loop) {
+        ctx.globalAlpha = m.k;
+        ctx.drawImage(over, dx, dy, dw, dh);
+        ctx.globalAlpha = 1;
+      }
       if (fx) {
         // Всё, что рисует fx, ложится только на уже нарисованный металл.
         ctx.globalCompositeOperation = "source-atop";

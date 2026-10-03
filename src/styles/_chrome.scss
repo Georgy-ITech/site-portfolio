@@ -178,18 +178,6 @@
 }
 html:not(.js) .loader { display: none; }
 .loader__stage { position: relative; width: min(440px, 76vw); aspect-ratio: 1000 / 640; }
-// Та же тень, что у механизма первого экрана, — поделённая на масштаб перелёта (--fly-k):
-// в конце полёта холст растянут в --fly-k раз, и тень совпадает с тенью на месте до пикселя.
-.loader__mech {
-  --fly-k: 1;
-  display: block;
-  width: 100%;
-  height: 100%;
-  filter: saturate(1.12) contrast(1.03) drop-shadow(0 calc(40px / var(--fly-k)) calc(50px / var(--fly-k)) rgb(0 0 0 / 0.45));
-  transition: opacity 0.35s linear;
-  // Слой заранее: создавать его в момент, когда механизм трогается, — это рывок.
-  will-change: opacity, transform;
-}
 // Детали механизма поодиночке: прилетают, сцепляются, потом их сменяет вращающийся механизм.
 .loader__part {
   position: absolute;
@@ -201,7 +189,6 @@ html:not(.js) .loader { display: none; }
   pointer-events: none;
   will-change: opacity, transform;
 }
-.loader.is-assembling .loader__mech { opacity: 0; }
 .loader__count {
   font: 500 clamp(3rem, 8vw, 5.5rem)/1 var(--display);
   font-variant-numeric: tabular-nums;

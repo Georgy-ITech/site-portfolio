@@ -239,7 +239,8 @@ function heroFx(ctx, w, h) {
       ctx.fillRect(0, 0, w, h);
     }
   }
-  const dark = Math.min(1, Math.max(0, -0.5 + heroP * 1.5));
+  // Темнеет только в конце: на отъезде механизм должен быть виден целиком.
+  const dark = Math.min(1, Math.max(0, (heroP - 0.6) * 3));
   if (dark > 0) {
     ctx.fillStyle = `rgba(12, 17, 22, ${dark})`;
     ctx.fillRect(0, 0, w, h);
@@ -247,10 +248,41 @@ function heroFx(ctx, w, h) {
 }
 
 if (reduce) mech.still(); else mech.hold();
-const heroMech = mech.mount(heroCanvas, { fx: heroFx });
-const loaderMech = mech.mount($("#loaderMech"));
-const finalMech = mech.mount($("#finalMech"));
-const players = [heroMech, loaderMech, finalMech];
+// Макро во весь первый экран: ступица колеса (точка 0.736/0.584 кадра, считается при рендере) — справа и ниже заголовка
+// на широком экране, ниже заголовка на узком.
+const HUB = [0.736, 0.584];
+// Отъезд камеры по прокрутке первого экрана: заранее отрендеренные кадры (от ступицы к общему
+// виду механизма, колёса при этом проходят полоборота). Грузятся после заставки — первую загрузку
+// не тормозят. Переход с цикла на отъезд — коротким растворением: фаза вращения у них разная.
+const PULL = 75;
+const pullFrames = new Array(PULL).fill(null);
+function loadPull() {
+  if (reduce) return;
+  const order = [];
+  for (let step = 8; step >= 1; step = Math.floor(step / 2)) for (let i = 0; i < PULL; i += step) if (!order.includes(i)) order.push(i);
+  let n = 0;
+  const next = () => {
+    if (n >= order.length) return;
+    const i = order[n++];
+    const img = new Image();
+    img.decoding = "async";
+    img.onload = () => { pullFrames[i] = img; next(); };
+    img.onerror = next;
+    img.src = `${import.meta.env.BASE_URL}mech/pull/${String(i).padStart(3, "0")}.webp`;
+  };
+  for (let k = 0; k < 4; k++) next();
+}
+function pullMix() {
+  if (heroP <= 0.001) return null;
+  const t = Math.min(1, heroP / 0.45);
+  const want = Math.round(t * (PULL - 1));
+  let img = null;
+  for (let d = 0; d < PULL && !img; d++) img = pullFrames[want - d] || pullFrames[want + d] || null;
+  return img ? { img, k: Math.min(1, heroP / 0.06) } : null;
+}
+const heroMech = mech.mount(heroCanvas, { fx: heroFx, fit: "cover", focus: HUB, anchor: (w, h) => (w / h > 1.1 ? [0.74, 0.6] : [0.5, 0.66]), mix: pullMix });
+const finalMech = mech.mount($("#finalMech"), { fit: "cover", focus: HUB, anchor: () => [0.5, 0.5] });
+const players = [heroMech, finalMech];
 gsap.ticker.add((t) => players.forEach((p) => p.draw(t)));
 // Прокрутка докручивает колёса: быстрее листаешь — быстрее крутятся.
 if (lenis) lenis.on("scroll", ({ velocity }) => mech.nudge(velocity));
@@ -311,7 +343,7 @@ const parts = $$(".loader__part");
 // видеокарты (карточки с размытием фона, тени, большие SVG), до полсекунды. Пусть она пройдёт
 // сейчас, пока на экране только тёмный фон и 0 %, — а не посреди перелёта механизма.
 // Счётчик и сборка деталей начинаются, когда браузер освободился.
-if (!reduce) root.classList.add("is-loaded", "mech-morph");
+if (!reduce) root.classList.add("is-loaded");
 const calmStart = reduce ? Promise.resolve() : whenCalm(10, 2000).then(() => { loadStart = performance.now(); });
 const assembled = reduce
   ? (parts.forEach((p) => p.remove()), Promise.resolve())
@@ -328,62 +360,35 @@ function finishLoading() {
   gsap.ticker.remove(tickCount);
   countEl.textContent = "100";
   barEl.style.setProperty("--k", "1");
-  if (reduce) { root.classList.add("is-loaded"); loader.remove(); revealHero(); sky.start(); afterLoad(); return; }
-  // Механизм трогается с места и одним движением перелетает на своё место в первом экране,
-  // фон заставки растворяется под ним. Все холсты показывают одно и то же видео,
-  // поэтому на месте механизм просто продолжает вращение — подмены нет.
+  if (reduce) { root.classList.add("is-loaded", "mech-landed"); loader.remove(); revealHero(); sky.start(); afterLoad(); return; }
+  // «Нырок»: собранный механизм заставки растёт к камере вокруг ступицы и растворяется,
+  // а под ним уже крутится макро первого экрана — камера будто влетает в механизм.
+  // Колёса начинают вращаться до нырка: в макро нет застывшего кадра.
   const stage = $("#loaderStage");
-  const from = stage.getBoundingClientRect();
-  const to = heroCanvas.getBoundingClientRect();
-  loaderMech.setResolution(to.width / from.width);
-  $("#loaderMech").style.setProperty("--fly-k", String(to.width / from.width));
-  // На место механизма в заставке — пустышка того же размера: иначе счётчик и полоса
-  // подпрыгивают вверх, за шестерни, как только механизм уходит из потока.
-  const hold = document.createElement("div");
-  hold.style.cssText = `width:${from.width}px;height:${from.height}px`;
-  stage.before(hold);
-  document.body.append(stage);
-  Object.assign(stage.style, { position: "fixed", left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, zIndex: 130, margin: 0 });
-  // Посадка раскладывается по разным кадрам: подмена холста, уборка заставки,
-  // запуск букв заголовка. Всё разом давало заметную просадку прямо перед заголовком.
-  const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r()));
+  const hubOrigin = parts[0]?.dataset.origin || "36.6% 47.7%";
   const done = async () => {
-    root.classList.add("mech-landed");
-    stage.remove();
     gsap.to({ v: 0 }, { v: 1, duration: 1.2, ease: "power1.inOut", onUpdate() { spotIn = this.targets()[0].v; } });
-    await nextFrame();
-    loader.remove(); loaderMech.destroy();
-    players.splice(players.indexOf(loaderMech), 1);
-    await nextFrame();
+    loader.remove();
+    await new Promise((r) => requestAnimationFrame(() => r()));
     revealHero();
     sky.start();
-    // Пересчёт прокрутки тяжёлый — после того как заголовок собрался (1.5 с + до 0.75 с задержки).
     setTimeout(() => {
       (window.requestIdleCallback || ((f) => setTimeout(f, 0)))(afterLoad, { timeout: 800 });
     }, 2400);
   };
-  gsap.to(".loader__count, .loader__label, .loader__bar", { autoAlpha: 0, y: -12, duration: 0.4, ease: "power2.in" });
-  // Шапка, карточки и подписи начинают входить ещё под заставкой, пока механизм стоит:
-  // запуск десятков переходов разом стоит браузеру ~100 мс, посреди полёта это видно рывком.
-  // Буквы заголовка (размытие на каждой) собираются уже вокруг севшего механизма.
-  // Холст первого экрана пока рисует (невидимо): первый кадр в новом холсте дорогой,
-  // пусть он случится сейчас. На время полёта рисование выключаем, ближе к посадке включаем.
-  // 1) Детали сменяются механизмом коротким растворением (поза совпадает с первым кадром цикла).
-  // 2) Сразу после подмены шестерни трогаются на месте — собрались и закрутились.
-  // 3) Перелёт начинается, когда браузер спокоен, но механизм к этому времени уже крутится.
-  //    Раньше все три шага ждали друг друга неподвижно: 0.4 с растворения, 0.45 с паузы,
-  //    ровные кадры и первый кадр видео — механизм стоял собранным 1.2 с (на слабом телефоне 2.3 с).
   loader.classList.remove("is-assembling");
-  gsap.to(".loader__part", { autoAlpha: 0, duration: 0.2, ease: "power1.out" });
-  new Promise((r) => setTimeout(r, 200))
-    .then(() => { heroMech.setActive(false); return mech.start(); })
-    .then(() => whenCalm(6, 450))
-    .then(() => {
-      gsap.timeline({ onComplete: done })
-        .to(stage, { x: to.left - from.left, y: to.top - from.top, scale: to.width / from.width, transformOrigin: "0 0", duration: 1.7, ease: "power2.inOut" }, 0)
-        .to(loader, { autoAlpha: 0, duration: 1, ease: "power1.inOut" }, 0.3)
-        .add(() => heroMech.setActive(true), 1.45);
-    });
+  gsap.to(".loader__count, .loader__label, .loader__bar", { autoAlpha: 0, y: -12, duration: 0.35, ease: "power2.in" });
+  mech.start().then(() => {
+    root.classList.add("mech-landed");
+    gsap.timeline({ onComplete: done })
+      // Каждая деталь проворачивается вокруг своей оси, в свою сторону: соотношение как у зацепления
+      // (большое колесо медленнее). Плоский поворот наклонной картинки на быстром приближении не заметен.
+      .to(parts, { rotation: (i) => [-10, 22, -38][i] || 0, transformOrigin: (i, el) => el.dataset.origin || "50% 50%", duration: 1.25, ease: "power2.in" }, 0)
+      .to(stage, { scale: 7, transformOrigin: hubOrigin, duration: 1.25, ease: "power3.in" }, 0)
+      .to(stage, { autoAlpha: 0, duration: 0.55, ease: "power1.in" }, 0.7)
+      .to(loader, { autoAlpha: 0, duration: 0.9, ease: "power1.inOut" }, 0.35)
+      .fromTo(heroCanvas, { scale: 1.35 }, { scale: 1, duration: 1.8, ease: "power2.out" }, 0.35);
+  });
 }
 // Ждём, пока браузер переварит запуск первого экрана: 12 ровных кадров подряд (не дольше 22 мс).
 // Время отрисовки зависит от машины — на слабой видеокарте оно дольше, и фиксированная пауза
@@ -403,6 +408,7 @@ function whenCalm(need = 12, limit = 2500) {
 }
 function revealHero() { $$(".hero [data-split]").forEach((el) => el.classList.add("is-in")); }
 function afterLoad() {
+  loadPull();
   consent.ready();
   ScrollTrigger.refresh();
 }
