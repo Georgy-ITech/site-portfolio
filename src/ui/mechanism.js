@@ -64,21 +64,9 @@ function createClock(source, mode) {
     // и не останавливал; показывают его холсты.
     source.ready.then((url) => {
       const v = document.createElement("video");
-      v.muted = true; v.playsInline = true;
+      v.muted = true; v.loop = true; v.playsInline = true;
       v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
-      v.preload = "auto"; v.className = "mech-src";
-      // Обычный повтор — запасной путь: на стыке цикла браузер перематывает видео на начало,
-      // и кадр стыка держится 61–72 мс вместо 42 — шестерни запинаются раз в 5 секунд.
-      const plainLoop = () => {
-        if (v.loop) return;
-        const playing = !v.paused;
-        v.loop = true; v.src = url;
-        if (playing) v.play().catch(() => {});
-      };
-      if (mode === "video" && source.data && gaplessLoop(v, source.data, plainLoop)) {
-        // MediaSource в каком-нибудь браузере может потерять прозрачность — проверяем первый кадр.
-        if ("requestVideoFrameCallback" in v) v.requestVideoFrameCallback(() => { try { if (lostAlpha(v)) plainLoop(); } catch { plainLoop(); } });
-      } else plainLoop();
+      v.preload = "auto"; v.className = "mech-src"; v.src = url;
       document.body.append(v);
       c.video = v;
       if (mode === "packed") {
@@ -174,9 +162,7 @@ function videoSource(emit, mode) {
         got += value.length;
         if (total) emit(got / total);
       }
-      const blob = new Blob(chunks, { type });
-      state.url = URL.createObjectURL(blob);
-      if (mode === "video") state.data = await blob.arrayBuffer();
+      state.url = URL.createObjectURL(new Blob(chunks, { type }));
     } catch {
       state.url = url; // пусть браузер попробует сам — заставка всё равно отпустит по таймеру
     }
@@ -184,55 +170,6 @@ function videoSource(emit, mode) {
     return state.url;
   })();
   return state;
-}
-
-/* ---------- бесшовный повтор цикла ---------- */
-
-// Тот же файл подаётся в MediaSource снова и снова, каждый раз со сдвигом времени на длину цикла:
-// время видео идёт непрерывно, перемотки на начало нет — и нет запинки на стыке.
-// Пройденное убирается из буфера, впереди всегда три цикла (прокрутка разгоняет видео до ×4).
-function gaplessLoop(v, data, onFail) {
-  const type = 'video/webm; codecs="vp9"';
-  if (!window.MediaSource || !MediaSource.isTypeSupported(type)) return false;
-  const ms = new MediaSource();
-  let sb = null, dur = 0, next = 0, failed = false;
-  const fail = () => { if (!failed) { failed = true; onFail(); } };
-  const pump = () => {
-    if (failed || !sb || !dur || sb.updating) return;
-    try {
-      // Сначала запас впереди, уборка — потом: при разгоне ×4 цикл проходит за 1.25 с,
-      // и уборка вперёд добавления давала паузы до 110 мс в ожидании данных.
-      const t = v.currentTime;
-      if (next - t < dur * 3) { sb.timestampOffset = next; sb.appendBuffer(data); next += dur; }
-      else if (sb.buffered.length && t - sb.buffered.start(0) > dur * 2) sb.remove(sb.buffered.start(0), t - dur);
-    } catch { fail(); }
-  };
-  ms.addEventListener("sourceopen", () => {
-    try {
-      sb = ms.addSourceBuffer(type);
-      sb.mode = "segments";
-      sb.addEventListener("updateend", () => {
-        if (!dur && sb.buffered.length) next = dur = sb.buffered.end(0);
-        pump();
-      });
-      sb.addEventListener("error", fail);
-      sb.appendBuffer(data);
-    } catch { fail(); }
-  }, { once: true });
-  v.addEventListener("timeupdate", pump);
-  v.addEventListener("error", fail, { once: true });
-  v.loop = false;
-  v.src = URL.createObjectURL(ms);
-  return true;
-}
-
-// Угол кадра у рендера прозрачный; если он непрозрачен — альфа-канал потерян.
-function lostAlpha(v) {
-  const cv = document.createElement("canvas");
-  cv.width = 16; cv.height = 10;
-  const g = cv.getContext("2d", { willReadFrequently: true });
-  g.drawImage(v, 0, 0, 16, 10);
-  return g.getImageData(0, 0, 1, 1).data[3] > 8;
 }
 
 /* ---------- ?debug — состояние механизма на телефоне, где нет консоли ---------- */
