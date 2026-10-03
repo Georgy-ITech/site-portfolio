@@ -14,7 +14,7 @@
   padding: 0 var(--gutter);
   --brand-c: var(--text);
   color: var(--text);
-  transition: color 0.9s var(--f-cubic), transform 2.1s var(--f-cubic-in);
+  transition: color 0.9s var(--f-cubic), transform 2.1s var(--f-cubic-in), opacity 1.1s var(--f-cubic);
   // Не полоса, а тающий вниз градиент — как у референса.
   &::before {
     content: "";
@@ -166,29 +166,18 @@
   inset: 0;
   z-index: 120;
   display: grid;
-  place-content: center;
+  align-content: end;
   justify-items: center;
   gap: 8px;
-  background: var(--hero-bg);
-  background-color: var(--bg);
-  // Не 1, а 0.998: под полностью непрозрачным слоем браузер не отрисовывает первый экран
-  // и делает это разом, когда заставка начинает растворяться, — посреди перелёта механизма.
-  // На глаз разницы нет, а первый экран успевает отрисоваться заранее.
-  opacity: 0.998;
+  padding-bottom: 9svh;
+  // Прозрачная: под ней уже холст первого экрана с общим планом механизма —
+  // один и тот же объект от заставки до первого экрана, без подмены.
+  background: none;
 }
 html:not(.js) .loader { display: none; }
-.loader__stage { position: relative; width: min(440px, 76vw); aspect-ratio: 1000 / 640; }
-// Детали механизма поодиночке: прилетают, сцепляются, потом их сменяет вращающийся механизм.
-.loader__part {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  filter: saturate(1.12) contrast(1.03);
-  pointer-events: none;
-  will-change: opacity, transform;
-}
+// Пока идёт заставка и пролёт, интерфейс первого экрана скрыт: виден только механизм.
+html.is-intro :is(.head, .hero__grid, .hero__veil, .orbit--hero) { opacity: 0; }
+:is(.hero__grid, .hero__veil, .orbit--hero) { transition: opacity 1.1s var(--f-cubic); }
 .loader__count {
   font: 500 clamp(3rem, 8vw, 5.5rem)/1 var(--display);
   font-variant-numeric: tabular-nums;

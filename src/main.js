@@ -14,7 +14,6 @@ import { initMenu } from "./ui/menu.js";
 import { initGallery } from "./ui/gallery.js";
 import { initRelief } from "./ui/relief.js";
 import { initSky } from "./ui/sky.js";
-import { assemble } from "./ui/assemble.js";
 import { initConsent, goal } from "./ui/consent.js";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -291,11 +290,10 @@ if (lenis) lenis.on("scroll", ({ velocity }) => mech.nudge(velocity));
 
 const loader = $("#loader");
 const countEl = $("#loaderCount");
-// Счётчик идёт плавно от 0 до 100: не быстрее реальной загрузки и заканчивает вместе со сборкой
-// механизма (последняя деталь садится через 2.25 с). Раньше он шёл 2.9 с и догонял ещё ~0.4 с —
-// механизм почти секунду стоял собранным на «97, 98, 99», и это читалось как зависание.
+// Счётчик идёт плавно от 0 до 100: не быстрее реальной загрузки и не быстрее 1.6 с —
+// чтобы общий план механизма успели рассмотреть.
 const barEl = $("#loaderBar");
-const LOADER_TIME = reduce ? 0 : 2.05;
+const LOADER_TIME = reduce ? 0 : 1.6;
 let loadStart = reduce ? performance.now() : Infinity;
 let real = 0, shown = 0;
 mech.onProgress((p) => { real = Math.min(1, p); });
@@ -337,21 +335,14 @@ if (!reduce) {
 }
 
 const minShow = new Promise((r) => setTimeout(r, reduce ? 0 : 1100));
-// Механизм на заставке сначала собирается из деталей и только потом начинает вращаться.
-const parts = $$(".loader__part");
 // Первый экран собирается сразу, под заставкой: его первая отрисовка — тяжёлая разовая работа
-// видеокарты (карточки с размытием фона, тени, большие SVG), до полсекунды. Пусть она пройдёт
-// сейчас, пока на экране только тёмный фон и 0 %, — а не посреди перелёта механизма.
-// Счётчик и сборка деталей начинаются, когда браузер освободился.
-if (!reduce) root.classList.add("is-loaded");
+// видеокарты. Интерфейс при этом скрыт (is-intro), виден только механизм.
+if (!reduce) root.classList.add("is-loaded", "is-intro");
 const calmStart = reduce ? Promise.resolve() : whenCalm(10, 2000).then(() => { loadStart = performance.now(); });
-const assembled = reduce
-  ? (parts.forEach((p) => p.remove()), Promise.resolve())
-  : calmStart.then(() => assemble(loader, parts));
 // Страховка: если механизм не пришёл (сеть, блокировщик), сайт всё равно открывается.
-const giveUp = new Promise((r) => setTimeout(r, 8000));
+const giveUp = new Promise((r) => setTimeout(r, 9000));
 let finished = false;
-Promise.race([Promise.all([mech.ready, document.fonts.ready, minShow, assembled, counted]), giveUp]).then(() => {
+Promise.race([Promise.all([mech.ready, document.fonts.ready, minShow, calmStart, counted]), giveUp]).then(() => {
   if (!finished) { finished = true; finishLoading(); }
 });
 
@@ -360,34 +351,20 @@ function finishLoading() {
   gsap.ticker.remove(tickCount);
   countEl.textContent = "100";
   barEl.style.setProperty("--k", "1");
-  if (reduce) { root.classList.add("is-loaded", "mech-landed"); loader.remove(); revealHero(); sky.start(); afterLoad(); return; }
-  // «Нырок»: собранный механизм заставки растёт к камере вокруг ступицы и растворяется,
-  // а под ним уже крутится макро первого экрана — камера будто влетает в механизм.
-  // Колёса начинают вращаться до нырка: в макро нет застывшего кадра.
-  const stage = $("#loaderStage");
-  const hubOrigin = parts[0]?.dataset.origin || "36.6% 47.7%";
-  const done = async () => {
+  if (reduce) { root.classList.add("is-loaded", "mech-landed"); root.classList.remove("is-intro"); loader.remove(); revealHero(); sky.start(); afterLoad(); return; }
+  // Один объект от начала до конца: на заставке — общий план механизма, затем камера одним
+  // отрендеренным движением подлетает к ступице, колёса разгоняются до хода цикла, и последний
+  // кадр пролёта — это первый кадр цикла крупным планом. Интерфейс проступает к концу пролёта.
+  gsap.to(".loader__count, .loader__label, .loader__bar", { autoAlpha: 0, y: 10, duration: 0.45, ease: "power2.in", onComplete: () => loader.remove() });
+  const ui = gsap.delayedCall(1.5, () => { root.classList.remove("is-intro"); revealHero(); });
+  mech.start().then(() => {
+    ui.progress(1);
+    root.classList.add("mech-landed");
     gsap.to({ v: 0 }, { v: 1, duration: 1.2, ease: "power1.inOut", onUpdate() { spotIn = this.targets()[0].v; } });
-    loader.remove();
-    await new Promise((r) => requestAnimationFrame(() => r()));
-    revealHero();
     sky.start();
     setTimeout(() => {
       (window.requestIdleCallback || ((f) => setTimeout(f, 0)))(afterLoad, { timeout: 800 });
     }, 2400);
-  };
-  loader.classList.remove("is-assembling");
-  gsap.to(".loader__count, .loader__label, .loader__bar", { autoAlpha: 0, y: -12, duration: 0.35, ease: "power2.in" });
-  mech.start().then(() => {
-    root.classList.add("mech-landed");
-    gsap.timeline({ onComplete: done })
-      // Каждая деталь проворачивается вокруг своей оси, в свою сторону: соотношение как у зацепления
-      // (большое колесо медленнее). Плоский поворот наклонной картинки на быстром приближении не заметен.
-      .to(parts, { rotation: (i) => [-10, 22, -38][i] || 0, transformOrigin: (i, el) => el.dataset.origin || "50% 50%", duration: 1.25, ease: "power2.in" }, 0)
-      .to(stage, { scale: 7, transformOrigin: hubOrigin, duration: 1.25, ease: "power3.in" }, 0)
-      .to(stage, { autoAlpha: 0, duration: 0.55, ease: "power1.in" }, 0.7)
-      .to(loader, { autoAlpha: 0, duration: 0.9, ease: "power1.inOut" }, 0.35)
-      .fromTo(heroCanvas, { scale: 1.35 }, { scale: 1, duration: 1.8, ease: "power2.out" }, 0.35);
   });
 }
 // Ждём, пока браузер переварит запуск первого экрана: 12 ровных кадров подряд (не дольше 22 мс).

@@ -31,6 +31,7 @@ export function createMechanism() {
     hold() { clock.held = true; },
     still() { clock.still = true; },
     start: () => clock.start(),
+    introK: () => clock.introK(),
     nudge: (v) => clock.nudge(v),
     tick: (t) => clock.tick(t),
     mount(canvas, opts = {}) { return mountPlayer(canvas, clock, opts); },
@@ -39,46 +40,64 @@ export function createMechanism() {
 
 /* ---------- общий ход механизма ---------- */
 
+// Два видео одной сцены: пролёт камеры от общего плана к ступице (заставка) и бесшовный цикл
+// крупным планом. Последний кадр пролёта совпадает с первым кадром цикла — смена не видна.
 function createClock(source, mode) {
   const c = {
-    held: false, still: false, video: null, poster: null, why: "",
-    rate: 1, velocity: 0,
+    held: false, still: false, video: null, intro: null, poster: null, why: "",
+    rate: 1, velocity: 0, stage: mode === "packed" ? "intro" : "loop",
   };
+  // Первый кадр пролёта картинкой: механизм на заставке виден сразу, ещё до загрузки видео.
+  c.introPoster = new Image();
+  c.introPoster.decoding = "async";
+  c.introPoster.src = `${base}mech/dive-poster.webp`;
   // Страховка: если видео не дало ни кадра (автозапуск запрещён, декодер или WebGL отказали),
   // показываем неподвижный кадр, а не пустоту.
   c.fallback = (why) => {
     if (c.poster) return;
     c.why = why;
+    c.stage = "loop";
     c.poster = posterSource(() => {}).img;
-    if (c.video) { c.video.pause(); c.video.remove(); c.video = null; }
+    for (const v of [c.video, c.intro]) if (v) { v.pause(); v.remove(); }
+    c.video = c.intro = null;
+  };
+  const makeVideo = (url, loop) => {
+    const v = document.createElement("video");
+    v.muted = true; v.loop = loop; v.playsInline = true;
+    v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
+    v.preload = "auto"; v.className = "mech-src"; v.src = url;
+    document.body.append(v);
+    return v;
   };
   if (mode === "packed") {
-    // Одно видео на всех. Лежит в углу окна прозрачным, чтобы браузер считал его видимым
-    // и не останавливал; показывают его холсты.
-    source.ready.then((url) => {
-      const v = document.createElement("video");
-      v.muted = true; v.loop = true; v.playsInline = true;
-      v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
-      v.preload = "auto"; v.className = "mech-src"; v.src = url;
-      document.body.append(v);
+    // Видео лежат в углу окна прозрачными, чтобы браузер считал их видимыми и не останавливал;
+    // показывают их холсты.
+    source.ready.then(({ intro, loop }) => {
+      const v = makeVideo(loop, true);
       c.video = v;
       try { c.unpack = createUnpacker(v); } catch { c.fallback("webgl"); return; }
       v.addEventListener("error", () => c.fallback("error"), { once: true });
       setTimeout(() => { if (c.video && c.video.readyState < 2) c.fallback("no-data"); }, 3000);
+      if (intro && !c.still) {
+        const iv = makeVideo(intro, false);
+        c.intro = iv;
+        try { c.introUnpack = createUnpacker(iv); } catch { c.intro = null; c.stage = "loop"; }
+        iv.addEventListener("error", () => { c.intro = null; c.stage = "loop"; }, { once: true });
+      } else c.stage = "loop";
       // Режим энергосбережения на iPhone запрещает автозапуск — тогда пускаем с первого касания.
-      const kick = () => { if (!c.held && !c.still) v.play().catch(() => {}); };
+      const kick = () => { if (!c.held && !c.still) (c.stage === "intro" && c.intro ? c.intro : v).play().catch(() => {}); };
       addEventListener("touchstart", kick, { once: true, passive: true });
-      if (!c.held && !c.still) v.play().catch(() => {});
+      if (!c.held && !c.still) { c.stage = "loop"; v.play().catch(() => {}); }
       else if (c.held) {
-        // Разогрев декодера: пока механизм ждёт сборки, видео коротко проигрывается и
-        // возвращается на начало. Иначе первый старт после паузы стоит кадр-другой рывка.
-        v.play().then(() => setTimeout(() => { if (c.held) { v.pause(); v.currentTime = 0; } }, 250)).catch(() => {});
+        // Разогрев декодеров: коротко проигрываем и возвращаем на начало — иначе первый старт
+        // после паузы стоит кадр-другой рывка.
+        for (const x of [v, c.intro]) if (x) x.play().then(() => setTimeout(() => { if (c.held) { x.pause(); x.currentTime = 0; } }, 250)).catch(() => {});
       }
     });
   }
-  c.tick = (t) => {
+  c.tick = () => {
     const v = c.video;
-    if (v && !c.still && !c.held) {
+    if (v && !c.still && !c.held && c.stage === "loop") {
       // Прокрутка разгоняет колёса, потом они плавно возвращаются к своему ходу.
       c.velocity *= 0.9;
       const target = 1 + Math.min(Math.abs(c.velocity) * 0.06, 3);
@@ -87,28 +106,46 @@ function createClock(source, mode) {
     }
   };
   c.nudge = (v) => { c.velocity = v; };
-  // Старт после сборки. Промис — когда кадры уже действительно пошли: до этого механизм
-  // не показываем, иначе видно, как он «стоит» на первом кадре, пока видео раскачивается.
+  // Пролёт закончился — цикл стартует с нулевого кадра, а пока его кадр не пришёл,
+  // на холсте остаётся последний кадр пролёта (он тот же самый).
+  const toLoop = () => {
+    const v = c.video;
+    if (!v || c.stage === "loop") return;
+    v.currentTime = 0; v.playbackRate = 1;
+    v.play().catch(() => {});
+    const go = () => { c.stage = "loop"; };
+    if ("requestVideoFrameCallback" in v) v.requestVideoFrameCallback(go); else v.addEventListener("playing", go, { once: true });
+    setTimeout(go, 400);
+  };
+  // Старт после загрузки: пролёт камеры. Промис — когда пролёт закончился.
   c.start = () => {
     if (!c.held) return Promise.resolve();
     c.held = false;
     c.rate = 1;
-    const v = c.video;
-    if (!v) return Promise.resolve();
-    setTimeout(() => { if (c.video && c.video.currentTime < 0.05) c.fallback("no-play"); }, 1500);
-    v.currentTime = 0;
-    v.playbackRate = 1;
-    v.play().catch(() => {});
+    const iv = c.intro;
+    if (!iv || c.stage !== "intro") { toLoop(); return Promise.resolve(); }
+    iv.currentTime = 0;
+    iv.play().catch(() => {});
+    setTimeout(() => { if (c.intro && c.intro.currentTime < 0.05) { c.stage = "loop"; toLoop(); } }, 1500);
     return new Promise((ok) => {
-      const done = () => ok();
-      if ("requestVideoFrameCallback" in v) {
-        const wait = (_, meta) => (meta.mediaTime > 0.02 ? done() : v.requestVideoFrameCallback(wait));
-        v.requestVideoFrameCallback(wait);
-      } else v.addEventListener("playing", done, { once: true });
-      setTimeout(done, 700);
+      let done = false;
+      const end = () => { if (done) return; done = true; toLoop(); ok(); };
+      iv.addEventListener("ended", end, { once: true });
+      setTimeout(end, ((iv.duration || 2.5) + 1.5) * 1000);
     });
   };
+  // Доля пролёта: 0 — общий план на заставке, 1 — крупный план (и всё время после).
+  c.introK = () => {
+    if (c.stage === "loop" || c.still) return 1;
+    const iv = c.intro;
+    return iv && iv.duration ? Math.min(1, iv.currentTime / iv.duration) : 0;
+  };
   c.frame = () => {
+    if (c.stage === "intro") {
+      if (c.intro && c.intro.readyState >= 2) { try { return c.introUnpack(); } catch { /* ниже — картинка */ } }
+      const p = c.introPoster;
+      return p.complete && p.naturalWidth ? p : null;
+    }
     if (c.video) {
       if (c.video.readyState < 2) return null;
       if (!c.unpack) return c.video;
@@ -122,31 +159,35 @@ function createClock(source, mode) {
 
 /* ---------- источник: видео ---------- */
 
+// Оба видео качаются одним потоком прогресса для счётчика заставки: сначала пролёт, потом цикл.
 function videoSource(emit) {
-  const type = "video/mp4";
-  const url = `${base}mech/mech-macro.mp4`;
-  const state = { url: null };
+  const files = [`${base}mech/dive.mp4`, `${base}mech/mech-macro.mp4`];
+  const state = {};
   state.ready = (async () => {
-    try {
-      const res = await fetch(url);
-      if (!res.ok || !res.body) throw new Error(String(res.status));
-      const total = Number(res.headers.get("content-length")) || 0;
-      const reader = res.body.getReader();
-      const chunks = [];
-      let got = 0;
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
-        got += value.length;
-        if (total) emit(got / total);
+    const sizes = [0, 0], got = [0, 0];
+    const report = () => { const t = sizes[0] + sizes[1]; if (t) emit((got[0] + got[1]) / t); };
+    const load = async (url, i) => {
+      try {
+        const res = await fetch(url);
+        if (!res.ok || !res.body) throw new Error(String(res.status));
+        sizes[i] = Number(res.headers.get("content-length")) || 0;
+        const reader = res.body.getReader();
+        const chunks = [];
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          got[i] += value.length;
+          report();
+        }
+        return URL.createObjectURL(new Blob(chunks, { type: "video/mp4" }));
+      } catch {
+        return i === 0 ? null : url; // пролёта нет — сразу цикл; цикл пусть браузер попробует сам
       }
-      state.url = URL.createObjectURL(new Blob(chunks, { type }));
-    } catch {
-      state.url = url; // пусть браузер попробует сам — заставка всё равно отпустит по таймеру
-    }
+    };
+    const [intro, loop] = await Promise.all(files.map(load));
     emit(1);
-    return state.url;
+    return { intro, loop };
   })();
   return state;
 }
@@ -231,6 +272,8 @@ function posterSource(emit) {
 // позволяют края: на узком экране телефона ступица не уходит за край.
 // mix() → { img, k }: второй кадр поверх цикла с прозрачностью k (отъезд камеры при прокрутке);
 // при k = 1 цикл не рисуется вовсе.
+// Во время пролёта на заставке (clock.introK() < 1) вид плавно идёт от «кадр целиком, по центру»
+// к «cover со ступицей в anchor» — на узком экране общий план иначе не влез бы.
 function mountPlayer(canvas, clock, { fx = null, fit = "contain", focus = [0.5, 0.5], anchor = () => [0.5, 0.5], mix = null } = {}) {
   const ctx = canvas.getContext("2d");
   let visible = true, w = 0, h = 0, res = 1, active = true;
@@ -259,13 +302,15 @@ function mountPlayer(canvas, clock, { fx = null, fit = "contain", focus = [0.5, 
       if (!img) return;
       const iw = img.videoWidth || img.naturalWidth || img.width, ih = img.videoHeight || img.naturalHeight || img.height;
       if (!iw || !ih) return;
-      const s = fit === "cover" ? Math.max(w / iw, h / ih) : Math.min(w / iw, h / ih);
-      const dw = iw * s, dh = ih * s;
-      let dx = (w - dw) / 2, dy = (h - dh) / 2;
+      const sc = Math.min(w / iw, h / ih);
+      let dw = iw * sc, dh = ih * sc, dx = (w - dw) / 2, dy = (h - dh) / 2;
       if (fit === "cover") {
+        const sv = Math.max(w / iw, h / ih), vw = iw * sv, vh = ih * sv;
         const [ax, ay] = anchor(w, h);
-        dx = Math.min(0, Math.max(w - dw, w * ax - focus[0] * dw));
-        dy = Math.min(0, Math.max(h - dh, h * ay - focus[1] * dh));
+        const vx = Math.min(0, Math.max(w - vw, w * ax - focus[0] * vw));
+        const vy = Math.min(0, Math.max(h - vh, h * ay - focus[1] * vh));
+        const k0 = clock.introK(), k = k0 * k0 * (3 - 2 * k0);
+        dw += (vw - dw) * k; dh += (vh - dh) * k; dx += (vx - dx) * k; dy += (vy - dy) * k;
       }
       ctx.globalCompositeOperation = "source-over";
       ctx.clearRect(0, 0, w, h);
