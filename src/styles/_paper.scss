@@ -100,45 +100,6 @@
   p:nth-child(n + 2) { color: var(--ink-2); }
 }
 
-/* ---------- навыки ---------- */
-
-// Строки как у цен: группа слева, теги посередине, где это видно в работах — справа.
-.skill {
-  display: grid;
-  gap: 14px 32px;
-  padding: 26px 0;
-  border-top: 1px solid var(--ink-line);
-  &:last-child { border-bottom: 1px solid var(--ink-line); }
-  @media (min-width: $desktop) { grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.6fr) minmax(0, 0.9fr); align-items: baseline; }
-}
-.skill__name { font: 500 clamp(1.4rem, 2.2vw, 1.85rem)/1.1 var(--display); }
-.skill__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  li {
-    padding: 7px 11px;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px var(--ink-line);
-    font: 400 0.66rem/1.2 var(--mono);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink);
-  }
-}
-.skill__where {
-  font-size: 0.92rem;
-  color: var(--ink-2);
-  span {
-    display: block;
-    margin-bottom: 4px;
-    font: 400 0.62rem/1.4 var(--mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--acc-ink);
-  }
-}
-
 /* ---------- что входит в работу ---------- */
 
 .includes__list {
@@ -157,21 +118,25 @@
   p { margin-top: 10px; color: var(--ink-2); font-size: 0.95rem; }
 }
 
-/* ---------- почему я ---------- */
+/* ---------- что остаётся у вас: гарантии тёмной плашкой внутри «Что вы получаете» ---------- */
 
-.why__list {
+.keep {
+  margin-top: clamp(40px, 5vw, 64px);
+  padding: clamp(24px, 3vw, 36px) clamp(20px, 3vw, 36px);
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 4px;
   display: grid;
-  gap: 0 clamp(28px, 5vw, 80px);
-  @media (min-width: $tablet) { grid-template-columns: repeat(3, 1fr); }
+  gap: 22px;
+  @media (min-width: $desktop) { grid-template-columns: minmax(160px, 0.7fr) 3fr; gap: 28px; }
 }
-.why__item {
-  padding: 28px 0 34px;
-  border-top: 1px solid var(--acc-line);
-  h3 {
-    font: 500 clamp(1.4rem, 2.2vw, 1.8rem)/1.15 var(--display);
-    letter-spacing: -0.01em;
-  }
-  p { margin-top: 12px; color: var(--ink-2); max-width: 48ch; }
+.keep__kicker { font: 400 0.64rem/1.6 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--acc); }
+.keep__list {
+  display: grid;
+  gap: 22px clamp(20px, 3vw, 40px);
+  @media (min-width: $tablet) { grid-template-columns: repeat(3, 1fr); }
+  h3 { font: 500 clamp(1.15rem, 1.6vw, 1.35rem)/1.2 var(--display); color: #fff; }
+  p { margin-top: 8px; font-size: 0.9rem; color: #aeb8c2; }
 }
 
 /* ---------- этапы ---------- */
