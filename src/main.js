@@ -158,6 +158,23 @@ window.addEventListener("scroll", queueHeadTheme, { passive: true });
 window.addEventListener("resize", queueHeadTheme);
 syncHeadTheme();
 
+/* ---------- часы Сахалина в углу первого экрана ---------- */
+
+// Время, которое сейчас у меня: часовой механизм на экране и живые часы рядом — одно и то же.
+// Пока скрипт не отработал, в разметке остаётся «МСК+8».
+const clockEl = $("#heroClock");
+const clockFmt = new Intl.DateTimeFormat("ru-RU", { timeZone: "Asia/Sakhalin", hour: "2-digit", minute: "2-digit" });
+const tickClock = () => {
+  const now = new Date();
+  const text = clockFmt.format(now);
+  if (clockEl.textContent !== text) {
+    clockEl.textContent = text;
+    clockEl.dateTime = now.toISOString();
+  }
+  setTimeout(tickClock, 60000 - (now.getSeconds() * 1000 + now.getMilliseconds()) + 50);
+};
+try { tickClock(); clockEl.setAttribute("aria-label", "Время на Сахалине"); } catch { /* старый браузер без часовых поясов — остаётся МСК+8 */ }
+
 /* ---------- прогресс секций → --p ---------- */
 
 // Сами триггеры создаются после закрепления работ (ниже): иначе их границы считаются без его отступа.

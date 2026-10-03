@@ -5,6 +5,9 @@ import { splitChars } from "./split.js";
 
 const base = import.meta.env.BASE_URL;
 const src = (w) => `${base}images/${w.img}`;
+// Крупный кадр просмотрщика на ретине вдвое шире 1440 — отдаём снимок 2880 px, иначе он мылится.
+const srcset = (w) => `${src(w)} 1440w, ${src(w).replace(/\.jpg$/, "@2x.webp")} 2880w`;
+const SIZES = "(max-width: 767px) 100vw, 86vw";
 
 // Снимки вокруг заголовка: позиция центра (в долях экрана), ширина (vw), наклон.
 const SCATTER = [
@@ -80,9 +83,24 @@ export function initGallery({ reduce, onGoal }) {
   });
 
   function makeImg(w) {
+    // Работы, которые живут движением (курсор, 3D), показываем короткой бесшовной петлёй:
+    // неподвижный кадр их недопродаёт. Снимок — постер, пока видео не пошло.
+    if (w.video && !reduce) {
+      const v = document.createElement("video");
+      v.className = "viewer__img";
+      v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+      v.setAttribute("playsinline", ""); v.setAttribute("aria-label", w.alt);
+      v.preload = "auto";
+      v.poster = src(w);
+      v.src = `${base}images/${w.video}`;
+      v.width = 1440; v.height = 900;
+      return v;
+    }
     const img = document.createElement("img");
     img.className = "viewer__img";
     img.src = src(w);
+    img.srcset = srcset(w);
+    img.sizes = SIZES;
     img.alt = w.alt;
     img.width = 1440;
     img.height = 900;
@@ -93,6 +111,8 @@ export function initGallery({ reduce, onGoal }) {
   function preload(i) {
     const w = works[(i + works.length) % works.length];
     const im = new Image();
+    im.sizes = SIZES;
+    im.srcset = srcset(w);
     im.src = src(w);
   }
 

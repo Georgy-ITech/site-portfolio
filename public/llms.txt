@@ -27,16 +27,12 @@
 - [Smilio](https://georgy-itech.github.io/smilio-landing/) — стоматология, 4 страницы.
 - [FITSHIFT](https://georgy-itech.github.io/fitness-trainer-landing/) — персональный тренер.
 - [КРЕМА](https://krema-coffee.vercel.app/) — интернет-магазин кофе на React.
-- [Полярис](https://georgy-itech.github.io/ecommerce-homepage-showcase/) — главная магазина одежды.
-- [DoFit](https://georgy-itech.github.io/dofit-landing/) — фитнес-приложение.
-- [DesignShift](https://georgy-itech.github.io/designshift-landing/) — курс по веб-дизайну.
 - [Артель](https://artel-masters.vercel.app/) — площадка мастеров на Next.js и Three.js.
 - [Sable](https://georgy-itech.github.io/sable-landing/) — 3D-конфигуратор парфюма.
 - [Nodal](https://georgy-itech.github.io/nodal-landing/) — WebGL без библиотек.
 - [Aura](https://georgy-itech.github.io/aura-landing/) — живой aurora-фон.
 - [Nebula](https://georgy-itech.github.io/bento-landing/) — bento-лендинг аналитики.
 - [Expense Flow](https://georgy-itech.github.io/expense-tracker/) — учёт финансов.
-- [UI Motion](https://georgy-itech.github.io/ui-animation-showcase/) — витрина интерфейсных анимаций.
 
 ## Навыки
 - Вёрстка и адаптив: HTML, CSS, SCSS, вёрстка по Figma, многостраничные сайты.

@@ -346,3 +346,6 @@
   .hero .cta-label { display: none; }
   .hero::before { top: 62svh; left: -60%; right: -60%; }
 }
+
+// Часы: цифры одной ширины, чтобы строка не дёргалась при смене минуты.
+.hero__clock { font-variant-numeric: tabular-nums; }
