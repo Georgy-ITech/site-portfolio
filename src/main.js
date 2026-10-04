@@ -252,7 +252,7 @@ if (reduce) mech.still(); else mech.hold();
 const HUB = [0.736, 0.584];
 // Отъезд камеры по прокрутке первого экрана: заранее отрендеренные кадры (от ступицы к общему
 // виду механизма, колёса при этом проходят полоборота). Грузятся после заставки — первую загрузку
-// не тормозят. Переход с цикла на отъезд — коротким растворением: фаза вращения у них разная.
+// не тормозят.
 const PULL = 75;
 const pullFrames = new Array(PULL).fill(null);
 function loadPull() {
@@ -271,13 +271,43 @@ function loadPull() {
   };
   for (let k = 0; k < 4; k++) next();
 }
-function pullMix() {
-  if (heroP <= 0.001) return null;
-  const t = Math.min(1, heroP / 0.45);
-  const want = Math.round(t * (PULL - 1));
+// Стык цикла и отъезда — без растворения (фазы вращения разные, винты двоились): на первом
+// движении прокрутки цикл докручивается до нулевого кадра, и его сменяет нулевой кадр отъезда —
+// это один и тот же снимок. Дальше показанный кадр догоняет прокрутку с инерцией: камера и
+// колёса не скачут, даже если прокрутили рывком, пока цикл докручивался.
+let pullState = "loop", pullShown = 0, pullT = 0;
+function pullFrame(i) {
   let img = null;
-  for (let d = 0; d < PULL && !img; d++) img = pullFrames[want - d] || pullFrames[want + d] || null;
-  return img ? { img, k: Math.min(1, heroP / 0.06) } : null;
+  for (let d = 0; d < PULL && !img; d++) img = pullFrames[i - d] || pullFrames[i + d] || null;
+  return img;
+}
+function pullMix() {
+  const now = performance.now(), dt = Math.min(0.1, (now - (pullT || now)) / 1000);
+  pullT = now;
+  const want = Math.min(1, heroP / 0.45) * (PULL - 1);
+  if (pullState === "loop") {
+    if (heroP <= 0.001 || !pullFrames[0]) return null;
+    mech.arm();
+    pullState = "arming";
+  }
+  if (pullState === "arming") {
+    if (heroP <= 0.001) { mech.disarm(); pullState = "loop"; return null; }
+    if (!mech.armed()) return null;
+    pullState = "pull"; pullShown = 0;
+  }
+  if (pullState === "returning") {
+    if (heroP > 0.001) pullState = "pull";
+    else if (mech.fresh()) { pullState = "loop"; return null; }
+    else return { img: pullFrames[0], k: 1 };
+  }
+  pullShown += (want - pullShown) * (1 - Math.exp(-dt * 9));
+  if (heroP <= 0.001 && pullShown < 0.5) {
+    mech.rewind();
+    pullState = "returning";
+    return { img: pullFrames[0], k: 1 };
+  }
+  const img = pullFrame(Math.round(pullShown));
+  return img ? { img, k: 1 } : null;
 }
 const heroMech = mech.mount(heroCanvas, { fx: heroFx, fit: "cover", focus: HUB, anchor: (w, h) => (w / h > 1.1 ? [0.74, 0.6] : [0.5, 0.66]), mix: pullMix });
 const finalMech = mech.mount($("#finalMech"), { fit: "cover", focus: HUB, anchor: () => [0.5, 0.5] });
@@ -352,11 +382,11 @@ function finishLoading() {
   countEl.textContent = "100";
   barEl.style.setProperty("--k", "1");
   if (reduce) { root.classList.add("is-loaded", "mech-landed"); root.classList.remove("is-intro"); loader.remove(); revealHero(); sky.start(); afterLoad(); return; }
-  // Один объект от начала до конца: на заставке — общий план механизма, затем камера одним
-  // отрендеренным движением подлетает к ступице, колёса разгоняются до хода цикла, и последний
-  // кадр пролёта — это первый кадр цикла крупным планом. Интерфейс проступает к концу пролёта.
+  // Одна отрендеренная сцена (5.6 с): детали влетают из-за краёв кадра и садятся на место,
+  // механизм разгоняется, камера подлетает к ступице — последний кадр сцены это первый кадр
+  // цикла крупным планом. Интерфейс первого экрана проступает во время пролёта (с 4.2 с).
   gsap.to(".loader__count, .loader__label, .loader__bar", { autoAlpha: 0, y: 10, duration: 0.45, ease: "power2.in", onComplete: () => loader.remove() });
-  const ui = gsap.delayedCall(1.5, () => { root.classList.remove("is-intro"); revealHero(); });
+  const ui = gsap.delayedCall(4.2, () => { root.classList.remove("is-intro"); revealHero(); });
   mech.start().then(() => {
     ui.progress(1);
     root.classList.add("mech-landed");

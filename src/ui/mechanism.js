@@ -33,6 +33,11 @@ export function createMechanism() {
     start: () => clock.start(),
     introK: () => clock.introK(),
     nudge: (v) => clock.nudge(v),
+    arm: () => clock.arm(),
+    disarm: () => clock.disarm(),
+    armed: () => !!clock.armed,
+    rewind: () => clock.rewind(),
+    fresh: () => !!clock.fresh,
     tick: (t) => clock.tick(t),
     mount(canvas, opts = {}) { return mountPlayer(canvas, clock, opts); },
   };
@@ -40,17 +45,13 @@ export function createMechanism() {
 
 /* ---------- общий ход механизма ---------- */
 
-// Два видео одной сцены: пролёт камеры от общего плана к ступице (заставка) и бесшовный цикл
-// крупным планом. Последний кадр пролёта совпадает с первым кадром цикла — смена не видна.
+// Два видео одной сцены: заставка (сборка из деталей → разгон → пролёт камеры к ступице) и
+// бесшовный цикл крупным планом. Последний кадр заставки совпадает с первым кадром цикла.
 function createClock(source, mode) {
   const c = {
     held: false, still: false, video: null, intro: null, poster: null, why: "",
     rate: 1, velocity: 0, stage: mode === "packed" ? "intro" : "loop",
   };
-  // Первый кадр пролёта картинкой: механизм на заставке виден сразу, ещё до загрузки видео.
-  c.introPoster = new Image();
-  c.introPoster.decoding = "async";
-  c.introPoster.src = `${base}mech/dive-poster.webp`;
   // Страховка: если видео не дало ни кадра (автозапуск запрещён, декодер или WebGL отказали),
   // показываем неподвижный кадр, а не пустоту.
   c.fallback = (why) => {
@@ -97,6 +98,18 @@ function createClock(source, mode) {
   }
   c.tick = () => {
     const v = c.video;
+    if (v && !c.still && !c.held && c.stage === "loop" && c.arming) {
+      // Докрутка к нулевой фазе: колёса ускоряются и к концу цикла сбавляют ход, чтобы
+      // встать ровно на нулевой кадр — с него начинаются кадры отъезда.
+      const d = v.duration || 5, ct = v.currentTime;
+      if (ct < c.lastCt - d / 2) { c.arming = false; c.armed = true; }
+      c.lastCt = ct;
+      if (c.arming) {
+        c.rate = Math.min(6, Math.max(1.2, (d - ct) * 3));
+        v.playbackRate = c.rate;
+        return;
+      }
+    }
     if (v && !c.still && !c.held && c.stage === "loop") {
       // Прокрутка разгоняет колёса, потом они плавно возвращаются к своему ходу.
       c.velocity *= 0.9;
@@ -106,6 +119,28 @@ function createClock(source, mode) {
     }
   };
   c.nudge = (v) => { c.velocity = v; };
+  // Стык с отъездом по прокрутке. У цикла фаза идёт по времени, у кадров отъезда — по прокрутке,
+  // и смешивать их нельзя: на ступице двоятся винты. Поэтому цикл докручивается до нулевого
+  // кадра (arm → armed), а на обратном пути возвращается на него (rewind → fresh).
+  c.arm = () => {
+    if (c.armed || c.arming) return;
+    const v = c.video;
+    if (!v || c.still) { c.armed = true; return; }
+    if (c.stage !== "loop") return;
+    c.arming = true; c.lastCt = v.currentTime;
+  };
+  c.disarm = () => { c.arming = false; c.armed = false; };
+  c.rewind = () => {
+    c.armed = false; c.arming = false; c.fresh = false;
+    const v = c.video;
+    if (!v || c.still) { c.fresh = true; return; }
+    const ok = () => { c.fresh = true; };
+    v.addEventListener("seeked", () => {
+      if ("requestVideoFrameCallback" in v) v.requestVideoFrameCallback(ok); else ok();
+    }, { once: true });
+    setTimeout(ok, 400);
+    v.currentTime = 0;
+  };
   // Пролёт закончился — цикл стартует с нулевого кадра, а пока его кадр не пришёл,
   // на холсте остаётся последний кадр пролёта (он тот же самый).
   const toLoop = () => {
@@ -142,9 +177,10 @@ function createClock(source, mode) {
   };
   c.frame = () => {
     if (c.stage === "intro") {
-      if (c.intro && c.intro.readyState >= 2) { try { return c.introUnpack(); } catch { /* ниже — картинка */ } }
-      const p = c.introPoster;
-      return p.complete && p.naturalWidth ? p : null;
+      // Пока идёт загрузка — пусто: сцена начинается со сборки, первый кадр (детали за краями
+      // кадра) неподвижным не показываем.
+      if (c.held || !c.intro || c.intro.readyState < 2) return null;
+      try { return c.introUnpack(); } catch { return null; }
     }
     if (c.video) {
       if (c.video.readyState < 2) return null;
