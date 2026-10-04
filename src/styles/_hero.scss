@@ -2,9 +2,8 @@
 
 /*
   Первый экран — по устройству референса: движение по прокрутке — CSS от --p
-  (0 — экран на месте, 1 — ушёл целиком). Механизм уменьшается вокруг точки
-  далеко под собой и «вылезает» из-под второй строки; строки опускаются с разной
-  скоростью; карточки качаются маятником; всё тонет в тёмной арке.
+  (0 — экран на месте, 1 — ушёл целиком). Механизм отстаёт от прокрутки и чуть
+  приближается к ступице; строки опускаются с разной скоростью; всё тонет в тени.
 */
 
 .hero {
@@ -84,8 +83,9 @@
   text-shadow: 0 2px 26px rgb(0 0 0 / 0.5);
 }
 
-// Макро механизма во весь первый экран. Вход — с лёгкого приближения (main.js, нырок с заставки);
-// по прокрутке механизм отъезжает и темнеет вместе со сценой.
+// Макро механизма во весь первый экран. По прокрутке механизм отстаёт от страницы, чуть
+// приближается к ступице и темнеет (main.js) — колёса при этом крутятся не переставая.
+// Приближение, а не отдаление: при уменьшении стали бы видны обрезанные края кадра.
 .hero__macro {
   position: absolute;
   inset: 0;
@@ -93,9 +93,9 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  // Отъезд камеры — в самих кадрах (main.js); здесь механизм только отстаёт от прокрутки,
-  // чтобы дольше оставаться на виду. Свойство translate, а не transform: transform занят нырком.
   translate: 0 calc(var(--p) * 88svh);
+  scale: calc(1 + var(--p) * 0.12);
+  transform-origin: 74% 60%;
   filter: drop-shadow(0 30px 60px rgb(0 0 0 / 0.5));
 }
 // Вуаль для заголовка: тень сверху по центру, где стоят строки, и к низу — в фон работ.
@@ -126,8 +126,6 @@
   transform: translateY(calc(var(--p) * 5svh));
 }
 
-// Внешний слой — место, вход и маятник по прокрутке (origin далеко за краем);
-// внутренний — сама карточка: наклон к курсору вокруг своего центра.
 // Главное действие первого экрана — крупнее, подпись ярче, медленный латунный отсвет вокруг.
 .hero__cta .cta-label {
   position: absolute;
@@ -164,84 +162,6 @@
 }
 @media (prefers-reduced-motion: reduce) { .hero__cta-btn { animation: none; } }
 
-.hero__card {
-  position: absolute;
-  bottom: 14svh;
-  z-index: 3;
-  width: clamp(200px, 17vw, 280px);
-  text-decoration: none;
-  perspective: 700px;
-  // Вход — снизу; маятник по прокрутке — отдельными свойствами rotate/translate.
-  transform: translate3d(0, 45%, 0);
-  opacity: 0;
-  transition: transform 1.2s var(--f-smooth) 0.3s, opacity 0.9s var(--f-cubic) 0.3s;
-  html.is-loaded & { transform: none; opacity: 1; }
-}
-.hero__card-in {
-  --tx: 0deg;
-  --ty: 0deg;
-  display: block;
-  padding: 6px 6px 10px;
-  border-radius: var(--r-btn);
-  background: rgb(228 236 242 / 0.08);
-  border-top: 2px solid rgb(255 255 255 / 0.18);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 30px 60px rgb(0 0 0 / 0.35), inset 0 0 0 1px transparent;
-  transform: rotateX(var(--ty)) rotateY(var(--tx));
-  transition: transform 0.6s var(--f-cubic), translate 0.6s var(--f-cubic), box-shadow 0.6s var(--f-cubic), background-color 0.6s var(--f-cubic);
-}
-.hero__card-img {
-  display: block;
-  overflow: hidden;
-  border-radius: 4px;
-  img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-    object-position: top;
-    transition: scale 0.9s var(--f-cubic);
-  }
-}
-.hero__card-name {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  margin-top: 8px;
-  font: 400 0.6rem/1.2 var(--mono);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #c3ccd5;
-  transition: translate 0.6s var(--f-cubic), color 0.6s var(--f-cubic);
-  // «Смотреть →» выезжает снизу, название уходит вверх.
-  i {
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-style: normal;
-    color: var(--acc);
-    translate: 0 110%;
-    transition: translate 0.6s var(--f-cubic);
-  }
-}
-@media (hover: hover) {
-  .hero__card:is(:hover, :focus-visible) .hero__card-in {
-    translate: 0 -8px;
-    background-color: rgb(228 236 242 / 0.12);
-    box-shadow: 0 40px 80px rgb(0 0 0 / 0.45), 0 0 50px rgb(199 164 90 / 0.18), inset 0 0 0 1px rgb(199 164 90 / 0.55);
-  }
-  .hero__card:is(:hover, :focus-visible) .hero__card-img img { scale: 1.06; }
-  .hero__card:is(:hover, :focus-visible) .hero__card-name { color: transparent; }
-  .hero__card:is(:hover, :focus-visible) .hero__card-name i { translate: 0 0; }
-}
-.hero__card--l {
-  left: 3vw;
-  transform-origin: -150% 50%;
-  rotate: calc(-15deg + var(--p) * 45deg);
-  translate: 0 calc(var(--p) * 10svh);
-}
-
 .orbit {
   position: absolute;
   inset: 0;
@@ -253,7 +173,6 @@
 }
 
 @media (max-width: 899px) {
-  .hero__card { display: none; }
   .hero__aside--l { display: none; }
   .hero__title { top: 15svh; font-size: clamp(3rem, 15vw, 6.4rem); }
   .hero__line--2 { padding-left: 18%; }

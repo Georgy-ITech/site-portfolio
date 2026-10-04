@@ -35,7 +35,6 @@ if (!reduce) {
 }
 // Мгновенный переход — для «Работ»: без пролёта через первый экран и разброс снимков.
 const jumpToY = (y) => (lenis ? lenis.scrollTo(y, { immediate: true, force: true }) : window.scrollTo({ top: y, behavior: "auto" }));
-const scrollToY = (y) => (lenis ? lenis.scrollTo(y, { duration: 1.4 }) : window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" }));
 function scrollToTarget(hash) {
   // «Работы» ведут сразу в раскрытый просмотрщик на первой работе, минуя разброс снимков.
   if (hash === "#works") {
@@ -189,22 +188,6 @@ if (finePointer && !reduce) {
 }
 const sky = initSky($("#heroSky"), { reduce });
 
-// Карточки работ на первом экране наклоняются к курсору.
-if (finePointer && !reduce) {
-  $$(".hero__card").forEach((card) => {
-    const inner = card.querySelector(".hero__card-in");
-    card.addEventListener("pointermove", (e) => {
-      const r = inner.getBoundingClientRect();
-      inner.style.setProperty("--tx", `${((e.clientX - r.left) / r.width - 0.5) * 16}deg`);
-      inner.style.setProperty("--ty", `${(0.5 - (e.clientY - r.top) / r.height) * 16}deg`);
-    });
-    card.addEventListener("pointerleave", () => {
-      inner.style.setProperty("--tx", "0deg");
-      inner.style.setProperty("--ty", "0deg");
-    });
-  });
-}
-
 const orbits = $$(".orbit");
 gsap.ticker.add(() => {
   if (!finePointer || reduce) return;
@@ -250,66 +233,7 @@ if (reduce) mech.still(); else mech.hold();
 // Макро во весь первый экран: ступица колеса (точка 0.736/0.584 кадра, считается при рендере) — справа и ниже заголовка
 // на широком экране, ниже заголовка на узком.
 const HUB = [0.736, 0.584];
-// Отъезд камеры по прокрутке первого экрана: заранее отрендеренные кадры (от ступицы к общему
-// виду механизма, колёса при этом проходят полоборота). Грузятся после заставки — первую загрузку
-// не тормозят.
-const PULL = 75;
-const pullFrames = new Array(PULL).fill(null);
-function loadPull() {
-  if (reduce) return;
-  const order = [];
-  for (let step = 8; step >= 1; step = Math.floor(step / 2)) for (let i = 0; i < PULL; i += step) if (!order.includes(i)) order.push(i);
-  let n = 0;
-  const next = () => {
-    if (n >= order.length) return;
-    const i = order[n++];
-    const img = new Image();
-    img.decoding = "async";
-    img.onload = () => { pullFrames[i] = img; next(); };
-    img.onerror = next;
-    img.src = `${import.meta.env.BASE_URL}mech/pull/${String(i).padStart(3, "0")}.webp`;
-  };
-  for (let k = 0; k < 4; k++) next();
-}
-// Стык цикла и отъезда — без растворения (фазы вращения разные, винты двоились): на первом
-// движении прокрутки цикл докручивается до нулевого кадра, и его сменяет нулевой кадр отъезда —
-// это один и тот же снимок. Дальше показанный кадр догоняет прокрутку с инерцией: камера и
-// колёса не скачут, даже если прокрутили рывком, пока цикл докручивался.
-let pullState = "loop", pullShown = 0, pullT = 0;
-function pullFrame(i) {
-  let img = null;
-  for (let d = 0; d < PULL && !img; d++) img = pullFrames[i - d] || pullFrames[i + d] || null;
-  return img;
-}
-function pullMix() {
-  const now = performance.now(), dt = Math.min(0.1, (now - (pullT || now)) / 1000);
-  pullT = now;
-  const want = Math.min(1, heroP / 0.45) * (PULL - 1);
-  if (pullState === "loop") {
-    if (heroP <= 0.001 || !pullFrames[0]) return null;
-    mech.arm();
-    pullState = "arming";
-  }
-  if (pullState === "arming") {
-    if (heroP <= 0.001) { mech.disarm(); pullState = "loop"; return null; }
-    if (!mech.armed()) return null;
-    pullState = "pull"; pullShown = 0;
-  }
-  if (pullState === "returning") {
-    if (heroP > 0.001) pullState = "pull";
-    else if (mech.fresh()) { pullState = "loop"; return null; }
-    else return { img: pullFrames[0], k: 1 };
-  }
-  pullShown += (want - pullShown) * (1 - Math.exp(-dt * 9));
-  if (heroP <= 0.001 && pullShown < 0.5) {
-    mech.rewind();
-    pullState = "returning";
-    return { img: pullFrames[0], k: 1 };
-  }
-  const img = pullFrame(Math.round(pullShown));
-  return img ? { img, k: 1 } : null;
-}
-const heroMech = mech.mount(heroCanvas, { fx: heroFx, fit: "cover", focus: HUB, anchor: (w, h) => (w / h > 1.1 ? [0.74, 0.6] : [0.5, 0.66]), mix: pullMix });
+const heroMech = mech.mount(heroCanvas, { fx: heroFx, fit: "cover", focus: HUB, anchor: (w, h) => (w / h > 1.1 ? [0.74, 0.6] : [0.5, 0.66]) });
 const finalMech = mech.mount($("#finalMech"), { fit: "cover", focus: HUB, anchor: () => [0.5, 0.5] });
 const players = [heroMech, finalMech];
 gsap.ticker.add((t) => players.forEach((p) => p.draw(t)));
@@ -415,7 +339,6 @@ function whenCalm(need = 12, limit = 2500) {
 }
 function revealHero() { $$(".hero [data-split]").forEach((el) => el.classList.add("is-in")); }
 function afterLoad() {
-  loadPull();
   consent.ready();
   ScrollTrigger.refresh();
 }
@@ -425,10 +348,6 @@ function afterLoad() {
 const gallery = initGallery({ reduce, onGoal: goal });
 const progress = initProgress({ reduce });
 progress.on(hero, (p) => { heroP = p; });
-$$("[data-open-work]").forEach((a) => a.addEventListener("click", (e) => {
-  e.preventDefault();
-  gallery.open(Number(a.dataset.openWork), scrollToY);
-}));
 if (!reduce) initRelief($("#relief"));
 
 /* ---------- меню и якоря ---------- */
@@ -442,7 +361,7 @@ initMenu({
 
 document.addEventListener("click", (e) => {
   const a = e.target.closest?.('a[href^="#"]');
-  if (!a || a.closest("#menu") || a.hasAttribute("data-open-work")) return;
+  if (!a || a.closest("#menu")) return;
   const hash = a.getAttribute("href");
   if (hash.length < 2) return;
   e.preventDefault();

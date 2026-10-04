@@ -33,11 +33,6 @@ export function createMechanism() {
     start: () => clock.start(),
     introK: () => clock.introK(),
     nudge: (v) => clock.nudge(v),
-    arm: () => clock.arm(),
-    disarm: () => clock.disarm(),
-    armed: () => !!clock.armed,
-    rewind: () => clock.rewind(),
-    fresh: () => !!clock.fresh,
     tick: (t) => clock.tick(t),
     mount(canvas, opts = {}) { return mountPlayer(canvas, clock, opts); },
   };
@@ -96,51 +91,23 @@ function createClock(source, mode) {
       }
     });
   }
-  c.tick = () => {
+  // Маховик: прокрутка мягко раскручивает колёса (не больше чем вдвое), отпустили — они
+  // дольше, чем разгонялись, возвращаются к своему ходу. Колёса не останавливаются никогда.
+  // Считается по времени, а не по вызовам: tick зовут оба холста в одном кадре.
+  c.tick = (t) => {
     const v = c.video;
-    if (v && !c.still && !c.held && c.stage === "loop" && c.arming) {
-      // Докрутка к нулевой фазе: колёса ускоряются и к концу цикла сбавляют ход, чтобы
-      // встать ровно на нулевой кадр — с него начинаются кадры отъезда.
-      const d = v.duration || 5, ct = v.currentTime;
-      if (ct < c.lastCt - d / 2) { c.arming = false; c.armed = true; }
-      c.lastCt = ct;
-      if (c.arming) {
-        c.rate = Math.min(6, Math.max(1.2, (d - ct) * 3));
-        v.playbackRate = c.rate;
-        return;
-      }
-    }
+    const dt = c.lastT == null ? 0 : t - c.lastT;
+    if (dt <= 0) { c.lastT = t; return; }
+    c.lastT = t;
     if (v && !c.still && !c.held && c.stage === "loop") {
-      // Прокрутка разгоняет колёса, потом они плавно возвращаются к своему ходу.
-      c.velocity *= 0.9;
-      const target = 1 + Math.min(Math.abs(c.velocity) * 0.06, 3);
-      c.rate += (target - c.rate) * 0.12;
-      if (Math.abs(v.playbackRate - c.rate) > 0.02) v.playbackRate = c.rate;
+      c.velocity *= Math.exp(-dt * 4);
+      const target = 1 + Math.min(Math.abs(c.velocity) * 0.06, 1.1);
+      c.rate += (target - c.rate) * (1 - Math.exp(-dt * (target > c.rate ? 3 : 1.4)));
+      if (target === 1 && c.rate < 1.03) c.rate = 1;
+      if (Math.abs(v.playbackRate - c.rate) > 0.03 || (c.rate === 1 && v.playbackRate !== 1)) v.playbackRate = c.rate;
     }
   };
   c.nudge = (v) => { c.velocity = v; };
-  // Стык с отъездом по прокрутке. У цикла фаза идёт по времени, у кадров отъезда — по прокрутке,
-  // и смешивать их нельзя: на ступице двоятся винты. Поэтому цикл докручивается до нулевого
-  // кадра (arm → armed), а на обратном пути возвращается на него (rewind → fresh).
-  c.arm = () => {
-    if (c.armed || c.arming) return;
-    const v = c.video;
-    if (!v || c.still) { c.armed = true; return; }
-    if (c.stage !== "loop") return;
-    c.arming = true; c.lastCt = v.currentTime;
-  };
-  c.disarm = () => { c.arming = false; c.armed = false; };
-  c.rewind = () => {
-    c.armed = false; c.arming = false; c.fresh = false;
-    const v = c.video;
-    if (!v || c.still) { c.fresh = true; return; }
-    const ok = () => { c.fresh = true; };
-    v.addEventListener("seeked", () => {
-      if ("requestVideoFrameCallback" in v) v.requestVideoFrameCallback(ok); else ok();
-    }, { once: true });
-    setTimeout(ok, 400);
-    v.currentTime = 0;
-  };
   // Пролёт закончился — цикл стартует с нулевого кадра, а пока его кадр не пришёл,
   // на холсте остаётся последний кадр пролёта (он тот же самый).
   const toLoop = () => {
@@ -306,11 +273,9 @@ function posterSource(emit) {
 // fit: "contain" — весь кадр внутри холста; "cover" — заполнить холст (фон первого экрана).
 // При cover точка кадра focus (ступица колеса) ставится в точку холста anchor, насколько
 // позволяют края: на узком экране телефона ступица не уходит за край.
-// mix() → { img, k }: второй кадр поверх цикла с прозрачностью k (отъезд камеры при прокрутке);
-// при k = 1 цикл не рисуется вовсе.
 // Во время пролёта на заставке (clock.introK() < 1) вид плавно идёт от «кадр целиком, по центру»
 // к «cover со ступицей в anchor» — на узком экране общий план иначе не влез бы.
-function mountPlayer(canvas, clock, { fx = null, fit = "contain", focus = [0.5, 0.5], anchor = () => [0.5, 0.5], mix = null } = {}) {
+function mountPlayer(canvas, clock, { fx = null, fit = "contain", focus = [0.5, 0.5], anchor = () => [0.5, 0.5] } = {}) {
   const ctx = canvas.getContext("2d");
   let visible = true, w = 0, h = 0, res = 1, active = true;
   const resize = () => {
@@ -331,10 +296,7 @@ function mountPlayer(canvas, clock, { fx = null, fit = "contain", focus = [0.5, 
     draw(t) {
       clock.tick(t);
       if (!visible || !active) return;
-      const m = mix ? mix() : null;
-      const over = m && m.k > 0.001 && m.img ? m.img : null;
-      const loop = over && m.k >= 0.999 ? null : clock.frame();
-      const img = loop || over;
+      const img = clock.frame();
       if (!img) return;
       const iw = img.videoWidth || img.naturalWidth || img.width, ih = img.videoHeight || img.naturalHeight || img.height;
       if (!iw || !ih) return;
@@ -351,11 +313,6 @@ function mountPlayer(canvas, clock, { fx = null, fit = "contain", focus = [0.5, 
       ctx.globalCompositeOperation = "source-over";
       ctx.clearRect(0, 0, w, h);
       ctx.drawImage(img, dx, dy, dw, dh);
-      if (over && loop) {
-        ctx.globalAlpha = m.k;
-        ctx.drawImage(over, dx, dy, dw, dh);
-        ctx.globalAlpha = 1;
-      }
       if (fx) {
         // Всё, что рисует fx, ложится только на уже нарисованный металл.
         ctx.globalCompositeOperation = "source-atop";
