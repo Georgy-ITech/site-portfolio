@@ -26,8 +26,8 @@
 - [Remont.Krd](https://georgy-itech.github.io/appartment-recover/) — ремонт квартир.
 - [Smilio](https://georgy-itech.github.io/smilio-landing/) — стоматология, 4 страницы.
 - [FITSHIFT](https://georgy-itech.github.io/fitness-trainer-landing/) — персональный тренер.
-- [КРЕМА](https://krema-coffee.vercel.app/) — интернет-магазин кофе на React.
-- [Артель](https://artel-masters.vercel.app/) — площадка мастеров на Next.js и Three.js.
+- [КРЕМА](https://georgy-itech.github.io/krema-coffee/) — интернет-магазин кофе на React.
+- [Артель](https://georgy-itech.github.io/artel-masters/) — площадка мастеров на Next.js и Three.js.
 - [Sable](https://georgy-itech.github.io/sable-landing/) — 3D-конфигуратор парфюма.
 - [Nodal](https://georgy-itech.github.io/nodal-landing/) — WebGL без библиотек.
 - [Aura](https://georgy-itech.github.io/aura-landing/) — живой aurora-фон.
