@@ -30,7 +30,7 @@ if (analyticsOn) {
 }
 
 export default defineConfig({
-  // Сайт живёт в корне своего домена georgy-tech.ru (файл public/CNAME).
+  // Сайт живёт в корне своего домена www.georgy-tech.ru (файл public/CNAME); голый georgy-tech.ru GitHub перенаправляет на www.
   base: "/",
   build: { rollupOptions: { input }, assetsInlineLimit: 0 },
   plugins: [{
