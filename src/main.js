@@ -291,7 +291,7 @@ if (!reduce) {
 const minShow = new Promise((r) => setTimeout(r, reduce ? 0 : 1100));
 // Первый экран собирается сразу, под заставкой: его первая отрисовка — тяжёлая разовая работа
 // видеокарты. Интерфейс при этом скрыт (is-intro), виден только механизм.
-if (!reduce) root.classList.add("is-loaded", "is-intro");
+if (!reduce) root.classList.add("is-loaded", "is-intro", "is-waiting");
 const calmStart = reduce ? Promise.resolve() : whenCalm(10, 2000).then(() => { loadStart = performance.now(); });
 // Страховка: если механизм не пришёл (сеть, блокировщик), сайт всё равно открывается.
 const giveUp = new Promise((r) => setTimeout(r, 9000));
@@ -309,6 +309,7 @@ function finishLoading() {
   // Одна отрендеренная сцена (5.6 с): детали влетают из-за краёв кадра и садятся на место,
   // механизм разгоняется, камера подлетает к ступице — последний кадр сцены это первый кадр
   // цикла крупным планом. Интерфейс первого экрана проступает во время пролёта (с 4.2 с).
+  root.classList.remove("is-waiting");
   gsap.to(".loader__count, .loader__label, .loader__bar", { autoAlpha: 0, y: 10, duration: 0.45, ease: "power2.in", onComplete: () => loader.remove() });
   const ui = gsap.delayedCall(4.2, () => { root.classList.remove("is-intro"); revealHero(); });
   mech.start().then(() => {

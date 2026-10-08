@@ -97,7 +97,11 @@
   scale: calc(1 + var(--p) * 0.12);
   transform-origin: 74% 60%;
   filter: drop-shadow(0 30px 60px rgb(0 0 0 / 0.5));
+  transition: filter 0.9s cubic-bezier(0.23, 1, 0.32, 1);
 }
+// Пока считается загрузка, первый кадр сцены стоит за цифрами размытым и приглушённым;
+// на старте проявляется в резкость вместе с началом движения.
+html.is-waiting .hero__macro { filter: blur(10px) brightness(0.45) drop-shadow(0 30px 60px rgb(0 0 0 / 0.5)); }
 // Вуаль для заголовка: тень сверху по центру, где стоят строки, и к низу — в фон работ.
 .hero__veil {
   position: absolute;

@@ -14,6 +14,8 @@
   только по металлу — фон остаётся прозрачным.
 */
 const base = import.meta.env.BASE_URL;
+// Кадр сцены, который стоит за счётчиком (intro-still.webp — тот же кадр, 4 из 250 при 48 к/с).
+const INTRO_FROM = 4 / 48;
 
 export function createMechanism() {
   const mode = hasWebGL() ? "packed" : "poster";
@@ -133,7 +135,7 @@ function createClock(source, mode) {
     }
     const iv = c.intro;
     if (!iv || c.stage !== "intro") { toLoop(); return Promise.resolve(); }
-    iv.currentTime = 0;
+    iv.currentTime = INTRO_FROM;
     iv.play().catch(() => {});
     setTimeout(() => { if (c.intro && c.intro.currentTime < 0.05) { c.stage = "loop"; toLoop(); } }, 1500);
     return new Promise((ok) => {
@@ -153,7 +155,9 @@ function createClock(source, mode) {
     if (c.stage === "intro") {
       // Пока идёт загрузка — пусто: сцена начинается со сборки, первый кадр (детали за краями
       // кадра) неподвижным не показываем.
-      if (c.held || !c.intro || c.intro.readyState < 2) return null;
+      const s = source.introStill;
+      const held = s && s.complete && s.naturalWidth ? s : null;
+      if (c.held || !c.intro || c.intro.readyState < 2) return held;
       try { return c.introUnpack(); } catch { return null; }
     }
     const still = () => { const img = c.poster || source.img; return img && img.complete && img.naturalWidth ? img : null; };
@@ -176,6 +180,11 @@ function createClock(source, mode) {
 function videoSource(emit) {
   const files = [`${base}mech/dive.mp4`, `${base}mech/mech-macro.mp4`];
   const state = {};
+  // Кадр, с которого начинается сцена (детали влетают): стоит за счётчиком загрузки
+  // размытым, на старте видео продолжает ровно с него (INTRO_FROM).
+  state.introStill = new Image();
+  state.introStill.fetchPriority = "high";
+  state.introStill.src = `${base}mech/intro-still.webp`;
   state.img = new Image();
   state.img.decoding = "async";
   state.img.fetchPriority = "high";
