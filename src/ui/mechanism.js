@@ -73,7 +73,8 @@ function createClock(source, mode) {
       c.video = v;
       try { c.unpack = createUnpacker(v); } catch { c.fallback("webgl"); return; }
       v.addEventListener("error", () => c.fallback("error"), { once: true });
-      setTimeout(() => { if (c.video && c.video.readyState < 2) c.fallback("no-data"); }, 3000);
+      // Скачанный целиком цикл даёт кадр сразу; лёгкий на медленной сети тянется потоком — ждём дольше.
+      setTimeout(() => { if (c.video && c.video.readyState < 2) c.fallback("no-data"); }, loop.startsWith("blob:") ? 3000 : 20000);
       if (intro && !c.still) {
         const iv = makeVideo(intro, false);
         c.intro = iv;
@@ -124,6 +125,12 @@ function createClock(source, mode) {
     if (!c.held) return Promise.resolve();
     c.held = false;
     c.rate = 1;
+    if (!c.video) {
+      // сеть не успела: пролёт пропускаем, до прихода цикла стоит неподвижный кадр
+      c.stage = "loop";
+      source.slowStart?.();
+      return Promise.resolve();
+    }
     const iv = c.intro;
     if (!iv || c.stage !== "intro") { toLoop(); return Promise.resolve(); }
     iv.currentTime = 0;
@@ -149,13 +156,13 @@ function createClock(source, mode) {
       if (c.held || !c.intro || c.intro.readyState < 2) return null;
       try { return c.introUnpack(); } catch { return null; }
     }
+    const still = () => { const img = c.poster || source.img; return img && img.complete && img.naturalWidth ? img : null; };
     if (c.video) {
-      if (c.video.readyState < 2) return null;
+      if (c.video.readyState < 2) return c.stage === "loop" ? still() : null;
       if (!c.unpack) return c.video;
       try { return c.unpack(); } catch { c.fallback("unpack"); return null; }
     }
-    const img = c.poster || source.img;
-    return img && img.complete && img.naturalWidth ? img : null;
+    return still();
   };
   return c;
 }
@@ -163,15 +170,32 @@ function createClock(source, mode) {
 /* ---------- источник: видео ---------- */
 
 // Оба видео качаются одним потоком прогресса для счётчика заставки: сначала пролёт, потом цикл.
+// Неподвижный кадр крупного плана (128 КБ) грузится первым: на медленной сети он стоит на месте
+// механизма, пока не скачается цикл. Если заставка не дождалась видео (slowStart), пролёт
+// отменяется — вся полоса уходит на цикл.
 function videoSource(emit) {
   const files = [`${base}mech/dive.mp4`, `${base}mech/mech-macro.mp4`];
   const state = {};
+  state.img = new Image();
+  state.img.decoding = "async";
+  state.img.fetchPriority = "high";
+  state.img.src = `${base}mech/macro-poster.webp`;
+  // Медленная сеть: пролёт отменяется, а недокачанный цикл меняется на лёгкий (960×540, 24 к/с,
+  // 0.4 МБ вместо 1.5) — иначе на 40 КБ/с механизм не крутился больше минуты.
+  const introAbort = new AbortController(), loopAbort = new AbortController();
+  let loopDone = false, lite = false;
+  state.slowStart = () => {
+    introAbort.abort();
+    if (!loopDone) { lite = true; loopAbort.abort(); }
+  };
+  const stillLoaded = new Promise((ok) => { state.img.onload = state.img.onerror = ok; setTimeout(ok, 4000); });
   state.ready = (async () => {
+    await stillLoaded;
     const sizes = [0, 0], got = [0, 0];
     const report = () => { const t = sizes[0] + sizes[1]; if (t) emit((got[0] + got[1]) / t); };
     const load = async (url, i) => {
       try {
-        const res = await fetch(url);
+        const res = await fetch(url, { signal: (i === 0 ? introAbort : loopAbort).signal });
         if (!res.ok || !res.body) throw new Error(String(res.status));
         sizes[i] = Number(res.headers.get("content-length")) || 0;
         const reader = res.body.getReader();
@@ -185,10 +209,13 @@ function videoSource(emit) {
         }
         return URL.createObjectURL(new Blob(chunks, { type: "video/mp4" }));
       } catch {
-        return i === 0 ? null : url; // пролёта нет — сразу цикл; цикл пусть браузер попробует сам
+        if (i === 0) return null; // пролёта нет — сразу цикл
+        // цикл пусть браузер попробует сам: лёгкий, если сеть медленная
+        return lite ? `${base}mech/mech-macro-lite.mp4` : url;
       }
     };
     const [intro, loop] = await Promise.all(files.map(load));
+    loopDone = true;
     emit(1);
     return { intro, loop };
   })();

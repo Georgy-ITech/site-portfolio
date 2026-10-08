@@ -28,7 +28,13 @@ function lighten(hex, k = 0.35) {
   return `rgb(${c.join(",")})`;
 }
 
-export function initGallery({ reduce, onGoal }) {
+// after — промис, после которого можно качать снимки: на медленной сети они шли раньше механизма
+// первого экрана и забирали весь канал (2026-10-07, 25–70 КБ/с — механизма не было вовсе).
+export function initGallery({ reduce, onGoal, after = Promise.resolve() }) {
+  let free = false;
+  const queue = [];
+  const later = (f) => (free ? f() : queue.push(f));
+  after.then(() => { free = true; queue.splice(0).forEach((f) => f()); });
   const section = document.getElementById("works");
   const pin = section.querySelector(".works__pin");
   const scatter = document.getElementById("scatter");
@@ -59,7 +65,7 @@ export function initGallery({ reduce, onGoal }) {
     // Центровка и наклон — через GSAP, чтобы они складывались со смещением анимации, а не затирались.
     gsap.set(li, { xPercent: -50, yPercent: -50, rotate: s.r });
     const img = document.createElement("img");
-    img.src = src(works[s.i]);
+    later(() => { img.src = src(works[s.i]); });
     img.alt = "";
     img.width = 1440;
     img.height = 900;
@@ -91,15 +97,13 @@ export function initGallery({ reduce, onGoal }) {
       v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
       v.setAttribute("playsinline", ""); v.setAttribute("aria-label", w.alt);
       v.preload = "auto";
-      v.poster = src(w);
-      v.src = `${base}images/${w.video}`;
+      later(() => { v.poster = src(w); v.src = `${base}images/${w.video}`; });
       v.width = 1440; v.height = 900;
       return v;
     }
     const img = document.createElement("img");
     img.className = "viewer__img";
-    img.src = src(w);
-    img.srcset = srcset(w);
+    later(() => { img.src = src(w); img.srcset = srcset(w); });
     img.sizes = SIZES;
     img.alt = w.alt;
     img.width = 1440;
@@ -112,8 +116,7 @@ export function initGallery({ reduce, onGoal }) {
     const w = works[(i + works.length) % works.length];
     const im = new Image();
     im.sizes = SIZES;
-    im.srcset = srcset(w);
-    im.src = src(w);
+    later(() => { im.srcset = srcset(w); im.src = src(w); });
   }
 
   // Старое название уходит буквами вверх-влево, пока новое входит.

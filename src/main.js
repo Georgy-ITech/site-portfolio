@@ -345,7 +345,8 @@ function afterLoad() {
 
 /* ---------- работы ---------- */
 
-const gallery = initGallery({ reduce, onGoal: goal });
+// Снимки работ — после механизма первого экрана (или через 20 с, если сеть совсем плохая).
+const gallery = initGallery({ reduce, onGoal: goal, after: Promise.race([mech.ready, new Promise((r) => setTimeout(r, 20000))]) });
 const progress = initProgress({ reduce });
 progress.on(hero, (p) => { heroP = p; });
 if (!reduce) initRelief($("#relief"));
