@@ -5,7 +5,7 @@
   и показы), поэтому ставится без политики и согласия. Код подтверждения —
   webmaster.yandex.ru → «Добавить сайт» → способ «Мета-тег» → значение content.
 */
-export const YANDEX_VERIFICATION = "";
+export const YANDEX_VERIFICATION = "16296c90afc77952";
 
 /*
   Яндекс Метрика сохраняет cookie и получает IP — это обработка персональных
