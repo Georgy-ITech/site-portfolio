@@ -112,9 +112,9 @@ html:not(.js) .final__title .ch { transform: none; }
   padding: 18px 20px 20px;
   border: 1px solid var(--line);
   border-radius: 3px;
-  background: color-mix(in srgb, var(--bg) 94%, transparent);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--bg) 30%, transparent);
+  -webkit-backdrop-filter: blur(6px) brightness(0.48);
+  backdrop-filter: blur(6px) brightness(0.48);
   box-shadow: 0 20px 60px rgb(0 0 0 / 0.4);
   &[hidden] { display: none; }
 }
@@ -124,7 +124,7 @@ html:not(.js) .final__title .ch { transform: none; }
   text-transform: uppercase;
   color: var(--acc);
 }
-.consent__text { margin-top: 8px; font-size: 0.86rem; line-height: 1.55; color: var(--muted); a { color: var(--text); } }
+.consent__text { margin-top: 8px; font-size: 0.86rem; line-height: 1.55; color: color-mix(in srgb, var(--text) 88%, transparent); a { color: var(--text); } }
 .consent__actions { display: flex; gap: 8px; margin-top: 14px; }
 // Две кнопки одного веса: согласие, выбитое оформлением, не считается свободным.
 .consent__btn {
