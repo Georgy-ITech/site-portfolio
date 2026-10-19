@@ -1,7 +1,7 @@
 /*
   Согласие на статистику и Яндекс Метрика — перенос схемы с doctorgabriel.ru.
 
-  Порядок жёсткий: пока человек не нажал «Разрешить», скрипт Метрики не
+  Порядок жёсткий: пока человек не нажал «Принять», скрипт Метрики не
   запрашивается вовсе — ни cookie, ни IP к Яндексу не уходят. Отказ
   запоминается так же, как согласие, и баннер больше не пристаёт.
   Выбор хранится в localStorage этого браузера и на сервер не уходит.
@@ -79,13 +79,12 @@ function buildBanner() {
   el.setAttribute("aria-labelledby", "consentTitle");
   el.hidden = true;
   el.innerHTML = `
-    <h2 class="consent__title" id="consentTitle">Статистика посещений</h2>
-    <p class="consent__text">С вашего согласия сайт подключит Яндекс Метрику: она сохранит cookie и получит
-      ваш IP-адрес, чтобы считать посещения и видеть, откуда приходят. Без согласия сайт работает так же.
-      <a href="${base}privacy/">Политика</a> и <a href="${base}consent/">текст согласия</a>.</p>
+    <h2 class="consent__title" id="consentTitle">Файлы cookie</h2>
+    <p class="consent__text">Сайт использует cookie и Яндекс Метрику для статистики посещений.
+      Подробнее — в <a href="${base}privacy/">политике конфиденциальности</a> и <a href="${base}consent/">тексте согласия</a>.</p>
     <div class="consent__actions">
-      <button class="consent__btn" type="button" data-consent-yes>Разрешить</button>
-      <button class="consent__btn" type="button" data-consent-no>Отказаться</button>
+      <button class="consent__btn" type="button" data-consent-yes>Принять</button>
+      <button class="consent__btn" type="button" data-consent-no>Отклонить</button>
     </div>`;
   document.body.append(el);
   return el;
