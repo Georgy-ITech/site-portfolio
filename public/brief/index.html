@@ -3,94 +3,115 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="only light">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0c1116">
 <meta name="robots" content="noindex">
-<title>Опросник для сайта</title>
+<title>Опросник — Georgy_Tech</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-:root{color-scheme:only light;--ink:#1c1b19;--muted:#6a675f;--line:#d9d5cb;--bg:#f6f4ee;--card:#fff;--accent:#1f5c4a;--err:#a8321f}
+@font-face{font-family:"Cormorant Garamond Variable";src:url(fonts/cormorant-cyr.woff2) format("woff2");font-weight:300 700;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Cormorant Garamond Variable";src:url(fonts/cormorant-lat.woff2) format("woff2");font-weight:300 700;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+@font-face{font-family:"Geist Variable";src:url(fonts/geist-cyr.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Geist Variable";src:url(fonts/geist-lat.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+@font-face{font-family:"Martian Mono";src:url(fonts/martian-cyr.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Martian Mono";src:url(fonts/martian-lat.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+:root{color-scheme:dark;--bg:#0c1116;--glow:#17212b;--text:#e4ecf2;--muted:#94a3af;--dim:#748190;--line:rgb(228 236 242 / .14);--acc:#c7a45a;--err:#e39a86;
+--display:"Cormorant Garamond Variable",Georgia,serif;--sans:"Geist Variable",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Martian Mono",ui-monospace,monospace;--ease:cubic-bezier(.16,1,.3,1)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-main{max-width:680px;margin:0 auto;padding:24px 16px 96px}
-h1{font-size:28px;line-height:1.15;margin:8px 0 12px}
-h2{font-size:19px;margin:32px 0 12px}
-p{margin:0 0 10px}.muted{color:var(--muted);font-size:14px}
-.bar{position:sticky;top:0;z-index:2;background:var(--bg);padding:10px 16px;border-bottom:1px solid var(--line)}
-.bar>div{max-width:648px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
-.track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}.track i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
-.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
-.q.bad{border-color:var(--err)}
-.q label.t{display:block;font-weight:600;margin-bottom:8px}.star{color:var(--err)}
-textarea,input[type=text]{width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:inherit}
-textarea{min-height:72px;resize:vertical}
-.opts{display:flex;flex-wrap:wrap;gap:8px}
-.opt{min-height:44px;padding:9px 14px;border:1px solid var(--line);border-radius:22px;background:#fff;font:inherit;color:inherit;cursor:pointer;text-align:left}
-.opt[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
-.opt:focus-visible,textarea:focus-visible,input:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.more{margin-top:8px}.err{color:var(--err);font-size:14px;margin-top:6px;display:none}.q.bad .err{display:block}
-.btn{display:block;width:100%;min-height:48px;margin-top:10px;padding:12px;border-radius:8px;border:1px solid var(--accent);background:#fff;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;text-align:center;text-decoration:none}
-.btn.main{background:var(--accent);color:#fff}
-#done{display:none}pre{white-space:pre-wrap;word-break:break-word;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;font-size:14px;line-height:1.45;font-family:inherit;max-height:320px;overflow:auto}
+html{background:var(--bg)}
+body{margin:0;min-height:100dvh;background:radial-gradient(120% 70% at 50% 0,var(--glow) 0,var(--bg) 62%) no-repeat fixed var(--bg);color:var(--text);font:400 16px/1.55 var(--sans);overflow-x:hidden}
+.gear{position:fixed;right:-190px;bottom:-190px;width:520px;height:520px;color:var(--acc);opacity:.13;pointer-events:none;transition:transform 1.2s var(--ease);z-index:0}
+.line{position:fixed;inset:0 0 auto;height:2px;background:var(--line);z-index:3}.line i{display:block;height:100%;width:0;background:var(--acc);transition:width .7s var(--ease)}
+header{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:22px 20px 0;display:flex;justify-content:space-between;align-items:center}
+.logo{font:500 1.05rem/1.02 var(--display);color:var(--text);text-decoration:none;display:inline-block}.logo span{display:block;padding-left:.75em;position:relative}.logo span::before{content:"";position:absolute;left:0;bottom:.12em;width:.55em;height:1.5px;background:var(--acc)}
+.mono{font:400 .66rem/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.count{color:var(--muted)}
+main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:44px 20px 72px}
+.kicker{color:var(--acc);margin:0 0 14px}
+h1{font:500 clamp(2.5rem,8.5vw,4.4rem)/1.02 var(--display);letter-spacing:-.02em;margin:0 0 18px;outline:none}
+.lead{color:var(--muted);max-width:60ch;margin:0 0 10px}
+.note{color:var(--dim);font-size:.88rem;max-width:60ch;margin:0}
+.step{animation:rise .7s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.q{padding:26px 0;border-top:1px solid var(--line)}
+.q:first-of-type{margin-top:30px}
+.t{display:block;font-size:1.06rem;font-weight:500;margin-bottom:14px}
+.t b{display:block;font:400 .62rem/1 var(--mono);letter-spacing:.12em;color:var(--dim);margin-bottom:9px}.star{color:var(--acc)}
+textarea,input[type=text]{width:100%;font:400 16px/1.5 var(--sans);color:var(--text);padding:12px 14px;background:rgb(255 255 255 / .03);border:1px solid var(--line);border-radius:2px;transition:border-color .25s}
+textarea{min-height:92px;resize:vertical;display:block}
+::placeholder{color:var(--dim)}
+textarea:hover,input:hover{border-color:rgb(228 236 242 / .3)}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.opt{display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 14px;background:rgb(255 255 255 / .03);border:1px solid var(--line);border-radius:2px;font:400 .96rem/1.3 var(--sans);color:var(--text);cursor:pointer;text-align:left;transition:border-color .25s,background-color .25s}
+.opt::before{content:"";flex:none;width:11px;height:11px;border:1px solid var(--dim);transition:background-color .25s,border-color .25s}
+@media(hover:hover){.opt:hover{border-color:rgb(228 236 242 / .34)}}
+.opt[aria-pressed=true]{border-color:var(--acc);background:rgb(199 164 90 / .1)}.opt[aria-pressed=true]::before{background:var(--acc);border-color:var(--acc)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}h1:focus-visible{outline:none}
+.more{margin-top:8px}
+.err{display:none;color:var(--err);font-size:.88rem;margin-top:9px}.q.bad .err{display:block}.q.bad .t b{color:var(--err)}
+.nav{display:flex;gap:10px;margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.btn{display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;border:1px solid rgb(255 255 255 / .16);border-radius:2px;background:rgb(255 255 255 / .03);color:var(--text);font:500 .72rem/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;text-align:center;cursor:pointer;transition:background-color .35s,color .35s,border-color .35s}
+@media(hover:hover){.btn:hover{border-color:rgb(255 255 255 / .34);background:rgb(255 255 255 / .08)}.btn.main:hover{background:#fff;color:var(--bg)}}
+.btn.main{background:var(--text);border-color:var(--text);color:var(--bg);flex:1}
+.stack .btn{width:100%;margin-top:10px}.stack{margin-top:26px;max-width:460px}
+#copied{color:var(--acc);min-height:1.4em;margin:14px 0 0;font-size:.9rem}
+pre{white-space:pre-wrap;word-break:break-word;margin:18px 0 22px;padding:16px;background:rgb(255 255 255 / .03);border:1px solid var(--line);border-radius:2px;font:400 .88rem/1.5 var(--sans);color:var(--muted);max-height:340px;overflow:auto}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){.step{animation:none}.gear,.line i{transition:none}}
+@media(max-width:560px){.opts{grid-template-columns:1fr}main{padding-top:32px}.gear{width:380px;height:380px;right:-170px;bottom:-170px}}
 </style>
 </head>
 <body>
-<div class="bar"><div><div class="track"><i id="pr"></i></div><span id="cnt"></span></div></div>
-<main>
-<div id="form">
-<h1>Какой сайт вам нужен</h1>
-<p>Ответы заменяют техническое задание. По ним пойму замысел, предложу состав сайта и посчитаю стоимость. Отмечайте варианты и пишите своими словами. Не знаете ответа — напишите «не знаю».</p>
-<p class="muted">Ответы остаются на вашем устройстве, пока вы сами их не отправите. Не указывайте пароли, паспортные данные и данные ваших клиентов. Звёздочкой отмечено самое необходимое.</p>
-<div id="qs"></div>
-<button class="btn main" id="finish" type="button">Готово, показать ответы</button>
-</div>
-<div id="done">
-<h1>Осталось отправить</h1>
-<p>Нажмите первую кнопку: ответы скопируются и откроется чат. Вставьте их туда и отправьте.</p>
-<a class="btn main" id="tg" target="_blank" rel="noopener">Скопировать и открыть Telegram</a>
-<a class="btn" id="mail">Отправить на почту</a>
-<button class="btn" id="dl" type="button">Скачать файлом</button>
-<button class="btn" id="back" type="button">Вернуться к вопросам</button>
-<p class="muted" id="copied" style="margin-top:10px"></p>
-<pre id="out"></pre>
-<p class="muted">Опросник бесплатный и ни к чему не обязывает. Платить нужно только после подписания договора: 50 % аванс, 50 % при сдаче.</p>
-</div>
-</main>
+<div class="line" aria-hidden="true"><i id="pr"></i></div>
+<svg class="gear" id="gear" viewBox="0 0 200 200" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="100" cy="100" r="82" stroke-width="16" stroke-dasharray="17.17 17.17"/><circle cx="100" cy="100" r="72" stroke-width="3"/><circle cx="100" cy="100" r="22" stroke-width="3"/><path d="M100 28v50M100 122v50M28 100h50M122 100h50M49 49l35 35M116 116l35 35M151 49l-35 35M84 116l-35 35" stroke-width="3"/></svg>
+<header><a class="logo" href="/" aria-label="Georgy_Tech, на главную">Georgy<span>Tech</span></a><span class="mono count" id="cnt"></span></header>
+<main id="main"></main>
 <script>
-const DATA=[{"section": "О вас и деле", "questions": [{"text": "Как называется компания или проект? Если сайт уже есть — ссылка на него.", "options": null, "required": true}, {"text": "Чем занимаетесь? Опишите одной-двумя фразами, как незнакомому человеку.", "options": null, "required": true}, {"text": "В каком городе или регионе ваши клиенты?", "options": null, "required": true}, {"text": "Как вы работаете: ИП, ООО, самозанятость, пока никак не оформлены?", "options": null, "required": false}, {"text": "Ваша деятельность требует лицензии или особых правил рекламы (медицина, образование, финансы, алкоголь и другие)?", "options": null, "required": false}]}, {"section": "Зачем сайт", "questions": [{"text": "Что должен сделать посетитель сайта?", "options": ["позвонить или написать", "оставить заявку", "записаться на время", "купить и оплатить на сайте", "узнать о компании", "другое: ____"], "required": true}, {"text": "Что сейчас мешает и почему сайт нужен именно теперь?", "options": null, "required": false}, {"text": "Как поймёте через полгода, что сайт себя оправдал?", "options": null, "required": false}]}, {"section": "Ваши клиенты", "questions": [{"text": "Кто ваш обычный клиент и какая у него проблема, когда он вас ищет?", "options": null, "required": true}, {"text": "Почему выбирают вас, а не соседей? Что говорят сами клиенты?", "options": null, "required": false}, {"text": "Назовите 2–3 конкурентов (ссылки).", "options": null, "required": false}, {"text": "Откуда придут посетители?", "options": ["поиск Яндекса", "реклама", "соцсети", "рекомендации, своя база", "пока не знаю"], "required": false}]}, {"section": "Что будет на сайте", "questions": [{"text": "Какой объём представляете?", "options": ["одна страница", "несколько страниц (сколько: __)", "каталог услуг или товаров (сколько позиций: __)", "не знаю, предложите"], "required": true}, {"text": "Какие разделы необходимы?", "options": ["услуги / товары", "цены", "о компании", "работы, примеры", "отзывы", "вопросы и ответы", "статьи", "контакты, карта", "другое: ____"], "required": false}, {"text": "Какие функции нужны?", "options": ["форма заявки (куда приходит: ____)", "кнопки мессенджеров", "онлайн-запись с календарём", "корзина и оплата", "личный кабинет", "связь с CRM или другой системой (какой: ____)", "калькулятор стоимости", "нужны только контакты"], "required": true}, {"text": "Нужна ли статистика посещений (Яндекс Метрика)?", "options": ["да", "нет", "посоветуйте"], "required": false}, {"text": "Нужны ли другие языки? Какие?", "options": null, "required": false}, {"text": "Кто будет менять содержимое после запуска?", "options": ["буду сам, нужна простая панель", "буду присылать правки вам", "менять почти ничего не будем"], "required": false}]}, {"section": "Как должен выглядеть", "questions": [{"text": "Пришлите 2–3 сайта, которые нравятся, и скажите, что именно в них нравится. Можно из любой отрасли.", "options": null, "required": true}, {"text": "Что категорически не нравится?", "options": null, "required": false}, {"text": "Какое впечатление должен оставлять сайт?", "options": ["строгий, надёжный", "тёплый, домашний", "дорогой, статусный", "яркий, смелый", "простой, без лишнего", "другое: ____"], "required": false}, {"text": "Нужны ли заметная анимация или 3D?", "options": ["нет, спокойно", "немного оживить", "да, это часть впечатления"], "required": false}]}, {"section": "Что уже есть", "questions": [{"text": "Логотип и фирменный стиль?", "options": ["есть", "частично", "нет"], "required": false}, {"text": "Тексты?", "options": ["готовы", "есть черновики", "нужно написать"], "required": false}, {"text": "Фото и видео?", "options": ["свои, хорошего качества", "есть, но слабые", "нет"], "required": false}, {"text": "Домен и хостинг? Если есть — укажите адрес и где оформлены.", "options": null, "required": false}]}, {"section": "Сроки и бюджет", "questions": [{"text": "К какой дате нужен сайт и что привязано к этой дате?", "options": null, "required": true}, {"text": "На какой бюджет рассчитываете? Можно вилкой. Так сразу предложу то, что в него войдёт.", "options": null, "required": true}, {"text": "Что необходимо к первому запуску, а что можно добавить позже?", "options": null, "required": false}, {"text": "Кто с вашей стороны принимает решения и отвечает на вопросы? Как удобнее связываться?", "options": null, "required": false}]}], CONTACT={"telegram": "GeorgyTech", "email": "georgy.tech@ya.ru"}, KEY='site-brief-v1';
-const $=s=>document.querySelector(s);
+const DATA=[{"section": "О вас и деле", "questions": [{"text": "Как называется компания или проект? Если сайт уже есть — ссылка на него.", "options": null, "required": true}, {"text": "Чем занимаетесь? Опишите одной-двумя фразами, как незнакомому человеку.", "options": null, "required": true}, {"text": "В каком городе или регионе ваши клиенты?", "options": null, "required": true}, {"text": "Как вы работаете: ИП, ООО, самозанятость, пока никак не оформлены?", "options": null, "required": false}, {"text": "Ваша деятельность требует лицензии или особых правил рекламы (медицина, образование, финансы, алкоголь и другие)?", "options": null, "required": false}]}, {"section": "Зачем сайт", "questions": [{"text": "Что должен сделать посетитель сайта?", "options": ["позвонить или написать", "оставить заявку", "записаться на время", "купить и оплатить на сайте", "узнать о компании", "другое: ____"], "required": true}, {"text": "Что сейчас мешает и почему сайт нужен именно теперь?", "options": null, "required": false}, {"text": "Как поймёте через полгода, что сайт себя оправдал?", "options": null, "required": false}]}, {"section": "Ваши клиенты", "questions": [{"text": "Кто ваш обычный клиент и какая у него проблема, когда он вас ищет?", "options": null, "required": true}, {"text": "Почему выбирают вас, а не соседей? Что говорят сами клиенты?", "options": null, "required": false}, {"text": "Назовите 2–3 конкурентов (ссылки).", "options": null, "required": false}, {"text": "Откуда придут посетители?", "options": ["поиск Яндекса", "реклама", "соцсети", "рекомендации, своя база", "пока не знаю"], "required": false}]}, {"section": "Что будет на сайте", "questions": [{"text": "Какой объём представляете?", "options": ["одна страница", "несколько страниц (сколько: __)", "каталог услуг или товаров (сколько позиций: __)", "не знаю, предложите"], "required": true}, {"text": "Какие разделы необходимы?", "options": ["услуги / товары", "цены", "о компании", "работы, примеры", "отзывы", "вопросы и ответы", "статьи", "контакты, карта", "другое: ____"], "required": false}, {"text": "Какие функции нужны?", "options": ["форма заявки (куда приходит: ____)", "кнопки мессенджеров", "онлайн-запись с календарём", "корзина и оплата", "личный кабинет", "связь с CRM или другой системой (какой: ____)", "калькулятор стоимости", "нужны только контакты"], "required": true}, {"text": "Нужна ли статистика посещений (Яндекс Метрика)?", "options": ["да", "нет", "посоветуйте"], "required": false}, {"text": "Нужны ли другие языки? Какие?", "options": null, "required": false}, {"text": "Кто будет менять содержимое после запуска?", "options": ["буду сам, нужна простая панель", "буду присылать правки вам", "менять почти ничего не будем"], "required": false}]}, {"section": "Как должен выглядеть", "questions": [{"text": "Пришлите 2–3 сайта, которые нравятся, и скажите, что именно в них нравится. Можно из любой отрасли.", "options": null, "required": true}, {"text": "Что категорически не нравится?", "options": null, "required": false}, {"text": "Какое впечатление должен оставлять сайт?", "options": ["строгий, надёжный", "тёплый, домашний", "дорогой, статусный", "яркий, смелый", "простой, без лишнего", "другое: ____"], "required": false}, {"text": "Нужны ли заметная анимация или 3D?", "options": ["нет, спокойно", "немного оживить", "да, это часть впечатления"], "required": false}]}, {"section": "Что уже есть", "questions": [{"text": "Логотип и фирменный стиль?", "options": ["есть", "частично", "нет"], "required": false}, {"text": "Тексты?", "options": ["готовы", "есть черновики", "нужно написать"], "required": false}, {"text": "Фото и видео?", "options": ["свои, хорошего качества", "есть, но слабые", "нет"], "required": false}, {"text": "Домен и хостинг? Если есть — укажите адрес и где оформлены.", "options": null, "required": false}]}, {"section": "Сроки и бюджет", "questions": [{"text": "К какой дате нужен сайт и что привязано к этой дате?", "options": null, "required": true}, {"text": "На какой бюджет рассчитываете? Можно вилкой. Так сразу предложу то, что в него войдёт.", "options": null, "required": true}, {"text": "Что необходимо к первому запуску, а что можно добавить позже?", "options": null, "required": false}, {"text": "Кто с вашей стороны принимает решения и отвечает на вопросы? Как удобнее связываться?", "options": null, "required": false}]}], CONTACT={"telegram": "GeorgyTech", "email": "georgy.tech@yandex.ru"}, KEY='site-brief-v1';
+const $=s=>document.querySelector(s), el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 let st={};try{st=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
-const all=DATA.flatMap(s=>s.questions);
+const all=DATA.flatMap(s=>s.questions), LAST=DATA.length+1;
+let num=0;DATA.forEach(s=>s.questions.forEach(q=>q.i=num++));
 const blank=o=>/_{2,}/.test(o);
 const label=o=>o.replace(/\s*\([^)]*_{2,}\)/,'').replace(/:?\s*_{2,}/,'').trim();
 const hint=o=>{const m=o.match(/\(([^)]*?):?\s*_{2,}\)/);return m?m[1]:'Уточните'};
+const ans=i=>st[i]=st[i]||{};
 function answered(i){const a=st[i]||{};return !!((a.text||'').trim()||(a.sel&&a.sel.length))}
-function progress(){const n=all.filter((_,i)=>answered(i)).length;$('#pr').style.width=(n/all.length*100)+'%';$('#cnt').textContent=n+' из '+all.length}
-let idx=0;const root=$('#qs');
-DATA.forEach(s=>{const h=document.createElement('h2');h.textContent=s.section;root.append(h);
- s.questions.forEach(q=>{const i=idx++,a=st[i]=st[i]||{},w=document.createElement('div');w.className='q';w.id='q'+i;
-  const l=document.createElement('label');l.className='t';l.textContent=(i+1)+'. '+q.text;l.htmlFor='a'+i;
-  if(q.required){const r=document.createElement('span');r.className='star';r.textContent=' *';l.append(r)}w.append(l);
-  if(q.options){a.sel=a.sel||[];a.more=a.more||{};const b=document.createElement('div');b.className='opts';b.setAttribute('role','group');const extras=document.createElement('div');
-   q.options.forEach(o=>{const x=document.createElement('button');x.type='button';x.className='opt';x.textContent=label(o);x.setAttribute('aria-pressed',a.sel.includes(o));
-    let inp=null;if(blank(o)){inp=document.createElement('input');inp.type='text';inp.className='more';inp.placeholder=hint(o);inp.setAttribute('aria-label',hint(o));inp.value=a.more[o]||'';inp.hidden=!a.sel.includes(o);inp.oninput=()=>{a.more[o]=inp.value;save()};extras.append(inp)}
-    x.onclick=()=>{const on=!a.sel.includes(o);a.sel=on?[...a.sel,o]:a.sel.filter(v=>v!==o);x.setAttribute('aria-pressed',on);if(inp){inp.hidden=!on;if(on)inp.focus()}w.classList.remove('bad');save();progress()};b.append(x)});
-   w.append(b,extras);const c=document.createElement('input');c.type='text';c.className='more';c.id='a'+i;c.placeholder='Комментарий, если нужно';c.value=a.text||'';c.oninput=()=>{a.text=c.value;w.classList.remove('bad');save();progress()};w.append(c)}
-  else{const t=document.createElement('textarea');t.id='a'+i;t.value=a.text||'';t.oninput=()=>{a.text=t.value;w.classList.remove('bad');save();progress()};w.append(t)}
-  if(q.required){const e=document.createElement('div');e.className='err';e.textContent='Ответьте хотя бы коротко или напишите «не знаю».';w.append(e)}
-  root.append(w)})});
-progress();
-function text(){let i=0,r='ОПРОСНИК ДЛЯ САЙТА\n';DATA.forEach(s=>{r+='\n— '+s.section+' —\n';s.questions.forEach(q=>{const a=st[i]||{},p=[];(a.sel||[]).forEach(o=>{const m=(a.more||{})[o];p.push(label(o)+(m&&m.trim()?': '+m.trim():''))});if((a.text||'').trim())p.push(a.text.trim());r+=(i+1)+'. '+q.text+'\n'+(p.length?p.join('; '):'—')+'\n';i++})});return r}
-function legacy(t){const x=document.createElement('textarea');x.value=t;x.style.position='fixed';x.style.opacity='0';document.body.append(x);x.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}x.remove();return ok}
-function copy(t){if(legacy(t))return Promise.resolve(true);if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(()=>true,()=>false);return Promise.resolve(false)}
-$('#finish').onclick=()=>{let first=null;all.forEach((q,i)=>{const w=$('#q'+i);if(q.required&&!answered(i)){w.classList.add('bad');first=first||w}});
- if(first){first.scrollIntoView({behavior:'smooth',block:'center'});return}
- const t=text();$('#out').textContent=t;$('#form').style.display='none';$('#done').style.display='block';scrollTo(0,0);
- $('#tg').href='https://t.me/'+CONTACT.telegram;
- $('#mail').href='mailto:'+CONTACT.email+'?subject='+encodeURIComponent('Опросник для сайта')+'&body='+encodeURIComponent(t.slice(0,1800)+(t.length>1800?'\n\n(текст длиннее, вставьте остальное из буфера)':''))};
-$('#tg').onclick=()=>{copy(text()).then(ok=>{$('#copied').textContent=ok?'Ответы скопированы. Вставьте их в чат.':'Скопировать не удалось: выделите текст ниже вручную.'})};
-$('#mail').addEventListener('click',()=>{copy(text())});
-$('#dl').onclick=()=>{const u=URL.createObjectURL(new Blob([text()],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='oprosnik-sait.txt';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
-$('#back').onclick=()=>{$('#done').style.display='none';$('#form').style.display='block'};
+let step=Number(st.step)||0;if(step>LAST)step=0;
+function progress(){const n=all.filter(q=>answered(q.i)).length;$('#pr').style.width=(step===LAST?100:n/all.length*100)+'%';
+ $('#cnt').textContent=step===0?all.length+' вопросов':step===LAST?'Готово':'Раздел '+step+' из '+DATA.length;
+ $('#gear').style.transform='rotate('+step*40+'deg)'}
+function go(n){step=n;st.step=n;save();render();scrollTo(0,0);const h=$('h1');if(h)h.focus({preventScroll:true})}
+function question(q){const a=ans(q.i),w=el('div','q');w.id='q'+q.i;
+ const l=el('label','t');l.htmlFor='a'+q.i;l.append(el('b','',String(q.i+1).padStart(2,'0')),q.text);
+ if(q.required)l.append(el('span','star',' *'));w.append(l);
+ const touch=()=>{w.classList.remove('bad');save();progress()};
+ if(q.options){a.sel=a.sel||[];a.more=a.more||{};const b=el('div','opts');b.setAttribute('role','group');const extras=el('div');
+  q.options.forEach(o=>{const x=el('button','opt',label(o));x.type='button';x.setAttribute('aria-pressed',a.sel.includes(o));let inp=null;
+   if(blank(o)){inp=el('input','more');inp.type='text';inp.placeholder=hint(o);inp.setAttribute('aria-label',hint(o));inp.value=a.more[o]||'';inp.hidden=!a.sel.includes(o);inp.oninput=()=>{a.more[o]=inp.value;save()};extras.append(inp)}
+   x.onclick=()=>{const on=!a.sel.includes(o);a.sel=on?[...a.sel,o]:a.sel.filter(v=>v!==o);x.setAttribute('aria-pressed',on);if(inp){inp.hidden=!on;if(on)inp.focus()}touch()};b.append(x)});
+  const c=el('input','more');c.type='text';c.id='a'+q.i;c.placeholder='Комментарий, если нужно';c.value=a.text||'';c.oninput=()=>{a.text=c.value;touch()};w.append(b,extras,c)}
+ else{const t=el('textarea');t.id='a'+q.i;t.value=a.text||'';t.oninput=()=>{a.text=t.value;touch()};w.append(t)}
+ if(q.required)w.append(el('div','err','Ответьте хотя бы коротко или напишите «не знаю».'));
+ return w}
+function btn(text,cls,fn){const b=el('button','btn '+(cls||''),text);b.type='button';b.onclick=fn;return b}
+function render(){const m=$('#main');m.textContent='';const s=el('div','step');m.append(s);
+ if(step===0){s.append(el('p','mono kicker','Опросник'),h('Расскажите свою идею'),el('p','lead','Ответы заменяют техническое задание. По ним пойму замысел, предложу состав сайта и посчитаю стоимость. Отмечайте варианты и пишите своими словами. Не знаете ответа — напишите «не знаю».'),el('p','note','Ответы остаются на вашем устройстве, пока вы сами их не отправите. Не указывайте пароли, паспортные данные и данные ваших клиентов. Звёздочкой отмечено самое необходимое.'));
+  const n=el('div','nav');n.append(btn(all.some(q=>answered(q.i))?'Продолжить':'Начать','main',()=>go(1)));s.append(n)}
+ else if(step<LAST){const sec=DATA[step-1];s.append(el('p','mono kicker',String(step).padStart(2,'0')+' / '+String(DATA.length).padStart(2,'0')),h(sec.section));sec.questions.forEach(q=>s.append(question(q)));
+  const n=el('div','nav');n.append(btn('Назад','',()=>go(step-1)),btn(step===DATA.length?'Готово, показать ответы':'Дальше','main',()=>{let first=null;sec.questions.forEach(q=>{if(q.required&&!answered(q.i)){const w=$('#q'+q.i);w.classList.add('bad');first=first||w}});if(first){first.scrollIntoView({behavior:'smooth',block:'center'});return}go(step+1)}));s.append(n)}
+ else{const t=text();s.append(el('p','mono kicker','Последний шаг'),h('Осталось отправить'),el('p','lead','Нажмите первую кнопку: ответы скопируются и откроется чат. Вставьте их туда и отправьте.'));
+  const k=el('div','stack'),tg=el('a','btn main','Скопировать и открыть Telegram');tg.href='https://t.me/'+CONTACT.telegram;tg.target='_blank';tg.rel='noopener';
+  const c=el('p','','');c.id='copied';c.setAttribute('role','status');tg.onclick=()=>{c.textContent=copy(t)?'Ответы скопированы. Вставьте их в чат.':'Скопировать не удалось: выделите текст ниже вручную.'};
+  const ma=el('a','btn','Отправить на почту');ma.href='mailto:'+CONTACT.email+'?subject='+encodeURIComponent('Опросник для сайта')+'&body='+encodeURIComponent(t.slice(0,1800)+(t.length>1800?'\n\n(текст длиннее, вставьте остальное из буфера)':''));ma.addEventListener('click',()=>copy(t));
+  k.append(tg,ma,btn('Скачать файлом','',()=>{const u=URL.createObjectURL(new Blob([t],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='oprosnik-sait.txt';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}),btn('Вернуться к вопросам','',()=>go(DATA.length)));
+  s.append(k,c,el('pre','',t),el('p','note','Опросник бесплатный и ни к чему не обязывает. Платить нужно только после подписания договора: 50 % аванс, 50 % при сдаче.'))}
+ progress()}
+function h(t){const x=el('h1','',t);x.tabIndex=-1;return x}
+function text(){let r='ОПРОСНИК ДЛЯ САЙТА\n';DATA.forEach(s=>{r+='\n— '+s.section+' —\n';s.questions.forEach(q=>{const a=st[q.i]||{},p=[];(a.sel||[]).forEach(o=>{const m=(a.more||{})[o];p.push(label(o)+(m&&m.trim()?': '+m.trim():''))});if((a.text||'').trim())p.push(a.text.trim());r+=(q.i+1)+'. '+q.text+'\n'+(p.length?p.join('; '):'—')+'\n'})});return r}
+function copy(t){const x=document.createElement('textarea');x.value=t;x.style.position='fixed';x.style.opacity='0';document.body.append(x);x.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}x.remove();if(!ok&&navigator.clipboard){navigator.clipboard.writeText(t).catch(()=>{});ok=true}return ok}
+render();
 </script>
 </body>
 </html>
