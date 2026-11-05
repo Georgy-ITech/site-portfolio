@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex">
+<title>Опросник для сайта</title>
+<style>
+:root{color-scheme:only light;--ink:#1c1b19;--muted:#6a675f;--line:#d9d5cb;--bg:#f6f4ee;--card:#fff;--accent:#1f5c4a;--err:#a8321f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:680px;margin:0 auto;padding:24px 16px 96px}
+h1{font-size:28px;line-height:1.15;margin:8px 0 12px}
+h2{font-size:19px;margin:32px 0 12px}
+p{margin:0 0 10px}.muted{color:var(--muted);font-size:14px}
+.bar{position:sticky;top:0;z-index:2;background:var(--bg);padding:10px 16px;border-bottom:1px solid var(--line)}
+.bar>div{max-width:648px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+.track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}.track i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.q.bad{border-color:var(--err)}
+.q label.t{display:block;font-weight:600;margin-bottom:8px}.star{color:var(--err)}
+textarea,input[type=text]{width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:inherit}
+textarea{min-height:72px;resize:vertical}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{min-height:44px;padding:9px 14px;border:1px solid var(--line);border-radius:22px;background:#fff;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.opt[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.opt:focus-visible,textarea:focus-visible,input:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.more{margin-top:8px}.err{color:var(--err);font-size:14px;margin-top:6px;display:none}.q.bad .err{display:block}
+.btn{display:block;width:100%;min-height:48px;margin-top:10px;padding:12px;border-radius:8px;border:1px solid var(--accent);background:#fff;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;text-align:center;text-decoration:none}
+.btn.main{background:var(--accent);color:#fff}
+#done{display:none}pre{white-space:pre-wrap;word-break:break-word;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;font-size:14px;line-height:1.45;font-family:inherit;max-height:320px;overflow:auto}
+</style>
+</head>
+<body>
+<div class="bar"><div><div class="track"><i id="pr"></i></div><span id="cnt"></span></div></div>
+<main>
+<div id="form">
+<h1>Какой сайт вам нужен</h1>
+<p>Ответы заменяют техническое задание. По ним пойму замысел, предложу состав сайта и посчитаю стоимость. Отмечайте варианты и пишите своими словами. Не знаете ответа — напишите «не знаю».</p>
+<p class="muted">Ответы остаются на вашем устройстве, пока вы сами их не отправите. Не указывайте пароли, паспортные данные и данные ваших клиентов. Звёздочкой отмечено самое необходимое.</p>
+<div id="qs"></div>
+<button class="btn main" id="finish" type="button">Готово, показать ответы</button>
+</div>
+<div id="done">
+<h1>Осталось отправить</h1>
+<p>Нажмите первую кнопку: ответы скопируются и откроется чат. Вставьте их туда и отправьте.</p>
+<a class="btn main" id="tg" target="_blank" rel="noopener">Скопировать и открыть Telegram</a>
+<a class="btn" id="mail">Отправить на почту</a>
+<button class="btn" id="dl" type="button">Скачать файлом</button>
+<button class="btn" id="back" type="button">Вернуться к вопросам</button>
+<p class="muted" id="copied" style="margin-top:10px"></p>
+<pre id="out"></pre>
+<p class="muted">Опросник бесплатный и ни к чему не обязывает. Платить нужно только после подписания договора: 50 % аванс, 50 % при сдаче.</p>
+</div>
+</main>
+<script>
+const DATA=[{"section": "О вас и деле", "questions": [{"text": "Как называется компания или проект? Если сайт уже есть — ссылка на него.", "options": null, "required": true}, {"text": "Чем занимаетесь? Опишите одной-двумя фразами, как незнакомому человеку.", "options": null, "required": true}, {"text": "В каком городе или регионе ваши клиенты?", "options": null, "required": true}, {"text": "Как вы работаете: ИП, ООО, самозанятость, пока никак не оформлены?", "options": null, "required": false}, {"text": "Ваша деятельность требует лицензии или особых правил рекламы (медицина, образование, финансы, алкоголь и другие)?", "options": null, "required": false}]}, {"section": "Зачем сайт", "questions": [{"text": "Что должен сделать посетитель сайта?", "options": ["позвонить или написать", "оставить заявку", "записаться на время", "купить и оплатить на сайте", "узнать о компании", "другое: ____"], "required": true}, {"text": "Что сейчас мешает и почему сайт нужен именно теперь?", "options": null, "required": false}, {"text": "Как поймёте через полгода, что сайт себя оправдал?", "options": null, "required": false}]}, {"section": "Ваши клиенты", "questions": [{"text": "Кто ваш обычный клиент и какая у него проблема, когда он вас ищет?", "options": null, "required": true}, {"text": "Почему выбирают вас, а не соседей? Что говорят сами клиенты?", "options": null, "required": false}, {"text": "Назовите 2–3 конкурентов (ссылки).", "options": null, "required": false}, {"text": "Откуда придут посетители?", "options": ["поиск Яндекса", "реклама", "соцсети", "рекомендации, своя база", "пока не знаю"], "required": false}]}, {"section": "Что будет на сайте", "questions": [{"text": "Какой объём представляете?", "options": ["одна страница", "несколько страниц (сколько: __)", "каталог услуг или товаров (сколько позиций: __)", "не знаю, предложите"], "required": true}, {"text": "Какие разделы необходимы?", "options": ["услуги / товары", "цены", "о компании", "работы, примеры", "отзывы", "вопросы и ответы", "статьи", "контакты, карта", "другое: ____"], "required": false}, {"text": "Какие функции нужны?", "options": ["форма заявки (куда приходит: ____)", "кнопки мессенджеров", "онлайн-запись с календарём", "корзина и оплата", "личный кабинет", "связь с CRM или другой системой (какой: ____)", "калькулятор стоимости", "нужны только контакты"], "required": true}, {"text": "Нужна ли статистика посещений (Яндекс Метрика)?", "options": ["да", "нет", "посоветуйте"], "required": false}, {"text": "Нужны ли другие языки? Какие?", "options": null, "required": false}, {"text": "Кто будет менять содержимое после запуска?", "options": ["буду сам, нужна простая панель", "буду присылать правки вам", "менять почти ничего не будем"], "required": false}]}, {"section": "Как должен выглядеть", "questions": [{"text": "Пришлите 2–3 сайта, которые нравятся, и скажите, что именно в них нравится. Можно из любой отрасли.", "options": null, "required": true}, {"text": "Что категорически не нравится?", "options": null, "required": false}, {"text": "Какое впечатление должен оставлять сайт?", "options": ["строгий, надёжный", "тёплый, домашний", "дорогой, статусный", "яркий, смелый", "простой, без лишнего", "другое: ____"], "required": false}, {"text": "Нужны ли заметная анимация или 3D?", "options": ["нет, спокойно", "немного оживить", "да, это часть впечатления"], "required": false}]}, {"section": "Что уже есть", "questions": [{"text": "Логотип и фирменный стиль?", "options": ["есть", "частично", "нет"], "required": false}, {"text": "Тексты?", "options": ["готовы", "есть черновики", "нужно написать"], "required": false}, {"text": "Фото и видео?", "options": ["свои, хорошего качества", "есть, но слабые", "нет"], "required": false}, {"text": "Домен и хостинг? Если есть — укажите адрес и где оформлены.", "options": null, "required": false}]}, {"section": "Сроки и бюджет", "questions": [{"text": "К какой дате нужен сайт и что привязано к этой дате?", "options": null, "required": true}, {"text": "На какой бюджет рассчитываете? Можно вилкой. Так сразу предложу то, что в него войдёт.", "options": null, "required": true}, {"text": "Что необходимо к первому запуску, а что можно добавить позже?", "options": null, "required": false}, {"text": "Кто с вашей стороны принимает решения и отвечает на вопросы? Как удобнее связываться?", "options": null, "required": false}]}], CONTACT={"telegram": "GeorgyTech", "email": "georgy.tech@ya.ru"}, KEY='site-brief-v1';
+const $=s=>document.querySelector(s);
+let st={};try{st=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const all=DATA.flatMap(s=>s.questions);
+const blank=o=>/_{2,}/.test(o);
+const label=o=>o.replace(/\s*\([^)]*_{2,}\)/,'').replace(/:?\s*_{2,}/,'').trim();
+const hint=o=>{const m=o.match(/\(([^)]*?):?\s*_{2,}\)/);return m?m[1]:'Уточните'};
+function answered(i){const a=st[i]||{};return !!((a.text||'').trim()||(a.sel&&a.sel.length))}
+function progress(){const n=all.filter((_,i)=>answered(i)).length;$('#pr').style.width=(n/all.length*100)+'%';$('#cnt').textContent=n+' из '+all.length}
+let idx=0;const root=$('#qs');
+DATA.forEach(s=>{const h=document.createElement('h2');h.textContent=s.section;root.append(h);
+ s.questions.forEach(q=>{const i=idx++,a=st[i]=st[i]||{},w=document.createElement('div');w.className='q';w.id='q'+i;
+  const l=document.createElement('label');l.className='t';l.textContent=(i+1)+'. '+q.text;l.htmlFor='a'+i;
+  if(q.required){const r=document.createElement('span');r.className='star';r.textContent=' *';l.append(r)}w.append(l);
+  if(q.options){a.sel=a.sel||[];a.more=a.more||{};const b=document.createElement('div');b.className='opts';b.setAttribute('role','group');const extras=document.createElement('div');
+   q.options.forEach(o=>{const x=document.createElement('button');x.type='button';x.className='opt';x.textContent=label(o);x.setAttribute('aria-pressed',a.sel.includes(o));
+    let inp=null;if(blank(o)){inp=document.createElement('input');inp.type='text';inp.className='more';inp.placeholder=hint(o);inp.setAttribute('aria-label',hint(o));inp.value=a.more[o]||'';inp.hidden=!a.sel.includes(o);inp.oninput=()=>{a.more[o]=inp.value;save()};extras.append(inp)}
+    x.onclick=()=>{const on=!a.sel.includes(o);a.sel=on?[...a.sel,o]:a.sel.filter(v=>v!==o);x.setAttribute('aria-pressed',on);if(inp){inp.hidden=!on;if(on)inp.focus()}w.classList.remove('bad');save();progress()};b.append(x)});
+   w.append(b,extras);const c=document.createElement('input');c.type='text';c.className='more';c.id='a'+i;c.placeholder='Комментарий, если нужно';c.value=a.text||'';c.oninput=()=>{a.text=c.value;w.classList.remove('bad');save();progress()};w.append(c)}
+  else{const t=document.createElement('textarea');t.id='a'+i;t.value=a.text||'';t.oninput=()=>{a.text=t.value;w.classList.remove('bad');save();progress()};w.append(t)}
+  if(q.required){const e=document.createElement('div');e.className='err';e.textContent='Ответьте хотя бы коротко или напишите «не знаю».';w.append(e)}
+  root.append(w)})});
+progress();
+function text(){let i=0,r='ОПРОСНИК ДЛЯ САЙТА\n';DATA.forEach(s=>{r+='\n— '+s.section+' —\n';s.questions.forEach(q=>{const a=st[i]||{},p=[];(a.sel||[]).forEach(o=>{const m=(a.more||{})[o];p.push(label(o)+(m&&m.trim()?': '+m.trim():''))});if((a.text||'').trim())p.push(a.text.trim());r+=(i+1)+'. '+q.text+'\n'+(p.length?p.join('; '):'—')+'\n';i++})});return r}
+function legacy(t){const x=document.createElement('textarea');x.value=t;x.style.position='fixed';x.style.opacity='0';document.body.append(x);x.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}x.remove();return ok}
+function copy(t){if(legacy(t))return Promise.resolve(true);if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(()=>true,()=>false);return Promise.resolve(false)}
+$('#finish').onclick=()=>{let first=null;all.forEach((q,i)=>{const w=$('#q'+i);if(q.required&&!answered(i)){w.classList.add('bad');first=first||w}});
+ if(first){first.scrollIntoView({behavior:'smooth',block:'center'});return}
+ const t=text();$('#out').textContent=t;$('#form').style.display='none';$('#done').style.display='block';scrollTo(0,0);
+ $('#tg').href='https://t.me/'+CONTACT.telegram;
+ $('#mail').href='mailto:'+CONTACT.email+'?subject='+encodeURIComponent('Опросник для сайта')+'&body='+encodeURIComponent(t.slice(0,1800)+(t.length>1800?'\n\n(текст длиннее, вставьте остальное из буфера)':''))};
+$('#tg').onclick=()=>{copy(text()).then(ok=>{$('#copied').textContent=ok?'Ответы скопированы. Вставьте их в чат.':'Скопировать не удалось: выделите текст ниже вручную.'})};
+$('#mail').addEventListener('click',()=>{copy(text())});
+$('#dl').onclick=()=>{const u=URL.createObjectURL(new Blob([text()],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='oprosnik-sait.txt';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+$('#back').onclick=()=>{$('#done').style.display='none';$('#form').style.display='block'};
+</script>
+</body>
+</html>
