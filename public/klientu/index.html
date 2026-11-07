@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0c1116">
+<meta name="robots" content="noindex">
+<title>Как мы работаем — Georgy_Tech</title>
+<meta name="description" content="Памятка клиенту: порядок работы над сайтом, договор и оплата, что подготовить и как прислать, домен и хостинг, документы.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:"Cormorant Garamond Variable";src:url(/brief/fonts/cormorant-cyr.woff2) format("woff2");font-weight:300 700;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Cormorant Garamond Variable";src:url(/brief/fonts/cormorant-lat.woff2) format("woff2");font-weight:300 700;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+@font-face{font-family:"Geist Variable";src:url(/brief/fonts/geist-cyr.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Geist Variable";src:url(/brief/fonts/geist-lat.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+@font-face{font-family:"Martian Mono";src:url(/brief/fonts/martian-cyr.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Martian Mono";src:url(/brief/fonts/martian-lat.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+:root{
+  --bg:#0c1116;--glow:#17212b;--text:#e4ecf2;--muted:#94a3af;--dim:#748190;--line:rgb(228 236 242 / .14);--acc:#c7a45a;
+  --paper:#e8edf1;--ink:#0c1116;--ink-2:#3b4652;--ink-line:rgb(12 17 22 / .14);--acc-ink:#7a5a08;--acc-line:rgb(122 90 8 / .45);
+  --display:"Cormorant Garamond Variable",Georgia,serif;--sans:"Geist Variable",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Martian Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);--gutter:clamp(16px,4vw,56px);
+  color-scheme:dark}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth;scroll-padding-top:20px}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.6 var(--sans);overflow-x:hidden;-webkit-text-size-adjust:100%}
+h1,h2,h3,p,ul,ol,dl,dd{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.mono{font:400 .64rem/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+
+/* ---------- тёмная сцена ---------- */
+.top{position:relative;overflow:hidden;background:radial-gradient(120% 80% at 50% 0,var(--glow) 0,var(--bg) 62%);padding:0 var(--gutter) clamp(56px,8vw,96px)}
+.gear{position:absolute;left:-200px;bottom:-240px;width:clamp(360px,40vw,560px);height:auto;color:var(--acc);opacity:.1;pointer-events:none}
+.head{position:relative;max-width:1180px;margin:0 auto;padding:22px 0;display:flex;justify-content:space-between;align-items:center}
+.logo{font:500 1.05rem/1.02 var(--display);color:var(--text);text-decoration:none}.logo span{display:block;padding-left:.75em;position:relative}.logo span::before{content:"";position:absolute;left:0;bottom:.12em;width:.55em;height:1.5px;background:var(--acc)}
+.head .mono{color:var(--muted)}
+.hero{position:relative;max-width:1180px;margin:0 auto;padding-top:clamp(40px,8vw,110px);display:grid;gap:clamp(40px,6vw,64px)}
+@media(min-width:1024px){.hero{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:end;gap:80px}}
+.hero h1{font:500 clamp(2.9rem,8.4vw,6.2rem)/.96 var(--display);letter-spacing:-.03em;max-width:11ch}
+.hero__lead{margin-top:clamp(20px,3vw,28px);max-width:46ch;color:var(--muted);font-size:clamp(1rem,1.3vw,1.1rem)}
+.hero__lead b{color:var(--text);font-weight:500}
+.hero__kicker{color:var(--acc);font-size:.95rem;margin-bottom:18px}
+.toc__title{font:500 1.35rem/1.2 var(--display);color:var(--text)}
+.toc__hint{margin-top:6px;color:var(--muted);font-size:.9rem;padding-bottom:14px;border-bottom:1px solid var(--acc)}
+.toc{list-style:none;padding:0}
+.toc a{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:50px;padding:12px 4px 12px 0;border-bottom:1px solid var(--line);text-decoration:underline;text-decoration-color:rgb(199 164 90 / .35);text-underline-offset:5px;color:var(--text);font-size:1rem;transition:color .3s var(--ease),padding .4s var(--ease),text-decoration-color .3s var(--ease)}
+.toc a svg{flex:none;width:18px;height:18px;color:var(--acc);transition:transform .4s var(--ease)}
+@media(hover:hover){.toc a:hover{padding-left:6px;text-decoration-color:var(--acc)}.toc a:hover svg{transform:translateY(3px)}}
+
+/* ---------- бумага ---------- */
+.paper{background:var(--paper);color:var(--ink);color-scheme:light;padding:clamp(64px,9vw,130px) var(--gutter) clamp(72px,9vw,130px)}
+.sec{max-width:1180px;margin:0 auto;display:grid;gap:22px 56px;padding-top:28px;border-top:1px solid var(--acc-line)}
+.sec+.sec{margin-top:clamp(72px,9vw,120px)}
+@media(min-width:1024px){.sec{grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr)}.sec__side{position:sticky;top:28px;align-self:start}}
+.sec h2{font:500 clamp(2.1rem,4.6vw,3.6rem)/1 var(--display);letter-spacing:-.025em}
+.sec__intro{margin-top:14px;color:var(--ink-2);max-width:40ch}
+.body{display:grid;gap:26px;min-width:0}
+.body p,.body li{color:var(--ink-2);max-width:62ch}
+.body b{color:var(--ink);font-weight:600}
+.body a{text-decoration-color:var(--acc-ink);text-underline-offset:3px}
+
+.rows{list-style:none;padding:0}
+.rows li{padding:18px 0;border-top:1px solid var(--ink-line);max-width:none}
+.rows li:last-child{border-bottom:1px solid var(--ink-line)}
+.rows h3{font:500 clamp(1.25rem,1.9vw,1.5rem)/1.2 var(--display);color:var(--ink)}
+.rows p{margin-top:4px}
+
+.grid2{display:grid;gap:12px}
+@media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+.card{padding:20px;border:1px solid var(--ink-line);border-radius:4px;background:rgb(255 255 255 / .45)}
+.card h3{font:500 1.35rem/1.2 var(--display);color:var(--ink)}
+.card p{margin-top:6px;font-size:.95rem}
+
+.plate{padding:clamp(26px,3.4vw,38px);background:var(--ink);color:var(--paper);border-radius:4px;display:grid;gap:14px;outline:1px solid rgb(199 164 90 / .5);outline-offset:-8px}
+.plate h3{font:500 clamp(1.3rem,2vw,1.6rem)/1.2 var(--display);color:#fff}
+.plate p,.plate li{color:#b9c3cc;max-width:62ch}
+.plate b{color:#fff}
+.plate ol{padding-left:1.2em;display:grid;gap:6px}.plate li::marker{color:#e4ecf2}
+
+.dl{display:grid}
+.dl div{display:grid;gap:4px;padding:14px 0;border-top:1px solid var(--ink-line)}
+.dl div:last-child{border-bottom:1px solid var(--ink-line)}
+@media(min-width:640px){.dl div{grid-template-columns:minmax(150px,.45fr) 1fr;gap:20px}}
+.dl dt{font:500 1.15rem/1.3 var(--display);color:var(--ink)}
+.dl dd{color:var(--ink-2)}
+.note{font-size:.88rem;color:#55606b}
+
+/* ---------- финал ---------- */
+.end{background:radial-gradient(100% 120% at 50% 100%,var(--glow) 0,var(--bg) 70%);padding:clamp(64px,9vw,120px) var(--gutter);text-align:center}
+.end h2{font:500 clamp(2.4rem,6vw,4.6rem)/1 var(--display);letter-spacing:-.03em}
+.end p{margin:16px auto 0;max-width:46ch;color:var(--muted)}
+.cta{margin-top:30px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 24px;border:1px solid rgb(255 255 255 / .18);border-radius:.4rem;color:var(--text);font:500 .72rem/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:background-color .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease)}
+.btn.main{background:var(--text);border-color:var(--text);color:var(--bg)}
+@media(hover:hover){.btn:hover{border-color:rgb(255 255 255 / .4);background:rgb(255 255 255 / .08)}.btn.main:hover{background:#fff;color:var(--bg)}}
+.foot{background:var(--bg);color:var(--dim);text-align:center;padding:0 var(--gutter) 32px}
+@media(max-width:559px){.cta .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.top,.end{background:#fff;color:#0c1116}.gear,.contents,.cta{display:none}.sec{break-inside:avoid-page}.sec__side{position:static}}
+</style>
+</head>
+<body>
+<header class="top">
+  <svg class="gear" viewBox="0 0 200 200" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="100" cy="100" r="82" stroke-width="16" stroke-dasharray="17.17 17.17"/><circle cx="100" cy="100" r="72" stroke-width="3"/><circle cx="100" cy="100" r="22" stroke-width="3"/><path d="M100 28v50M100 122v50M28 100h50M122 100h50M49 49l35 35M116 116l35 35M151 49l-35 35M84 116l-35 35" stroke-width="3"/></svg>
+  <div class="head"><a class="logo" href="/" aria-label="Georgy_Tech, на главную">Georgy<span>Tech</span></a><span class="mono">Памятка клиенту</span></div>
+  <div class="hero">
+    <div>
+      <p class="hero__kicker">Памятка для тех, кто заказывает сайт у Georgy_Tech</p>
+      <h1>Как мы сделаем ваш сайт</h1>
+      <p class="hero__lead">Здесь ответы на вопросы, которые обычно появляются после первого сообщения: как идёт работа, что понадобится от вас и что я делаю сам. <b>Половина оплаты вперёд, половина при сдаче, цена фиксируется в смете, месяц правок после сдачи — бесплатно.</b> Сайт и домен оформлены на вас.</p>
+    </div>
+    <nav class="contents" aria-labelledby="toc-title">
+      <p class="toc__title" id="toc-title">Содержание</p>
+      <p class="toc__hint">Нажмите на раздел — страница перейдёт к нему.</p>
+      <ul class="toc">
+        <li><a href="#poryadok">Порядок работы<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#dogovor">Договор и оплата<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#materialy">Что подготовить и как прислать<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#cena">От чего зависит цена<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#svyaz">Как общаемся<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#domen">Домен и хостинг<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#servisy">Ваши сервисы<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#dannye">Документы о данных<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#pravki">Правки и сдача<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+        <li><a href="#slova">Словарик<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="paper">
+  <section class="sec" id="poryadok" aria-labelledby="h-poryadok">
+    <div class="sec__side"><h2 id="h-poryadok">Порядок работы</h2><p class="sec__intro">Семь шагов. На каждом понятно, что делаю я и что нужно от вас.</p></div>
+    <div class="body">
+      <ol class="rows">
+        <li><div><h3>Опросник</h3><p>Вы отвечаете на вопросы о деле и о сайте. Можно с телефона, «не знаю» — тоже ответ. Ответы заменяют техническое задание.</p></div></li>
+        <li><div><h3>Уточнения</h3><p>Если чего-то не хватает, присылаю вопросы одним сообщением. Если сайт нужно связать с вашим сервисом — например, бонусной программой, — сам пишу в его поддержку.</p></div></li>
+        <li><div><h3>Предложение</h3><p>Присылаю файлом: что будет на сайте, этапы, стоимость и срок. Если бюджет меньше нужного объёма — два варианта: что войдёт сейчас и что добавить позже.</p></div></li>
+        <li><div><h3>Договор и аванс</h3><p>Подписываем договор, вы вносите половину суммы и присылаете материалы. <a href="#dogovor">Как подписать</a>.</p></div></li>
+        <li><div><h3>Первый экран</h3><p>Показываю верх главной страницы раньше всего остального. По нему видно цвет, шрифты и настроение. Направление правим здесь, пока это просто.</p></div></li>
+        <li><div><h3>Готовый сайт по ссылке</h3><p>Сайт открывается по временному адресу. Вы смотрите его с телефона и компьютера и присылаете замечания.</p></div></li>
+        <li><div><h3>Запуск</h3><p>Принимаете работу, вносите вторую половину, я публикую сайт на вашем домене и передаю инструкцию.</p></div></li>
+      </ol>
+      <p class="note">Для простых сайтов предложение готово через 1–2 дня после опросника. Для магазинов и сайтов, связанных с другими сервисами, — после ответа поддержки сервиса.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="dogovor" aria-labelledby="h-dogovor">
+    <div class="sec__side"><h2 id="h-dogovor">Договор и оплата</h2><p class="sec__intro">Договор защищает обе стороны: в нём записано, что я делаю, за сколько и к какому сроку.</p></div>
+    <div class="body">
+      <div class="plate">
+        <h3>Как подписать договор</h3>
+        <ol>
+          <li>Присылаю договор файлом PDF. В нём уже стоят состав сайта, цена и сроки из предложения.</li>
+          <li>Проверьте ваши данные: ФИО или название компании, ИНН, адрес.</li>
+          <li>Распечатайте последнюю страницу, подпишите и пришлите фото или скан в наш чат. Ехать никуда не нужно.</li>
+          <li>Вносите аванс по реквизитам из договора — и я начинаю.</li>
+        </ol>
+      </div>
+      <ul class="rows plain">
+        <li><div><h3>50 % аванс, 50 % при сдаче</h3><p>Аванс — после подписания договора. Вторая половина — когда вы приняли готовый сайт, до публикации на домене.</p></div></li>
+        <li><div><h3>Цена не меняется</h3><p>После договора цена фиксирована. Отдельно оплачивается только новое, чего не было в смете, — и только если вы согласились с ценой заранее.</p></div></li>
+        <li><div><h3>Через Kwork</h3><p>Если вы пришли через Kwork, условия и оплата фиксируются в заказе на площадке. Деньги уходят мне, только когда вы приняли работу.</p></div></li>
+        <li><div><h3>Домен, хостинг, сервисы</h3><p>Оплачиваете напрямую, они оформлены на вас. В мою цену не входят.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="materialy" aria-labelledby="h-materialy">
+    <div class="sec__side"><h2 id="h-materialy">Что подготовить и как прислать</h2><p class="sec__intro">Присылайте всё, что есть. Чего нет — не страшно: напишите, решим.</p></div>
+    <div class="body">
+      <dl class="dl">
+        <div><dt>Логотип</dt><dd>Лучше всего — файл от дизайнера: SVG, PDF, AI или CDR. Такой логотип не теряет чёткость при любом размере. Если есть только картинка — присылайте её, разберёмся.</dd></div>
+        <div><dt>Фото и видео</dt><dd>Всё, даже слабые: сам отберу и скажу, что лучше переснять. Только те, что вы вправе использовать, — не скачанные из интернета.</dd></div>
+        <div><dt>Тексты</dt><dd>Черновики, описания, ответы на частые вопросы клиентов. Готовых текстов не нужно: напишу по разговору.</dd></div>
+        <div><dt>Товары или услуги</dt><dd>Названия и цены — списком в сообщении, таблицей или фото прайса.</dd></div>
+        <div><dt>Контакты</dt><dd>Телефон, мессенджеры, адрес, часы работы, ссылки на 2ГИС, Яндекс Карты, соцсети.</dd></div>
+        <div><dt>Отзывы</dt><dd>Ссылка на площадку, где они уже есть.</dd></div>
+        <div><dt>Что нравится</dt><dd>2–3 сайта и что именно в них нравится. Можно из любой отрасли.</dd></div>
+      </dl>
+      <div class="plate">
+        <h3>Как прислать</h3>
+        <ol>
+          <li><b>Прямо в наш чат.</b> Тексты — сообщением, остальное — вложениями.</li>
+          <li><b>Фото — файлом, а не как фото.</b> Иначе мессенджер сожмёт их и качество упадёт. В Telegram: скрепка → «Файл» → выбрать снимки.</li>
+          <li><b>Если файлов много</b> — загрузите в папку на Яндекс Диске или в другое облако и пришлите ссылку.</li>
+          <li><b>Не присылайте пароли</b> от банка, Госуслуг и кабинетов. Где нужен доступ, покажу, как выдать отдельный, без доступа к деньгам.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="cena" aria-labelledby="h-cena">
+    <div class="sec__side"><h2 id="h-cena">От чего зависит цена</h2><p class="sec__intro">Базовые цены — <a href="/#prices">на главной</a>. Точную называю в предложении.</p></div>
+    <div class="body">
+      <ul class="rows plain">
+        <li><div><h3>Объём</h3><p>Сколько страниц и блоков, сколько товаров в каталоге.</p></div></li>
+        <li><div><h3>Функции</h3><p>Оплата на сайте, личный кабинет покупателя, связь с вашими сервисами, панель, чтобы менять цены и фото самому.</p></div></li>
+        <li><div><h3>Готовность материалов</h3><p>Есть ли тексты и фото или их нужно писать и подбирать.</p></div></li>
+      </ul>
+      <p>Интернет-магазин с оплатой, личный кабинет и связь с другими системами считаю отдельно, после того как разберу задачу. <b>Если бюджет меньше</b> — предложу вариант, который в него укладывается, и покажу, что можно добавить позже без переделки.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="svyaz" aria-labelledby="h-svyaz">
+    <div class="sec__side"><h2 id="h-svyaz">Как общаемся</h2></div>
+    <div class="body">
+      <ul class="rows plain">
+        <li><div><h3>Москва +8</h3><p>Я на Сахалине. Пишите в любое время — отвечу в рабочее. Написали вечером по Москве — утром у меня уже есть ответ.</p></div></li>
+        <li><div><h3>Можно голосовыми</h3><p>Если так удобнее. Разберу сам.</p></div></li>
+        <li><div><h3>Замечания — одним сообщением</h3><p>Списком, по порядку. Так ничего не теряется и замечания не противоречат друг другу.</p></div></li>
+        <li><div><h3>Всё записано</h3><p>Цена, состав и сроки — в предложении и договоре. Если по ходу о чём-то договорились, пишу в чат отдельное сообщение «Договорились: …» — его легко найти.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="domen" aria-labelledby="h-domen">
+    <div class="sec__side"><h2 id="h-domen">Домен и хостинг</h2><p class="sec__intro">Две разные покупки, их часто путают.</p></div>
+    <div class="body">
+      <div class="grid2">
+        <div class="card"><h3>Домен — адрес сайта</h3><p>Например, vash-sait.ru. Как номер дома: сам ничего не хранит.</p></div>
+        <div class="card"><h3>Хостинг — где лежит сайт</h3><p>Сервер, откуда сайт видят посетители. Как сам дом.</p></div>
+      </div>
+      <ul class="rows plain">
+        <li><div><h3>Оформляются на вас</h3><p>Лучше в одном кабинете: одна оплата, одно напоминание о продлении. Платятся раз в год.</p></div></li>
+        <li><div><h3>Покупать сразу не нужно</h3><p>Когда сайт будет почти готов, пришлю пошаговую инструкцию: что выбрать и что убрать из корзины, — туда часто сами добавляются ненужные платные услуги.</p></div></li>
+        <li><div><h3>Заранее проверьте Госуслуги</h3><p>С 1 сентября 2026 года домен .ru или .рф регистрируется и продлевается только с подтверждением личности через Госуслуги. Нужна <b>подтверждённая</b> учётная запись, упрощённая не подойдёт. Статус виден в профиле.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="servisy" aria-labelledby="h-servisy">
+    <div class="sec__side"><h2 id="h-servisy">Ваши сервисы</h2><p class="sec__intro">CRM, бонусная программа, онлайн-запись, касса.</p></div>
+    <div class="body">
+      <p>Если вы уже работаете с таким сервисом, сайт подключается к нему, а не заменяет его. Например, покупатель списывает бонусы прямо при заказе на сайте.</p>
+      <ul class="rows">
+        <li><div><h3>Пришлите название и контакт</h3><p>Сервиса и его поддержки или вашего менеджера.</p></div></li>
+        <li><div><h3>Дальше я сам</h3><p>Связываюсь с ними и узнаю, как подключить сайт. От ответа часто зависит, на чём делать сайт, поэтому это происходит до предложения.</p></div></li>
+        <li><div><h3>Тариф — напрямую сервису</h3><p>Если подключение платное, платите вы сервису, а не мне.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="dannye" aria-labelledby="h-dannye">
+    <div class="sec__side"><h2 id="h-dannye">Документы о данных</h2><p class="sec__intro">Нужны, если сайт что-то узнаёт о посетителях.</p></div>
+    <div class="body">
+      <p>Имя и телефон в заказе, регистрация покупателя, статистика посещений Яндекс Метрики — это <b>персональные данные</b>. По закону для них нужны:</p>
+      <ul class="rows">
+        <li><div><h3>Политика обработки данных</h3><p>Страница на сайте: какие данные собираете и зачем.</p></div></li>
+        <li><div><h3>Согласие посетителя</h3><p>Галочка в форме и окно согласия на сайте.</p></div></li>
+        <li><div><h3>Уведомление в Роскомнадзор</h3><p>Заявление, что вы обрабатываете данные. Подаётся на сайте ведомства.</p></div></li>
+      </ul>
+      <p>Шаблоны документов и окно согласия делаю я. Данные вашей компании и подача уведомления — с вашей стороны, покажу, как это сделать.</p>
+      <p>Если на сайте будет оплата, понадобятся ещё сведения о продавце и условия покупки и возврата. Это разбираем отдельно, когда понятно, как устроена оплата.</p>
+      <p class="note">Это общий порядок, а не юридическая консультация. Вопросы о вашем бизнесе лучше уточнить у юриста.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="pravki" aria-labelledby="h-pravki">
+    <div class="sec__side"><h2 id="h-pravki">Правки и сдача</h2></div>
+    <div class="body">
+      <ul class="rows plain">
+        <li><div><h3>Правки в рамках сметы — без счёта</h3><p>Правим, пока не станет так, как договорились.</p></div></li>
+        <li><div><h3>Главное — на первом экране</h3><p>Там менять направление проще всего. Если позже захотите совсем другое, это уже новая работа.</p></div></li>
+        <li><div><h3>Что вы получаете</h3><p>Сайт на вашем домене, исходный код и инструкцию, как менять содержимое.</p></div></li>
+        <li><div><h3>Месяц после сдачи — бесплатно</h3><p>Исправляю ошибки и вношу мелкие правки текста и картинок. Дальше — правки от 1 500 ₽.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="slova" aria-labelledby="h-slova">
+    <div class="sec__side"><h2 id="h-slova">Словарик</h2><p class="sec__intro">Слова, которые встретятся в переписке и документах.</p></div>
+    <div class="body">
+      <dl class="dl">
+        <div><dt>Техническое задание</dt><dd>Описание будущего сайта: что на нём, для кого и как работает. У нас его заменяет опросник.</dd></div>
+        <div><dt>Смета</dt><dd>Список работ с ценой каждой. Входит в предложение и договор.</dd></div>
+        <div><dt>Аванс</dt><dd>Первая половина оплаты, до начала работы.</dd></div>
+        <div><dt>Первый экран</dt><dd>Верх главной страницы — то, что человек видит сразу, не листая.</dd></div>
+        <div><dt>Акт</dt><dd>Короткий документ о том, что работа сдана и принята.</dd></div>
+        <div><dt>Исходный код</dt><dd>Файлы, из которых состоит сайт. С ними любой разработчик сможет продолжить работу.</dd></div>
+        <div><dt>Панель управления</dt><dd>Страница, где вы сами меняете цены, фото и тексты через браузер, без программиста.</dd></div>
+        <div><dt>CRM</dt><dd>Программа для учёта клиентов и заказов.</dd></div>
+        <div><dt>Интеграция</dt><dd>Связь сайта с другим сервисом, чтобы данные передавались сами.</dd></div>
+        <div><dt>Эквайринг</dt><dd>Приём оплаты картой. Подключается в банке.</dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<section class="end" aria-labelledby="h-end">
+  <h2 id="h-end">Остались вопросы?</h2>
+  <p>Напишите — отвечу и, если нужно, добавлю ответ сюда.</p>
+  <div class="cta">
+    <a class="btn main" href="/brief/">Заполнить опросник</a>
+    <a class="btn" href="https://t.me/GeorgyTech" target="_blank" rel="noopener noreferrer">Написать в Telegram</a>
+  </div>
+</section>
+<footer class="foot mono">© 2026 Georgy_Tech · Сайты под ключ · Сахалин</footer>
+</body>
+</html>
