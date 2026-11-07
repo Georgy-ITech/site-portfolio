@@ -54,6 +54,21 @@ html:not(.js) .final__title .ch { transform: none; }
   }
 }
 
+.final__guide {
+  margin-top: 22px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: rgb(199 164 90 / 0.5);
+    text-underline-offset: 4px;
+    transition: color 0.3s var(--f-cubic), text-decoration-color 0.3s var(--f-cubic);
+    &:hover { color: var(--acc); text-decoration-color: var(--acc); }
+  }
+}
+.final__guide + .final__mail { margin-top: 10px; }
+
 .final__mail {
   display: inline-flex;
   align-items: center;

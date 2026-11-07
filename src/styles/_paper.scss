@@ -323,3 +323,14 @@
   p { padding: 0 0 26px; max-width: 64ch; color: var(--ink-2); }
   .is-open & { grid-template-rows: 1fr; }
 }
+
+// Ссылка на страницу «Как мы работаем» под ценами (отдельно от data-lines: разбивка на строки стирает ссылки).
+.prices__more { margin-top: 10px; }
+.prices__more a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--acc-line);
+  text-underline-offset: 4px;
+  transition: color 0.3s var(--f-cubic), text-decoration-color 0.3s var(--f-cubic);
+  &:hover { color: var(--acc-ink); text-decoration-color: var(--acc-ink); }
+}
