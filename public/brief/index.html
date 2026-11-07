@@ -6,6 +6,7 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0c1116">
 <meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
 <title>Опросник — Georgy_Tech</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
@@ -29,6 +30,7 @@ header{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:22px 20
 main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:44px 20px 72px}
 .kicker{color:var(--acc);margin:0 0 14px}
 h1{font:500 clamp(2.5rem,8.5vw,4.4rem)/1.02 var(--display);letter-spacing:-.02em;margin:0 0 18px;outline:none}
+h2{font:500 1.9rem/1.1 var(--display);margin:40px 0 4px}
 .lead{color:var(--muted);max-width:60ch;margin:0 0 10px}
 .note{color:var(--dim);font-size:.88rem;max-width:60ch;margin:0}
 .step{animation:rise .7s var(--ease)}
@@ -49,16 +51,20 @@ textarea:hover,input:hover{border-color:rgb(228 236 242 / .3)}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}h1:focus-visible{outline:none}
 .more{margin-top:8px}
 .err{display:none;color:var(--err);font-size:.88rem;margin-top:9px}.q.bad .err{display:block}.q.bad .t b{color:var(--err)}
-.nav{display:flex;gap:10px;margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
 .btn{display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;border:1px solid rgb(255 255 255 / .16);border-radius:2px;background:rgb(255 255 255 / .03);color:var(--text);font:500 .72rem/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;text-align:center;cursor:pointer;transition:background-color .35s,color .35s,border-color .35s}
 @media(hover:hover){.btn:hover{border-color:rgb(255 255 255 / .34);background:rgb(255 255 255 / .08)}.btn.main:hover{background:#fff;color:var(--bg)}}
 .btn.main{background:var(--text);border-color:var(--text);color:var(--bg);flex:1}
+.btn.quiet{border-color:transparent;background:none;color:var(--muted)}
 .stack .btn{width:100%;margin-top:10px}.stack{margin-top:26px;max-width:460px}
 #copied{color:var(--acc);min-height:1.4em;margin:14px 0 0;font-size:.9rem}
-pre{white-space:pre-wrap;word-break:break-word;margin:18px 0 22px;padding:16px;background:rgb(255 255 255 / .03);border:1px solid var(--line);border-radius:2px;font:400 .88rem/1.5 var(--sans);color:var(--muted);max-height:340px;overflow:auto}
+.r{display:grid;grid-template-columns:2.2em 1fr;gap:4px 12px;padding:16px 0;border-top:1px solid var(--line);break-inside:avoid}
+.r .n{font:400 .62rem/2 var(--mono);color:var(--dim)}.r .qt{color:var(--muted);font-size:.92rem}.r .a{grid-column:2;font-size:1.02rem;white-space:pre-wrap;word-break:break-word}.r .a.no{color:var(--dim)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;grid-column:2}.tag{border:1px solid var(--acc);padding:3px 10px;font-size:.92rem}
 [hidden]{display:none!important}
 @media(prefers-reduced-motion:reduce){.step{animation:none}.gear,.line i{transition:none}}
 @media(max-width:560px){.opts{grid-template-columns:1fr}main{padding-top:32px}.gear{width:380px;height:380px;right:-170px;bottom:-170px}}
+@media print{:root{--text:#0c1116;--muted:#3b4652;--dim:#5b6672;--line:rgb(12 17 22 / .18);--acc:#7a5a08;color-scheme:light}html,body{background:#fff}.gear,.line,.nav,.stack,#copied,.noprint{display:none!important}main{padding-top:20px}.step{animation:none}h2{break-after:avoid}}
 </style>
 </head>
 <body>
@@ -67,7 +73,7 @@ pre{white-space:pre-wrap;word-break:break-word;margin:18px 0 22px;padding:16px;b
 <header><a class="logo" href="/" aria-label="Georgy_Tech, на главную">Georgy<span>Tech</span></a><span class="mono count" id="cnt"></span></header>
 <main id="main"></main>
 <script>
-const DATA=[{"section": "О вас и деле", "questions": [{"text": "Как называется компания или проект? Если сайт уже есть — ссылка на него.", "options": null, "required": true}, {"text": "Чем занимаетесь? Опишите одной-двумя фразами, как незнакомому человеку.", "options": null, "required": true}, {"text": "В каком городе или регионе ваши клиенты?", "options": null, "required": true}, {"text": "Как вы работаете: ИП, ООО, самозанятость, пока никак не оформлены?", "options": null, "required": false}, {"text": "Ваша деятельность требует лицензии или особых правил рекламы (медицина, образование, финансы, алкоголь и другие)?", "options": null, "required": false}]}, {"section": "Зачем сайт", "questions": [{"text": "Что должен сделать посетитель сайта?", "options": ["позвонить или написать", "оставить заявку", "записаться на время", "купить и оплатить на сайте", "узнать о компании", "другое: ____"], "required": true}, {"text": "Что сейчас мешает и почему сайт нужен именно теперь?", "options": null, "required": false}, {"text": "Как поймёте через полгода, что сайт себя оправдал?", "options": null, "required": false}]}, {"section": "Ваши клиенты", "questions": [{"text": "Кто ваш обычный клиент и какая у него проблема, когда он вас ищет?", "options": null, "required": true}, {"text": "Почему выбирают вас, а не соседей? Что говорят сами клиенты?", "options": null, "required": false}, {"text": "Назовите 2–3 конкурентов (ссылки).", "options": null, "required": false}, {"text": "Откуда придут посетители?", "options": ["поиск Яндекса", "реклама", "соцсети", "рекомендации, своя база", "пока не знаю"], "required": false}]}, {"section": "Что будет на сайте", "questions": [{"text": "Какой объём представляете?", "options": ["одна страница", "несколько страниц (сколько: __)", "каталог услуг или товаров (сколько позиций: __)", "не знаю, предложите"], "required": true}, {"text": "Какие разделы необходимы?", "options": ["услуги / товары", "цены", "о компании", "работы, примеры", "отзывы", "вопросы и ответы", "статьи", "контакты, карта", "другое: ____"], "required": false}, {"text": "Какие функции нужны?", "options": ["форма заявки (куда приходит: ____)", "кнопки мессенджеров", "онлайн-запись с календарём", "корзина и оплата", "личный кабинет", "связь с CRM или другой системой (какой: ____)", "калькулятор стоимости", "нужны только контакты"], "required": true}, {"text": "Нужна ли статистика посещений (Яндекс Метрика)?", "options": ["да", "нет", "посоветуйте"], "required": false}, {"text": "Нужны ли другие языки? Какие?", "options": null, "required": false}, {"text": "Кто будет менять содержимое после запуска?", "options": ["буду сам, нужна простая панель", "буду присылать правки вам", "менять почти ничего не будем"], "required": false}]}, {"section": "Как должен выглядеть", "questions": [{"text": "Пришлите 2–3 сайта, которые нравятся, и скажите, что именно в них нравится. Можно из любой отрасли.", "options": null, "required": true}, {"text": "Что категорически не нравится?", "options": null, "required": false}, {"text": "Какое впечатление должен оставлять сайт?", "options": ["строгий, надёжный", "тёплый, домашний", "дорогой, статусный", "яркий, смелый", "простой, без лишнего", "другое: ____"], "required": false}, {"text": "Нужны ли заметная анимация или 3D?", "options": ["нет, спокойно", "немного оживить", "да, это часть впечатления"], "required": false}]}, {"section": "Что уже есть", "questions": [{"text": "Логотип и фирменный стиль?", "options": ["есть", "частично", "нет"], "required": false}, {"text": "Тексты?", "options": ["готовы", "есть черновики", "нужно написать"], "required": false}, {"text": "Фото и видео?", "options": ["свои, хорошего качества", "есть, но слабые", "нет"], "required": false}, {"text": "Домен и хостинг? Если есть — укажите адрес и где оформлены.", "options": null, "required": false}]}, {"section": "Сроки и бюджет", "questions": [{"text": "К какой дате нужен сайт и что привязано к этой дате?", "options": null, "required": true}, {"text": "На какой бюджет рассчитываете? Можно вилкой. Так сразу предложу то, что в него войдёт.", "options": null, "required": true}, {"text": "Что необходимо к первому запуску, а что можно добавить позже?", "options": null, "required": false}, {"text": "Кто с вашей стороны принимает решения и отвечает на вопросы? Как удобнее связываться?", "options": null, "required": false}]}], CONTACT={"telegram": "GeorgyTech", "email": "georgy.tech@yandex.ru"}, KEY='site-brief-v1';
+const DATA=[{"section": "О вас и деле", "questions": [{"text": "Как называется компания или проект? Если сайт уже есть — ссылка на него", "options": null, "required": true}, {"text": "Как к вам обращаться?", "options": null, "required": true}, {"text": "Чем занимаетесь? Опишите одной-двумя фразами, как незнакомому человеку", "options": null, "required": true}, {"text": "В каком городе или регионе ваши клиенты?", "options": null, "required": true}, {"text": "С кем будем заключать договор?", "options": ["с компанией (ООО)", "с ИП", "с вами лично", "пока не знаю"], "required": false}, {"text": "Ваша деятельность требует лицензии или особых правил рекламы (медицина, образование, финансы, алкоголь и другие)?", "options": ["нет", "да (какие: ____)", "не уверен"], "required": false}]}, {"section": "Зачем сайт", "questions": [{"text": "Что должен сделать посетитель сайта?", "options": ["позвонить или написать", "оставить заявку", "записаться на время", "купить и оплатить на сайте", "узнать о компании", "другое: ____"], "required": true}, {"text": "Что сейчас мешает и почему сайт нужен именно теперь?", "options": null, "required": false}, {"text": "Как поймёте через полгода, что сайт себя оправдал?", "options": null, "required": false}]}, {"section": "Ваши клиенты", "questions": [{"text": "Кто ваш обычный клиент и какая у него проблема, когда он вас ищет?", "options": null, "required": true}, {"text": "Почему выбирают вас, а не соседей? Что говорят сами клиенты?", "options": null, "required": false}, {"text": "Назовите 2–3 конкурентов (ссылки)", "options": null, "required": false}, {"text": "Откуда придут посетители?", "options": ["поиск Яндекса", "реклама", "соцсети", "рекомендации, своя база", "пока не знаю"], "required": false}]}, {"section": "Что будет на сайте", "questions": [{"text": "Какой объём представляете?", "options": ["одна страница", "несколько страниц (сколько: __)", "каталог услуг или товаров (сколько позиций: __)", "не знаю, предложите"], "required": true}, {"text": "Какие разделы необходимы?", "options": ["услуги / товары", "цены", "о компании", "работы, примеры", "отзывы", "вопросы и ответы", "статьи", "контакты, карта", "другое: ____"], "required": false}, {"text": "Какие функции нужны?", "options": ["форма заявки (куда приходит: ____)", "кнопки мессенджеров", "онлайн-запись с календарём", "корзина и оплата", "личный кабинет", "связь с CRM или другой системой (какой: ____)", "калькулятор стоимости", "нужны только контакты"], "required": true}, {"text": "Нужна ли статистика посещений (Яндекс Метрика)?", "options": ["да", "нет", "посоветуйте"], "required": false}, {"text": "Нужны ли другие языки? Какие?", "options": null, "required": false}, {"text": "Как будете менять тексты, цены и фото после запуска?", "options": ["сам, через простую панель", "сам, если покажете как", "буду присылать правки вам", "менять почти ничего не будем", "не знаю, посоветуйте"], "required": false}]}, {"section": "Как должен выглядеть", "questions": [{"text": "Пришлите 2–3 сайта, которые нравятся, и скажите, что именно в них нравится. Можно из любой отрасли. Если что-то точно не нравится — тоже напишите", "options": null, "required": true}, {"text": "Какое впечатление должен оставлять сайт?", "options": ["строгий, надёжный", "тёплый, домашний", "дорогой, статусный", "яркий, смелый", "простой, без лишнего", "другое: ____"], "required": false}, {"text": "Нужны ли заметная анимация или 3D?", "options": ["нет, спокойно", "немного оживить", "да, это часть впечатления"], "required": false}]}, {"section": "Что уже есть", "questions": [{"text": "Логотип и фирменный стиль?", "options": ["есть", "частично", "нет"], "required": false}, {"text": "Тексты?", "options": ["готовы", "есть черновики", "нужно написать"], "required": false}, {"text": "Фото и видео?", "options": ["свои, хорошего качества", "есть, но слабые", "нет"], "required": false}, {"text": "Домен и хостинг? Если есть — укажите адрес и где оформлены", "options": null, "required": false}]}, {"section": "Сроки и бюджет", "questions": [{"text": "К какой дате нужен сайт и что привязано к этой дате?", "options": null, "required": true}, {"text": "На какой бюджет рассчитываете? Можно вилкой. Так сразу предложу то, что в него войдёт", "options": null, "required": true}, {"text": "Что необходимо к первому запуску, а что можно добавить позже?", "options": null, "required": false}, {"text": "Кто с вашей стороны принимает решения? Как удобнее связываться?", "options": null, "required": false}, {"text": "Как вы обо мне узнали?", "options": ["Kwork", "Telegram", "поиск", "по рекомендации", "другое: ____"], "required": false}]}], CONTACT={"telegram": "GeorgyTech", "email": "georgy.tech@yandex.ru"}, KEY='site-brief-v2', BASE=location.origin+location.pathname;
 const $=s=>document.querySelector(s), el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 let st={};try{st=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
@@ -77,7 +83,7 @@ const blank=o=>/_{2,}/.test(o);
 const label=o=>o.replace(/\s*\([^)]*_{2,}\)/,'').replace(/:?\s*_{2,}/,'').trim();
 const hint=o=>{const m=o.match(/\(([^)]*?):?\s*_{2,}\)/);return m?m[1]:'Уточните'};
 const ans=i=>st[i]=st[i]||{};
-function answered(i){const a=st[i]||{};return !!((a.text||'').trim()||(a.sel&&a.sel.length))}
+function answered(i,s){const a=(s||st)[i]||{};return !!((a.text||'').trim()||(a.sel&&a.sel.length))}
 let step=Number(st.step)||0;if(step>LAST)step=0;
 function progress(){const n=all.filter(q=>answered(q.i)).length;$('#pr').style.width=(step===LAST?100:n/all.length*100)+'%';
  $('#cnt').textContent=step===0?all.length+' вопросов':step===LAST?'Готово':'Раздел '+step+' из '+DATA.length;
@@ -96,23 +102,54 @@ function question(q){const a=ans(q.i),w=el('div','q');w.id='q'+q.i;
  if(q.required)w.append(el('div','err','Ответьте хотя бы коротко или напишите «не знаю».'));
  return w}
 function btn(text,cls,fn){const b=el('button','btn '+(cls||''),text);b.type='button';b.onclick=fn;return b}
+function h(t){const x=el('h1','',t);x.tabIndex=-1;return x}
+function wipe(){if(!confirm('Удалить все ответы с этого устройства? Если вы их ещё не отправили, они пропадут.'))return;st={};try{localStorage.removeItem(KEY)}catch(e){}step=0;render();scrollTo(0,0)}
+
+/* Ответы упаковываются в адрес ссылки после «#». Эта часть адреса не отправляется на сервер:
+   сайт ничего не получает и не хранит, ответы видит только тот, кому клиент отправит ссылку. */
+function pack(s){const o={d:new Date().toISOString().slice(0,10),a:{}};all.forEach(q=>{const a=s[q.i];if(!answered(q.i,s))return;const r={};
+ if(a.sel&&a.sel.length){r.s=a.sel.map(v=>q.options.indexOf(v)).filter(n=>n>=0);const m={};a.sel.forEach(v=>{const t=(a.more||{})[v];if(t&&t.trim())m[q.options.indexOf(v)]=t.trim()});if(Object.keys(m).length)r.m=m}
+ if((a.text||'').trim())r.t=a.text.trim();o.a[q.i]=r});return o}
+const b64=u=>{let s='';u.forEach(c=>s+=String.fromCharCode(c));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const unb64=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');const b=atob(s);return Uint8Array.from(b,c=>c.charCodeAt(0))};
+async function encode(o){const raw=new TextEncoder().encode(JSON.stringify(o));
+ if(window.CompressionStream){try{const z=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer());return 'z'+b64(z)}catch(e){}}
+ return 'j'+b64(raw)}
+async function decode(s){const bytes=unb64(s.slice(1));let raw=bytes;
+ if(s[0]==='z')raw=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+ return JSON.parse(new TextDecoder().decode(raw))}
+function lines(o){return all.map(q=>{const r=o.a[q.i];if(!r)return [q,null];const p=[];(r.s||[]).forEach(n=>{const m=(r.m||{})[n];p.push(label(q.options[n])+(m?': '+m:''))});return [q,{tags:p,text:r.t||''}]})}
+function asText(o){let r='ОПРОСНИК ДЛЯ САЙТА · '+o.d+'\n';const L=lines(o);DATA.forEach(s=>{r+='\n— '+s.section+' —\n';s.questions.forEach(q=>{const x=L[q.i][1];r+=(q.i+1)+'. '+q.text+'\n'+(x?[...x.tags,x.text].filter(Boolean).join('; '):'—')+'\n'})});return r}
+const nameOf=o=>{const f=r=>r&&r.t||'';return [f(o.a[1]),f(o.a[0])].filter(Boolean).join(', ')||'без имени'};
+function report(o,root){const L=lines(o);DATA.forEach(s=>{root.append(el('h2','',s.section));s.questions.forEach(q=>{const x=L[q.i][1],r=el('div','r');r.append(el('span','n',String(q.i+1).padStart(2,'0')),el('span','qt',q.text));
+ if(!x)r.append(el('div','a no','—'));else{if(x.tags.length){const t=el('div','tags');x.tags.forEach(v=>t.append(el('span','tag',v)));r.append(t)}if(x.text)r.append(el('div','a',x.text))}root.append(r)})})}
+function copy(t){const x=document.createElement('textarea');x.value=t;x.style.position='fixed';x.style.opacity='0';document.body.append(x);x.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}x.remove();if(!ok&&navigator.clipboard){navigator.clipboard.writeText(t).catch(()=>{});ok=true}return ok}
+
 function render(){const m=$('#main');m.textContent='';const s=el('div','step');m.append(s);
- if(step===0){s.append(el('p','mono kicker','Опросник'),h('Расскажите свою идею'),el('p','lead','Ответы заменяют техническое задание. По ним пойму замысел, предложу состав сайта и посчитаю стоимость. Отмечайте варианты и пишите своими словами. Не знаете ответа — напишите «не знаю».'),el('p','note','Ответы хранятся только в браузере на вашем устройстве, пока вы сами их не отправите. После отправки их можно удалить кнопкой в конце. Не указывайте пароли, паспортные данные и данные ваших клиентов. Звёздочкой отмечено самое необходимое.'));
-  const n=el('div','nav');const has=all.some(q=>answered(q.i));n.append(btn(has?'Продолжить':'Начать','main',()=>go(1)));if(has)n.append(btn('Начать заново','',wipe));s.append(n)}
+ if(step===0){s.append(el('p','mono kicker','Опросник'),h('Расскажите свою идею'),el('p','lead','Ответы заменяют техническое задание. По ним пойму замысел, предложу состав сайта и посчитаю стоимость. Отмечайте варианты и пишите своими словами. Не знаете ответа — напишите «не знаю».'),el('p','note','Ответы хранятся только в браузере на вашем устройстве, пока вы сами их не отправите. Не указывайте пароли, паспортные данные и данные ваших клиентов. Звёздочкой отмечено самое необходимое.'));
+  const has=all.some(q=>answered(q.i)),n=el('div','nav');n.append(btn(has?'Продолжить':'Начать','main',()=>go(1)));if(has)n.append(btn('Начать заново','',wipe));s.append(n)}
  else if(step<LAST){const sec=DATA[step-1];s.append(el('p','mono kicker',String(step).padStart(2,'0')+' / '+String(DATA.length).padStart(2,'0')),h(sec.section));sec.questions.forEach(q=>s.append(question(q)));
   const n=el('div','nav');n.append(btn('Назад','',()=>go(step-1)),btn(step===DATA.length?'Готово, показать ответы':'Дальше','main',()=>{let first=null;sec.questions.forEach(q=>{if(q.required&&!answered(q.i)){const w=$('#q'+q.i);w.classList.add('bad');first=first||w}});if(first){first.scrollIntoView({behavior:'smooth',block:'center'});return}go(step+1)}));s.append(n)}
- else{const t=text();s.append(el('p','mono kicker','Последний шаг'),h('Осталось отправить'),el('p','lead','Нажмите первую кнопку: ответы скопируются и откроется чат. Вставьте их туда и отправьте.'));
-  const k=el('div','stack'),tg=el('a','btn main','Скопировать и открыть Telegram');tg.href='https://t.me/'+CONTACT.telegram;tg.target='_blank';tg.rel='noopener';
-  const c=el('p','','');c.id='copied';c.setAttribute('role','status');tg.onclick=()=>{c.textContent=copy(t)?'Ответы скопированы. Вставьте их в чат.':'Скопировать не удалось: выделите текст ниже вручную.'};
-  const ma=el('a','btn','Отправить на почту');ma.href='mailto:'+CONTACT.email+'?subject='+encodeURIComponent('Опросник для сайта')+'&body='+encodeURIComponent(t.slice(0,1800)+(t.length>1800?'\n\n(текст длиннее, вставьте остальное из буфера)':''));ma.addEventListener('click',()=>copy(t));
-  k.append(tg,ma,btn('Скачать файлом','',()=>{const u=URL.createObjectURL(new Blob([t],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='oprosnik-sait.txt';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}),btn('Вернуться к вопросам','',()=>go(DATA.length)),btn('Удалить ответы с устройства','',wipe));
-  s.append(k,c,el('pre','',t),el('p','note','Опросник бесплатный и ни к чему не обязывает. Платить нужно только после подписания договора: 50 % аванс, 50 % при сдаче.'))}
+ else{const o=pack(st);s.append(el('p','mono kicker','Последний шаг'),h('Осталось отправить'),el('p','lead','Ответы собраны в одну ссылку. Нажмите первую кнопку: ссылка скопируется и откроется чат. Вставьте её туда и отправьте.'));
+  const k=el('div','stack'),tg=el('a','btn main','Скопировать ссылку и открыть Telegram');tg.href='https://t.me/'+CONTACT.telegram;tg.target='_blank';tg.rel='noopener';
+  const c=el('p','','');c.id='copied';c.setAttribute('role','status');let link='';
+  const msg=()=>'Ответы на опросник для сайта: '+link;
+  tg.onclick=e=>{if(!link){e.preventDefault();return}c.textContent=copy(msg())?'Ссылка скопирована. Вставьте её в чат.':'Скопировать не удалось: нажмите «Скопировать текстом».'};
+  const ma=el('a','btn','Отправить на почту');ma.addEventListener('click',()=>{if(link)copy(msg())});
+  k.append(tg,ma,btn('Сохранить в PDF','',()=>print()),btn('Скопировать текстом','',()=>{c.textContent=copy(asText(o))?'Текст скопирован.':'Скопировать не удалось.'}),btn('Вернуться к вопросам','',()=>go(DATA.length)),btn('Удалить ответы с устройства','quiet',wipe));
+  s.append(k,c,el('p','note noprint','Ссылка открывает ваши ответы в таком же виде, как ниже. Ответы зашиты в саму ссылку: сайт их не получает и не хранит, поэтому пересылайте её только мне. Опросник бесплатный и ни к чему не обязывает. Платить нужно только после подписания договора: 50 % аванс, 50 % при сдаче.'));
+  report(o,s);
+  encode(o).then(z=>{link=BASE+'#r='+z;ma.href='mailto:'+CONTACT.email+'?subject='+encodeURIComponent('Опросник для сайта')+'&body='+encodeURIComponent(msg())})}
  progress()}
-function wipe(){if(!confirm('Удалить все ответы с этого устройства? Если вы их ещё не отправили, они пропадут.'))return;st={};try{localStorage.removeItem(KEY)}catch(e){}step=0;render();scrollTo(0,0)}
-function h(t){const x=el('h1','',t);x.tabIndex=-1;return x}
-function text(){let r='ОПРОСНИК ДЛЯ САЙТА\n';DATA.forEach(s=>{r+='\n— '+s.section+' —\n';s.questions.forEach(q=>{const a=st[q.i]||{},p=[];(a.sel||[]).forEach(o=>{const m=(a.more||{})[o];p.push(label(o)+(m&&m.trim()?': '+m.trim():''))});if((a.text||'').trim())p.push(a.text.trim());r+=(q.i+1)+'. '+q.text+'\n'+(p.length?p.join('; '):'—')+'\n'})});return r}
-function copy(t){const x=document.createElement('textarea');x.value=t;x.style.position='fixed';x.style.opacity='0';document.body.append(x);x.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}x.remove();if(!ok&&navigator.clipboard){navigator.clipboard.writeText(t).catch(()=>{});ok=true}return ok}
-render();
+
+async function viewer(z){const m=$('#main'),s=el('div','step');m.append(s);$('#pr').style.width='100%';
+ let o;try{o=await decode(z)}catch(e){s.append(h('Ссылка повреждена'),el('p','lead','Попросите отправить ответы ещё раз или скопировать их текстом.'));return}
+ $('#cnt').textContent='Ответы · '+o.d;document.title='Опросник: '+nameOf(o);
+ s.append(el('p','mono kicker','Ответы на опросник · '+o.d),h(nameOf(o)));
+ const n=el('div','nav');n.append(btn('Сохранить в PDF','main',()=>print()),btn('Скопировать текстом','',()=>{n.querySelector('.btn:last-child').textContent=copy(asText(o))?'Скопировано':'Не удалось'}));s.append(n);report(o,s)}
+
+const R=location.hash.match(/^#r=([A-Za-z0-9_-]+)$/);
+if(R)viewer(R[1]);else render();
 </script>
 </body>
 </html>
